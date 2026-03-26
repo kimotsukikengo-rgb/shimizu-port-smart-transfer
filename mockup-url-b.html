@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Sales Terminal - Mockup URL B</title>
+<style>
+  :root {
+    --primary: #1a5276;
+    --primary-light: #2980b9;
+    --accent: #e67e22;
+    --accent-hover: #d35400;
+    --bg: #f0f2f5;
+    --card: #ffffff;
+    --text: #2c3e50;
+    --text-light: #7f8c8d;
+    --border: #dce1e6;
+    --success: #27ae60;
+    --danger: #e74c3c;
+    --staff-blue: #2c3e50;
+    --staff-accent: #3498db;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: var(--bg); color: var(--text); }
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* Staff Header */
+  .staff-header { background: var(--staff-blue); color: #fff; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .staff-header .sh-left { display: flex; align-items: center; gap: 10px; }
+  .staff-header .sh-badge { background: var(--danger); font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700; }
+  .staff-header .sh-title { font-size: 14px; font-weight: 600; }
+  .staff-header .sh-info { font-size: 11px; opacity: 0.7; }
+  .btn-back { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; padding: 4px 8px; }
+  .content { flex: 1; padding: 16px; max-width: 600px; margin: 0 auto; width: 100%; }
+
+  /* Login */
+  .login-box { max-width: 380px; margin: 60px auto; background: var(--card); border-radius: 12px; padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .login-box h2 { font-size: 18px; margin-bottom: 4px; text-align: center; }
+  .login-box p { font-size: 13px; color: var(--text-light); text-align: center; margin-bottom: 24px; }
+  .login-logo { text-align: center; margin-bottom: 20px; }
+  .login-logo div { font-size: 40px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; background: var(--card); }
+  .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--staff-accent); box-shadow: 0 0 0 3px rgba(52,152,219,0.15); }
+  .btn-primary { display: block; width: 100%; padding: 14px; background: var(--staff-accent); color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; }
+  .btn-primary:hover { background: #2185c5; }
+  .btn-success { background: var(--success); }
+  .btn-success:hover { background: #219a52; }
+  .btn-danger { background: var(--danger); color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; }
+  .btn-outline { display: block; width: 100%; padding: 14px; background: var(--card); color: var(--primary); border: 2px solid var(--primary); border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; text-align: center; }
+
+  /* Quick course selector */
+  .quick-section { margin-bottom: 20px; }
+  .quick-section h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--primary); border-left: 3px solid var(--primary); padding-left: 8px; }
+  .course-quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .cq-btn { padding: 12px 8px; background: var(--card); border: 2px solid var(--border); border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; }
+  .cq-btn:hover { border-color: var(--staff-accent); }
+  .cq-btn.selected { border-color: var(--staff-accent); background: #eaf2f8; }
+  .cq-btn .cq-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .cq-btn .cq-info { font-size: 11px; color: var(--text-light); }
+  .cq-btn .cq-price { font-size: 15px; font-weight: 700; color: var(--accent); margin-top: 4px; }
+
+  /* Vehicle toggle */
+  .vehicle-toggle { display: flex; gap: 8px; margin: 12px 0; }
+  .vt-btn { flex: 1; padding: 10px; border: 2px solid var(--border); border-radius: 8px; text-align: center; cursor: pointer; background: var(--card); font-size: 13px; }
+  .vt-btn.selected { border-color: var(--staff-accent); background: #eaf2f8; }
+  .vt-btn strong { display: block; font-size: 15px; }
+
+  /* Number input */
+  .num-input { display: flex; align-items: center; gap: 12px; }
+  .num-btn { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--border); background: var(--card); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .num-btn:hover { border-color: var(--staff-accent); }
+  .num-val { font-size: 24px; font-weight: 700; width: 40px; text-align: center; }
+
+  /* Summary card */
+  .summary-card { background: #eaf2f8; border-radius: 10px; padding: 14px; margin: 16px 0; }
+  .summary-card h4 { font-size: 14px; color: var(--primary); margin-bottom: 8px; }
+  .sc-row { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
+  .sc-total { border-top: 2px solid var(--primary); margin-top: 6px; padding-top: 6px; font-weight: 700; font-size: 18px; }
+
+  /* Receipt number */
+  .receipt-display { background: var(--staff-blue); color: #fff; border-radius: 10px; padding: 16px; text-align: center; margin: 16px 0; }
+  .receipt-display .rd-label { font-size: 12px; opacity: 0.7; }
+  .receipt-display .rd-value { font-size: 28px; font-weight: 700; letter-spacing: 2px; margin: 4px 0; }
+  .receipt-display .rd-waiting { font-size: 14px; opacity: 0.9; margin-top: 4px; }
+
+  /* Payment confirm */
+  .payment-confirm-box { background: #fef9e7; border: 2px solid #f1c40f; border-radius: 10px; padding: 16px; margin: 16px 0; }
+  .payment-confirm-box h4 { color: #7d6608; margin-bottom: 8px; }
+  .pc-row { display: flex; justify-content: space-between; font-size: 14px; padding: 4px 0; }
+
+  /* Status badges */
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .badge-instant { background: #fdedec; color: var(--danger); }
+  .badge-reserve { background: #eaf2f8; color: var(--staff-accent); }
+
+  /* Confirm screen */
+  .confirm-hero { text-align: center; padding: 30px 16px; }
+  .confirm-check { width: 60px; height: 60px; border-radius: 50%; background: var(--success); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 16px; }
+  .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+  .action-btn { padding: 16px 10px; border-radius: 10px; text-align: center; cursor: pointer; border: 2px solid var(--border); background: var(--card); transition: all 0.2s; }
+  .action-btn:hover { border-color: var(--staff-accent); }
+  .action-btn .ab-icon { font-size: 24px; margin-bottom: 4px; }
+  .action-btn .ab-label { font-size: 13px; font-weight: 600; }
+
+  .sticky-bottom { position: sticky; bottom: 0; background: var(--bg); padding: 12px 16px; border-top: 1px solid var(--border); max-width: 600px; margin: 0 auto; width: 100%; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- SCREEN 1: Staff Login -->
+<!-- ============================================================ -->
+<div class="screen active" id="staff-login">
+  <div style="background: var(--staff-blue); padding: 16px; text-align: center; color: #fff;">
+    <div style="font-size: 13px; opacity: 0.7;">STAFF TERMINAL</div>
+    <div style="font-size: 18px; font-weight: 700;">Shimizu Port Smart Transfer</div>
+    <div style="font-size: 12px; opacity: 0.6;">清水港 スマート交通手配</div>
+  </div>
+  <div class="login-box">
+    <div class="login-logo"><div>🔐</div></div>
+    <h2>Staff Login</h2>
+    <p>スタッフログイン</p>
+    <div class="form-group">
+      <label>Staff Code / スタッフコード</label>
+      <input type="text" placeholder="e.g. YY, HE, SO..." value="YY">
+    </div>
+    <div class="form-group">
+      <label>Password / パスワード</label>
+      <input type="password" placeholder="パスワード" value="****">
+    </div>
+    <button class="btn-primary" onclick="goTo('staff-order')">Login / ログイン</button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN 2: Order Input (受注入力) -->
+<!-- ============================================================ -->
+<div class="screen" id="staff-order">
+  <div class="staff-header">
+    <div class="sh-left">
+      <div>
+        <div class="sh-title">受注入力 <span class="sh-badge">即売</span></div>
+        <div class="sh-info">Staff: YY | 2026/03/26 | Norwegian Spirit</div>
+      </div>
+    </div>
+    <button class="btn-back" onclick="goTo('staff-login')" style="font-size:14px;">Logout</button>
+  </div>
+
+  <div class="content">
+    <!-- Type selector -->
+    <div class="quick-section">
+      <h3>区分選択</h3>
+      <div class="vehicle-toggle">
+        <div class="vt-btn selected" onclick="selectType(this)"><strong>手配</strong>チャーター</div>
+        <div class="vt-btn" onclick="selectType(this)"><strong>ワンウェイ</strong>メーター</div>
+      </div>
+    </div>
+
+    <!-- Course quick select -->
+    <div class="quick-section">
+      <h3>コース選択</h3>
+      <div class="course-quick-grid">
+        <div class="cq-btn selected" onclick="selectCourse(this)">
+          <div class="cq-name">🗻 富士宮</div>
+          <div class="cq-info">4h</div>
+          <div class="cq-price">¥35,140</div>
+        </div>
+        <div class="cq-btn" onclick="selectCourse(this)">
+          <div class="cq-name">🌲 三保・日本平</div>
+          <div class="cq-info">3h</div>
+          <div class="cq-price">¥20,100</div>
+        </div>
+        <div class="cq-btn" onclick="selectCourse(this)">
+          <div class="cq-name">🏯 龍華寺</div>
+          <div class="cq-info">3h</div>
+          <div class="cq-price">¥20,100</div>
+        </div>
+        <div class="cq-btn" onclick="selectCourse(this)">
+          <div class="cq-name">🏔️ 三保+富士宮</div>
+          <div class="cq-info">6h</div>
+          <div class="cq-price">¥48,700</div>
+        </div>
+        <div class="cq-btn" onclick="selectCourse(this)">
+          <div class="cq-name">🗺️ 河口湖</div>
+          <div class="cq-info">6h</div>
+          <div class="cq-price">¥54,300</div>
+        </div>
+        <div class="cq-btn" onclick="selectCourse(this)">
+          <div class="cq-name">⏱️ フリー</div>
+          <div class="cq-info">1~8h</div>
+          <div class="cq-price">¥7,700/h~</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vehicle type -->
+    <div class="quick-section">
+      <h3>車両タイプ</h3>
+      <div class="vehicle-toggle">
+        <div class="vt-btn selected" onclick="selectType(this)"><strong>🚗 普通車</strong>4名まで</div>
+        <div class="vt-btn" onclick="selectType(this)"><strong>🚐 大型車</strong>6名まで</div>
+      </div>
+    </div>
+
+    <!-- Number of cars -->
+    <div class="quick-section">
+      <h3>台数</h3>
+      <div class="num-input">
+        <div class="num-btn">−</div>
+        <div class="num-val">1</div>
+        <div class="num-btn">+</div>
+        <span style="font-size:13px; color:var(--text-light);">台</span>
+      </div>
+    </div>
+
+    <!-- Passenger count -->
+    <div class="quick-section">
+      <h3>人数</h3>
+      <div class="num-input">
+        <div class="num-btn">−</div>
+        <div class="num-val">3</div>
+        <div class="num-btn">+</div>
+        <span style="font-size:13px; color:var(--text-light);">名</span>
+      </div>
+    </div>
+
+    <!-- Customer info (minimal for on-site) -->
+    <div class="quick-section">
+      <h3>顧客情報</h3>
+      <div class="form-group">
+        <label>Name / 名前</label>
+        <input type="text" placeholder="e.g. John Smith">
+      </div>
+      <div class="form-group">
+        <label>WhatsApp / Email（任意）</label>
+        <input type="text" placeholder="連絡先（任意）">
+      </div>
+      <div class="form-group">
+        <label>国籍</label>
+        <select>
+          <option>American</option>
+          <option>British</option>
+          <option>Australian</option>
+          <option>Canadian</option>
+          <option>German</option>
+          <option>French</option>
+          <option>Chinese</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Auto-calculated summary -->
+    <div class="summary-card">
+      <h4>受注サマリー</h4>
+      <div class="sc-row"><span>コース</span><span>富士宮 4h</span></div>
+      <div class="sc-row"><span>車両</span><span>普通車 × 1台</span></div>
+      <div class="sc-row"><span>人数</span><span>3名</span></div>
+      <div class="sc-row"><span>手配運賃</span><span>¥35,140</span></div>
+      <div class="sc-row sc-total"><span>合計金額</span><span>¥35,140</span></div>
+    </div>
+
+    <div style="height: 80px;"></div>
+  </div>
+
+  <div class="sticky-bottom">
+    <button class="btn-primary" onclick="goTo('staff-payment')" style="font-size:18px;">
+      登録 → 決済へ
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN 3: Payment Confirmation (決済確認) -->
+<!-- ============================================================ -->
+<div class="screen" id="staff-payment">
+  <div class="staff-header">
+    <div class="sh-left">
+      <button class="btn-back" onclick="goTo('staff-order')">&larr;</button>
+      <div>
+        <div class="sh-title">決済確認</div>
+        <div class="sh-info">Staff: YY | 2026/03/26</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="receipt-display">
+      <div class="rd-label">受付番号 / Reception No.</div>
+      <div class="rd-value">R-001</div>
+      <div class="rd-waiting">（ウェイティング番号は配車時に付与）</div>
+    </div>
+
+    <div class="payment-confirm-box">
+      <h4>受注内容確認</h4>
+      <div class="pc-row"><span>コース</span><span>富士宮 4h</span></div>
+      <div class="pc-row"><span>車両</span><span>普通車 × 1台</span></div>
+      <div class="pc-row"><span>人数</span><span>3名</span></div>
+      <div class="pc-row"><span>顧客名</span><span>John Smith</span></div>
+      <div class="pc-row" style="font-weight:700; font-size:18px; border-top:2px solid #f1c40f; margin-top:6px; padding-top:6px;">
+        <span>合計</span><span>¥35,140</span>
+      </div>
+    </div>
+
+    <div class="quick-section">
+      <h3>決済方法</h3>
+      <div class="vehicle-toggle">
+        <div class="vt-btn selected" onclick="selectType(this)"><strong>💳</strong>mPOS決済</div>
+        <div class="vt-btn" onclick="selectType(this)"><strong>📱</strong>Web決済</div>
+      </div>
+    </div>
+
+    <div class="quick-section">
+      <h3>mPOS決済確認</h3>
+      <div class="form-group">
+        <label>決済完了番号（mPOS端末から）</label>
+        <input type="text" placeholder="e.g. TXN-20260326-001" value="TXN-20260326-001">
+      </div>
+      <div class="form-group">
+        <label>決済担当スタッフ</label>
+        <input type="text" value="YY" readonly style="background:#f0f2f5;">
+      </div>
+    </div>
+
+    <div class="info-banner" style="background:#e8f8f0; border-color:#27ae60;">
+      <strong style="color:#1e8449;">💡 操作手順:</strong><br>
+      1. mPOS端末で ¥35,140 を決済<br>
+      2. 決済完了番号を上記に入力<br>
+      3. 「決済完了」ボタンを押す
+    </div>
+
+    <div style="height: 80px;"></div>
+  </div>
+
+  <div class="sticky-bottom">
+    <button class="btn-primary btn-success" onclick="goTo('staff-complete')" style="font-size:18px;">
+      ✓ 決済完了
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN 4: Complete / Print (完了・印刷) -->
+<!-- ============================================================ -->
+<div class="screen" id="staff-complete">
+  <div class="staff-header">
+    <div class="sh-left">
+      <div>
+        <div class="sh-title">受注完了</div>
+        <div class="sh-info">Staff: YY | 2026/03/26</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="confirm-hero">
+      <div class="confirm-check">✓</div>
+      <h2 style="color:var(--success);">受注・決済 完了</h2>
+      <p>受付番号メモを顧客へ手渡し</p>
+    </div>
+
+    <div class="receipt-display">
+      <div class="rd-label">受付番号 / Reception No.</div>
+      <div class="rd-value">R-001</div>
+      <div class="rd-label" style="margin-top:8px;">ステータス</div>
+      <div style="color:#2ecc71; font-weight:700;">決済済み ✓</div>
+    </div>
+
+    <div class="summary-card">
+      <h4>受注詳細</h4>
+      <div class="sc-row"><span>受付番号</span><span>R-001</span></div>
+      <div class="sc-row"><span>顧客名</span><span>John Smith</span></div>
+      <div class="sc-row"><span>コース</span><span>富士宮 4h</span></div>
+      <div class="sc-row"><span>車両</span><span>普通車 × 1台</span></div>
+      <div class="sc-row"><span>人数</span><span>3名</span></div>
+      <div class="sc-row"><span>決済</span><span>mPOS (TXN-20260326-001)</span></div>
+      <div class="sc-row"><span>受注ルート</span><span class="badge badge-instant">即売</span></div>
+      <div class="sc-row sc-total"><span>金額</span><span>¥35,140</span></div>
+    </div>
+
+    <div class="quick-section">
+      <h3>ウェイティング番号（任意）</h3>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <span style="font-size:14px; font-weight:600;">W-</span>
+        <input type="text" placeholder="例: 040" style="padding:12px; border:1px solid var(--border); border-radius:8px; font-size:18px; width:120px; text-align:center;">
+        <span style="font-size:12px; color:var(--text-light);">※配車時に入力でもOK</span>
+      </div>
+    </div>
+
+    <div class="action-grid">
+      <div class="action-btn" onclick="alert('旅行行程書PDF生成中...')">
+        <div class="ab-icon">🖨️</div>
+        <div class="ab-label">行程書印刷</div>
+      </div>
+      <div class="action-btn" onclick="alert('メール送信中...')">
+        <div class="ab-icon">📧</div>
+        <div class="ab-label">メール送信</div>
+      </div>
+      <div class="action-btn" onclick="alert('ウェイティングカード印刷中...')">
+        <div class="ab-icon">🎫</div>
+        <div class="ab-label">Waitingカード</div>
+      </div>
+      <div class="action-btn" onclick="alert('受注一覧へ...')">
+        <div class="ab-icon">📋</div>
+        <div class="ab-label">受注一覧</div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <button class="btn-primary" onclick="goTo('staff-order')" style="font-size:18px;">
+        ＋ 次の受注へ
+      </button>
+    </div>
+
+    <div style="height:20px;"></div>
+  </div>
+</div>
+
+<script>
+function goTo(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function selectCourse(el) {
+  document.querySelectorAll('.cq-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function selectType(el) {
+  el.parentElement.querySelectorAll('.vt-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+</script>
+</body>
+</html>

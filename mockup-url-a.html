@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shimizu Port Smart Transfer - Mockup URL A (Reservation)</title>
+<style>
+  :root {
+    --primary: #1a5276;
+    --primary-light: #2980b9;
+    --accent: #e67e22;
+    --accent-hover: #d35400;
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --text: #2c3e50;
+    --text-light: #7f8c8d;
+    --border: #dce1e6;
+    --success: #27ae60;
+    --danger: #e74c3c;
+    --fuji-blue: #4a90d9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: var(--bg); color: var(--text); }
+
+  /* Screen management */
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* Header */
+  .header { background: var(--primary); color: #fff; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .header-title { font-size: 14px; font-weight: 600; }
+  .header-sub { font-size: 11px; opacity: 0.8; }
+  .header-logo { display: flex; align-items: center; gap: 8px; }
+  .header-logo svg { width: 28px; height: 28px; }
+  .btn-back { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; padding: 4px 8px; }
+  .btn-lang { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; }
+
+  /* Content area */
+  .content { flex: 1; padding: 16px; max-width: 480px; margin: 0 auto; width: 100%; }
+
+  /* ===== Screen 1: Language Selection ===== */
+  .lang-hero { text-align: center; padding: 40px 16px 20px; }
+  .lang-hero h1 { font-size: 22px; color: var(--primary); margin-bottom: 4px; }
+  .lang-hero p { font-size: 13px; color: var(--text-light); }
+  .fuji-icon { width: 120px; height: 80px; margin: 0 auto 20px; }
+  .lang-grid { display: flex; flex-direction: column; gap: 10px; padding: 0 16px; max-width: 400px; margin: 0 auto; }
+  .lang-btn { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--card); border: 2px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.2s; font-size: 16px; }
+  .lang-btn:hover { border-color: var(--primary-light); background: #eaf2f8; }
+  .lang-flag { font-size: 24px; }
+  .lang-label { font-weight: 600; }
+  .individual-notice { text-align: center; margin: 24px 16px; padding: 12px; background: #fef9e7; border: 1px solid #f9e79f; border-radius: 8px; font-size: 13px; color: #7d6608; }
+  .meter-taxi-link { display: block; text-align: center; margin: 16px; padding: 12px; color: var(--primary-light); font-size: 13px; text-decoration: underline; cursor: pointer; }
+  .decoy-btn { display: block; text-align: center; margin: 8px 16px; padding: 14px; background: #ecf0f1; border: 1px solid var(--border); border-radius: 8px; color: var(--text-light); font-size: 14px; cursor: pointer; transition: background 0.2s; }
+  .decoy-btn:hover { background: #d5dbdb; }
+
+  /* ===== Screen 2: Course List ===== */
+  .course-category-tabs { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; }
+  .cat-tab { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--card); font-size: 13px; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+  .cat-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .course-card { background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px; overflow: hidden; cursor: pointer; transition: all 0.2s; }
+  .course-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-1px); }
+  .course-img { height: 140px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 40px; position: relative; }
+  .course-img .popular-badge { position: absolute; top: 8px; right: 8px; background: var(--accent); color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 4px; }
+  .course-info { padding: 12px 14px; }
+  .course-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .course-meta { display: flex; gap: 12px; font-size: 12px; color: var(--text-light); margin-bottom: 8px; }
+  .course-meta span { display: flex; align-items: center; gap: 3px; }
+  .course-price { font-size: 18px; font-weight: 700; color: var(--accent); }
+  .course-price small { font-size: 12px; color: var(--text-light); font-weight: 400; }
+
+  /* ===== Screen 3: Course Detail ===== */
+  .detail-hero { height: 200px; background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); display: flex; align-items: flex-end; padding: 16px; color: #fff; position: relative; }
+  .detail-hero h2 { font-size: 22px; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+  .detail-section { padding: 16px; }
+  .detail-section h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--primary); border-left: 3px solid var(--primary); padding-left: 8px; }
+  .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-label { color: var(--text-light); }
+  .detail-value { font-weight: 600; }
+  .dest-list { list-style: none; }
+  .dest-list li { padding: 6px 0; padding-left: 20px; position: relative; font-size: 14px; }
+  .dest-list li::before { content: ''; position: absolute; left: 0; top: 12px; width: 10px; height: 10px; border-radius: 50%; background: var(--fuji-blue); }
+  .dest-list li:not(:last-child)::after { content: ''; position: absolute; left: 4px; top: 22px; width: 2px; height: calc(100% - 6px); background: #d0d8e0; }
+  .included-list { list-style: none; font-size: 14px; }
+  .included-list li { padding: 4px 0; }
+  .included-list li.yes::before { content: '\2713 '; color: var(--success); font-weight: 700; }
+  .included-list li.no::before { content: '\2717 '; color: var(--danger); font-weight: 700; }
+  .vehicle-type-selector { display: flex; gap: 8px; margin: 12px 0; }
+  .vehicle-type-btn { flex: 1; padding: 10px; border: 2px solid var(--border); border-radius: 8px; text-align: center; cursor: pointer; background: var(--card); transition: all 0.2s; }
+  .vehicle-type-btn.selected { border-color: var(--primary); background: #eaf2f8; }
+  .vehicle-type-btn .vt-label { font-size: 12px; color: var(--text-light); }
+  .vehicle-type-btn .vt-price { font-size: 16px; font-weight: 700; color: var(--primary); }
+  .btn-primary { display: block; width: 100%; padding: 16px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s; text-align: center; }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-primary:disabled { background: #bdc3c7; cursor: not-allowed; }
+
+  /* ===== Screen 4: Booking Form ===== */
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: var(--text); }
+  .form-group label .req { color: var(--danger); font-size: 11px; margin-left: 4px; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; background: var(--card); transition: border 0.2s; }
+  .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(41,128,185,0.1); }
+  .form-hint { font-size: 11px; color: var(--text-light); margin-top: 3px; }
+  .booking-summary { background: #eaf2f8; border-radius: 10px; padding: 14px; margin-bottom: 20px; }
+  .booking-summary h4 { font-size: 14px; color: var(--primary); margin-bottom: 8px; }
+  .booking-summary .bs-row { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
+  .booking-summary .bs-total { border-top: 2px solid var(--primary); margin-top: 6px; padding-top: 6px; font-weight: 700; font-size: 16px; }
+
+  /* ===== Screen 5: Terms ===== */
+  .terms-box { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; max-height: 400px; overflow-y: auto; font-size: 13px; line-height: 1.7; margin-bottom: 16px; }
+  .terms-box h4 { margin: 10px 0 6px; }
+  .agree-check { display: flex; align-items: center; gap: 10px; padding: 14px; background: #fef9e7; border-radius: 8px; margin-bottom: 16px; cursor: pointer; }
+  .agree-check input { width: 20px; height: 20px; accent-color: var(--primary); }
+  .agree-check span { font-size: 14px; font-weight: 600; }
+
+  /* ===== Screen 6: Payment ===== */
+  .payment-summary { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 20px; }
+  .payment-summary h3 { font-size: 15px; margin-bottom: 10px; }
+  .ps-row { display: flex; justify-content: space-between; font-size: 14px; padding: 5px 0; }
+  .ps-total { border-top: 2px solid var(--text); margin-top: 8px; padding-top: 8px; font-size: 20px; font-weight: 700; }
+  .card-form { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 20px; }
+  .card-form h3 { font-size: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .card-row { display: flex; gap: 10px; }
+  .card-row .form-group { flex: 1; }
+  .security-badges { display: flex; justify-content: center; gap: 16px; margin: 12px 0; font-size: 11px; color: var(--text-light); }
+  .security-badges span { display: flex; align-items: center; gap: 4px; }
+
+  /* ===== Screen 7: Confirmation ===== */
+  .confirm-hero { text-align: center; padding: 40px 16px 20px; }
+  .confirm-check { width: 60px; height: 60px; border-radius: 50%; background: var(--success); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 16px; }
+  .confirm-hero h2 { font-size: 20px; color: var(--success); margin-bottom: 4px; }
+  .confirm-hero p { font-size: 13px; color: var(--text-light); }
+  .booking-number { background: var(--primary); color: #fff; text-align: center; padding: 14px; border-radius: 10px; margin: 16px 0; }
+  .booking-number .bn-label { font-size: 12px; opacity: 0.8; }
+  .booking-number .bn-value { font-size: 24px; font-weight: 700; letter-spacing: 2px; margin-top: 4px; }
+  .instructions { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .instructions h3 { font-size: 14px; margin-bottom: 10px; }
+  .instructions ol { padding-left: 20px; font-size: 13px; line-height: 1.8; }
+  .btn-secondary { display: block; width: 100%; padding: 14px; background: var(--card); color: var(--primary); border: 2px solid var(--primary); border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; text-align: center; }
+
+  /* ===== Important Information Overlay ===== */
+  .info-banner { background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 13px; }
+  .info-banner strong { color: #856404; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 16px; font-size: 11px; color: var(--text-light); border-top: 1px solid var(--border); margin-top: auto; }
+
+  /* Sticky bottom */
+  .sticky-bottom { position: sticky; bottom: 0; background: var(--bg); padding: 12px 16px; border-top: 1px solid var(--border); max-width: 480px; margin: 0 auto; width: 100%; }
+
+  /* Step indicator */
+  .step-bar { display: flex; justify-content: center; gap: 6px; padding: 10px 16px; background: #fff; border-bottom: 1px solid var(--border); }
+  .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+  .step-dot.active { background: var(--primary); }
+  .step-dot.done { background: var(--success); }
+
+  /* Responsive */
+  @media (min-width: 768px) {
+    .course-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .course-card { margin-bottom: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- SCREEN 1: Language Selection / Top -->
+<!-- ============================================================ -->
+<div class="screen active" id="screen-lang">
+  <div class="header">
+    <div class="header-logo">
+      <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="#fff" stroke-width="2"/><path d="M6 18 Q14 4 22 18" stroke="#fff" stroke-width="2" fill="none"/><circle cx="14" cy="10" r="3" fill="#fff" opacity="0.6"/></svg>
+      <div>
+        <div class="header-title">Shimizu Port Smart Transfer</div>
+        <div class="header-sub">清水港 スマート交通手配</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lang-hero">
+    <svg class="fuji-icon" viewBox="0 0 120 80"><polygon points="60,10 15,70 105,70" fill="#4a90d9" opacity="0.2"/><polygon points="60,10 35,45 85,45" fill="#fff"/><polygon points="60,10 40,40 80,40" fill="#e8e8e8"/><rect x="0" y="70" width="120" height="10" fill="#4a90d9" opacity="0.1" rx="5"/></svg>
+    <h1>Select Language</h1>
+    <p>言語をお選びください</p>
+  </div>
+
+  <div class="lang-grid">
+    <div class="lang-btn" onclick="goTo('screen-courses')">
+      <span class="lang-flag">&#127468;&#127463;</span>
+      <span class="lang-label">English</span>
+    </div>
+    <div class="lang-btn" onclick="goTo('screen-courses')">
+      <span class="lang-flag">&#127471;&#127477;</span>
+      <span class="lang-label">日本語</span>
+    </div>
+    <div class="lang-btn" onclick="goTo('screen-courses')">
+      <span class="lang-flag">&#127464;&#127475;</span>
+      <span class="lang-label">中文</span>
+    </div>
+    <div class="lang-btn" onclick="goTo('screen-courses')">
+      <span class="lang-flag">&#127472;&#127479;</span>
+      <span class="lang-label">한국어</span>
+    </div>
+    <div class="lang-btn" onclick="goTo('screen-courses')">
+      <span class="lang-flag">&#127466;&#127480;</span>
+      <span class="lang-label">Español</span>
+    </div>
+  </div>
+
+  <div class="individual-notice">
+    <strong>For Individual Travelers Only</strong><br>
+    個人旅行者専用 / 団体ツアーの方はエクスカーションデスクへ
+  </div>
+
+  <div class="decoy-btn" onclick="alert('Redirecting to metered taxi info...')">
+    🚕 Regular Metered Taxi (No Reservation)<br>
+    <span style="font-size:12px; color:#95a5a6;">通常のメータータクシーはこちら</span>
+  </div>
+
+  <div class="footer">
+    &copy; 2026 Shizuoka TaaS Travel Co., Ltd.<br>
+    Registered Travel Agency / 登録旅行業者
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN 2: Course List -->
+<!-- ============================================================ -->
+<div class="screen" id="screen-courses">
+  <div class="header">
+    <button class="btn-back" onclick="goTo('screen-lang')">&larr;</button>
+    <div class="header-title">Select Your Course</div>
+    <button class="btn-lang">EN</button>
+  </div>
+  <div class="step-bar">
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+
+  <div class="content">
+    <div class="course-category-tabs">
+      <div class="cat-tab active">All Courses</div>
+      <div class="cat-tab">Popular</div>
+      <div class="cat-tab">Half Day</div>
+      <div class="cat-tab">Full Day</div>
+      <div class="cat-tab">Free Plan</div>
+    </div>
+
+    <div class="course-card" onclick="goTo('screen-detail')">
+      <div class="course-img" style="background: linear-gradient(135deg, #2c3e50, #3498db);">
+        🗻
+        <span class="popular-badge">POPULAR</span>
+      </div>
+      <div class="course-info">
+        <div class="course-name">Mt. Fuji & Fujinomiya Course</div>
+        <div class="course-meta">
+          <span>🕒 4 hours</span>
+          <span>👥 Max 4</span>
+          <span>📍 Fujinomiya</span>
+        </div>
+        <div class="course-price">¥35,140 <small>/ vehicle (standard)</small></div>
+      </div>
+    </div>
+
+    <div class="course-card" onclick="goTo('screen-detail')">
+      <div class="course-img" style="background: linear-gradient(135deg, #1a5276, #48c9b0);">
+        🌲
+      </div>
+      <div class="course-info">
+        <div class="course-name">Miho Pine Grove & Nihondaira Course</div>
+        <div class="course-meta">
+          <span>🕒 3 hours</span>
+          <span>👥 Max 4</span>
+          <span>📍 Miho / Nihondaira</span>
+        </div>
+        <div class="course-price">¥20,100 <small>/ vehicle (standard)</small></div>
+      </div>
+    </div>
+
+    <div class="course-card" onclick="goTo('screen-detail')">
+      <div class="course-img" style="background: linear-gradient(135deg, #6c3483, #a569bd);">
+        🏯
+      </div>
+      <div class="course-info">
+        <div class="course-name">Ryugeji Temple Course</div>
+        <div class="course-meta">
+          <span>🕒 3 hours</span>
+          <span>👥 Max 4</span>
+          <span>📍 Ryugeji</span>
+        </div>
+        <div class="course-price">¥20,100 <small>/ vehicle (standard)</small></div>
+      </div>
+    </div>
+
+    <div class="course-card" onclick="goTo('screen-detail')">
+      <div class="course-img" style="background: linear-gradient(135deg, #1e8449, #52be80);">
+        🏔️
+      </div>
+      <div class="course-info">
+        <div class="course-name">Miho &amp; Fujinomiya Full Day</div>
+        <div class="course-meta">
+          <span>🕒 6 hours</span>
+          <span>👥 Max 4</span>
+          <span>📍 Miho / Fujinomiya</span>
+        </div>
+        <div class="course-price">¥48,700 <small>/ vehicle (standard)</small></div>
+      </div>
+    </div>
+
+    <div class="course-card" onclick="goTo('screen-detail')">
+      <div class="course-img" style="background: linear-gradient(135deg, #7d6608, #f1c40f);">
+        🗺️
+      </div>
+      <div class="course-info">
+        <div class="course-name">Lake Kawaguchi &amp; Mt. Fuji</div>
+        <div class="course-meta">
+          <span>🕒 6 hours</span>
+          <span>👥 Max 4</span>
+          <span>📍 Kawaguchiko</span>
+        </div>
+        <div class="course-price">¥54,300 <small>/ vehicle (standard)</small></div>
+      </div>
+    </div>
+
+    <div class="course-card" onclick="goTo('screen-detail')">
+      <div class="course-img" style="background: linear-gradient(135deg, #515a5a, #aab7b8);">
+        ⏱️
+      </div>
+      <div class="course-info">
+        <div class="course-name">Free Plan (Custom)</div>
+        <div class="course-meta">
+          <span>🕒 1~8 hours</span>
+          <span>👥 Max 4</span>
+          <span>📍 Your choice</span>
+        </div>
+        <div class="course-price">from ¥7,700 <small>/ hour (standard)</small></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN 3: Course Detail -->
+<!-- ============================================================ -->
+<div class="screen" id="screen-detail">
+  <div class="header">
+    <button class="btn-back" onclick="goTo('screen-courses')">&larr;</button>
+    <div class="header-title">Course Details</div>
+    <button class="btn-lang">EN</button>
+  </div>
+  <div class="step-bar">
+    <div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+
+  <div class="detail-hero" style="background: linear-gradient(135deg, #2c3e50, #3498db);">
+    <div>
+      <div style="font-size:12px; opacity:0.8; margin-bottom:4px;">POPULAR COURSE</div>
+      <h2>Mt. Fuji &amp; Fujinomiya Course</h2>
+    </div>
+  </div>
+
+  <div class="content" style="padding-top:0;">
+    <div class="detail-section">
+      <div class="detail-row">
+        <span class="detail-label">Duration</span>
+        <span class="detail-value">Approx. 4 hours</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Capacity</span>
+        <span class="detail-value">Max 4 passengers</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Pickup</span>
+        <span class="detail-value">Shimizu Port Terminal</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Drop-off</span>
+        <span class="detail-value">Shimizu Port / Fish Market</span>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <h3>Destinations</h3>
+      <ul class="dest-list">
+        <li>Shimizu Port Terminal (Pickup)</li>
+        <li>Fujisan Hongu Sengen Taisha Shrine</li>
+        <li>Shiraito Falls</li>
+        <li>World Heritage Centre (Rest Stop)</li>
+        <li>Shimizu Port / Fish Market (Drop-off)</li>
+      </ul>
+    </div>
+
+    <div class="detail-section">
+      <h3>Select Vehicle Type</h3>
+      <div class="vehicle-type-selector">
+        <div class="vehicle-type-btn selected" onclick="selectVehicle(this)">
+          <div>🚗</div>
+          <div class="vt-label">Standard<br>(max 4)</div>
+          <div class="vt-price">¥35,140</div>
+        </div>
+        <div class="vehicle-type-btn" onclick="selectVehicle(this)">
+          <div>🚐</div>
+          <div class="vt-label">Large<br>(max 6)</div>
+          <div class="vt-price">¥46,700</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <h3>Included</h3>
+      <ul class="included-list">
+        <li class="yes">Private vehicle &amp; driver</li>
+        <li class="yes">Fuel &amp; highway tolls</li>
+        <li class="yes">Insurance coverage</li>
+        <li class="no">Admission fees</li>
+        <li class="no">Food &amp; drinks</li>
+        <li class="no">Ropeway / cable car tickets</li>
+      </ul>
+    </div>
+
+    <div class="info-banner">
+      <strong>Important:</strong> Parking fees at some locations (approx. ¥200-¥2,500) are not included and will be paid separately by the passenger.
+    </div>
+
+    <div style="height:80px;"></div>
+  </div>
+
+  <div class="sticky-bottom">
+    <button class="btn-primary" onclick="goTo('screen-form')">
+      Select This Course — ¥35,140
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN 4: Booking Form -->
+<!-- ============================================================ -->
+<div class="screen" id="screen-form">
+  <div class="header">
+    <button class="btn-back" onclick="goTo('screen-detail')">&larr;</button>
+    <div class="header-title">Booking Details</div>
+    <button class="btn-lang">EN</button>
+  </div>
+  <div class="step-bar">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+
+  <div class="content">
+    <div class="booking-summary">
+      <h4>Booking Summary</h4>
+      <div class="bs-row"><span>Course</span><span>Mt. Fuji &amp; Fujinomiya</span></div>
+      <div class="bs-row"><span>Duration</span><span>4 hours</span></div>
+      <div class="bs-row"><span>Vehicle</span><span>Standard (max 4)</span></div>
+      <div class="bs-row bs-total"><span>Total</span><span>¥35,140</span></div>
+    </div>
+
+    <form onsubmit="event.preventDefault(); goTo('screen-terms');">
+      <div class="form-group">
+        <label>Name <span class="req">*Required</span></label>
+        <input type="text" placeholder="e.g. John Smith" required>
+      </div>
+
+      <div class="form-group">
+        <label>Email <span class="req">*Required</span></label>
+        <input type="email" placeholder="e.g. john@example.com" required>
+        <div class="form-hint">Confirmation email will be sent to this address</div>
+      </div>
+
+      <div class="form-group">
+        <label>WhatsApp / Phone <span class="req">*Required</span></label>
+        <input type="tel" placeholder="e.g. +1 234 567 8900">
+        <div class="form-hint">For emergency contact on the day of tour</div>
+      </div>
+
+      <div class="form-group">
+        <label>Number of Passengers <span class="req">*Required</span></label>
+        <select required>
+          <option value="">Select...</option>
+          <option>1 person</option>
+          <option>2 people</option>
+          <option selected>3 people</option>
+          <option>4 people</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Preferred Language</label>
+        <select>
+          <option>English</option>
+          <option>Japanese</option>
+          <option>No preference</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Nationality</label>
+        <select>
+          <option value="">Select...</option>
+          <option>United States</option>
+          <option>United Kingdom</option>
+          <option>Australia</option>
+          <option>Canada</option>
+          <option>Germany</option>
+          <option>France</option>
+          <option>China</option>
+          <option>Taiwan</option>
+          <option>South Korea</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Cruise Ship Name</label>
+        <select>
+          <option value="">Select...</option>
+          <option>Norwegian Spirit</option>
+          <option>Norwegian Sun</option>
+          <option>Celebrity Millennium</option>
+          <option>Ovation of the Seas</option>
+          <option>Diamond Princess</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Special Requests / Notes</label>
+        <textarea rows="3" placeholder="e.g. wheelchair access needed, child seat, etc."></textarea>
+      </div>
+
+      <div style="height:80px;"></div>
+      <div class="sticky-bottom">
+        <button type="submit" class="btn-primary">Continue to Terms &amp; Conditions</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN 5: Terms & Conditions -->
+<!-- ============================================================ -->
+<div class="screen" id="screen-terms">
+  <div class="header">
+    <button class="btn-back" onclick="goTo('screen-form')">&larr;</button>
+    <div class="header-title">Terms &amp; Conditions</div>
+    <button class="btn-lang">EN</button>
+  </div>
+  <div class="step-bar">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+  </div>
+
+  <div class="content">
+    <div class="info-banner">
+      <strong>Important / 重要:</strong> Please read the travel terms carefully before proceeding. This is a Package Tour (募集型企画旅行) contract under the Travel Agency Act of Japan.
+    </div>
+
+    <div class="terms-box">
+      <h4>Travel Terms &amp; Conditions (旅行条件書)</h4>
+      <p><strong>Article 1 - Scope of Application</strong><br>
+      These terms and conditions apply to the Arranged Tour Contract concluded between Shizuoka TaaS Travel Co., Ltd. (hereinafter "the Company") and the Traveler for the chartered taxi sightseeing services departing from Shimizu Port.</p>
+
+      <h4>Article 2 - Conclusion of Contract</h4>
+      <p>The Contract shall be formed when the Company receives payment from the Traveler and issues a confirmation. The Traveler agrees to comply with these Terms.</p>
+
+      <h4>Article 3 - Tour Content</h4>
+      <p>The tour includes private vehicle transportation with a licensed driver along the designated route. Sightseeing time at each location is included in the total tour duration.</p>
+
+      <h4>Article 4 - Tour Price</h4>
+      <p>The tour price includes vehicle hire, driver service, fuel, highway tolls, and consumption tax. Admission fees, parking fees, ropeway tickets, meals, and personal expenses are NOT included.</p>
+
+      <h4>Article 5 - Cancellation Policy</h4>
+      <p>- 7 days or more before departure: Free cancellation<br>
+      - 3-6 days before: 30% cancellation fee<br>
+      - 1-2 days before: 50% cancellation fee<br>
+      - Day of departure: 100% (no refund)</p>
+
+      <h4>Article 6 - Insurance</h4>
+      <p>All vehicles carry mandatory automobile liability insurance and voluntary insurance as required by Japanese law.</p>
+
+      <h4>Article 7 - Responsibilities</h4>
+      <p>The Company shall not be liable for delays or cancellations caused by weather, natural disasters, traffic conditions, or other force majeure events.</p>
+    </div>
+
+    <label class="agree-check" id="agreeCheck" onclick="toggleAgree()">
+      <input type="checkbox" id="agreeBox">
+      <span>I have read and agree to the Terms &amp; Conditions<br>
+      <small style="font-weight:400; color:#7f8c8d;">旅行条件書に同意します</small></span>
+    </label>
+
+    <div style="height:80px;"></div>
+  </div>
+
+  <div class="sticky-bottom">
+    <button class="btn-primary" id="btnProceedPay" disabled onclick="goTo('screen-payment')">
+      Proceed to Payment
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN 6: Payment -->
+<!-- ============================================================ -->
+<div class="screen" id="screen-payment">
+  <div class="header">
+    <button class="btn-back" onclick="goTo('screen-terms')">&larr;</button>
+    <div class="header-title">Payment</div>
+    <button class="btn-lang">EN</button>
+  </div>
+  <div class="step-bar">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+  </div>
+
+  <div class="content">
+    <div class="payment-summary">
+      <h3>Order Summary</h3>
+      <div class="ps-row"><span>Mt. Fuji &amp; Fujinomiya Course</span></div>
+      <div class="ps-row" style="color:var(--text-light); font-size:13px;"><span>Standard vehicle / 4 hours / 3 passengers</span></div>
+      <div class="ps-row ps-total"><span>Total</span><span>¥35,140</span></div>
+    </div>
+
+    <div class="card-form">
+      <h3>💳 Card Information</h3>
+      <div class="form-group">
+        <label>Card Number</label>
+        <input type="text" placeholder="4242 4242 4242 4242" maxlength="19">
+      </div>
+      <div class="card-row">
+        <div class="form-group">
+          <label>Expiry</label>
+          <input type="text" placeholder="MM / YY">
+        </div>
+        <div class="form-group">
+          <label>CVC</label>
+          <input type="text" placeholder="123" maxlength="4">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Cardholder Name</label>
+        <input type="text" placeholder="JOHN SMITH">
+      </div>
+    </div>
+
+    <div class="security-badges">
+      <span>🔒 SSL Encrypted</span>
+      <span>🛡️ PCI DSS Compliant</span>
+      <span>Powered by Stripe</span>
+    </div>
+
+    <div style="height:80px;"></div>
+  </div>
+
+  <div class="sticky-bottom">
+    <button class="btn-primary" onclick="goTo('screen-confirm')" style="background: var(--success);">
+      Confirm Payment — ¥35,140
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN 7: Booking Confirmed -->
+<!-- ============================================================ -->
+<div class="screen" id="screen-confirm">
+  <div class="header">
+    <div class="header-logo">
+      <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="#fff" stroke-width="2"/><path d="M6 18 Q14 4 22 18" stroke="#fff" stroke-width="2" fill="none"/></svg>
+      <div>
+        <div class="header-title">Shimizu Port Smart Transfer</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="confirm-hero">
+      <div class="confirm-check">✓</div>
+      <h2>Booking Confirmed!</h2>
+      <p>A confirmation email has been sent to john@example.com</p>
+    </div>
+
+    <div class="booking-number">
+      <div class="bn-label">Your Booking Number</div>
+      <div class="bn-value">R-20260326-001</div>
+    </div>
+
+    <div class="payment-summary" style="margin-bottom:16px;">
+      <h3>Booking Details</h3>
+      <div class="ps-row"><span>Course</span><span>Mt. Fuji &amp; Fujinomiya</span></div>
+      <div class="ps-row"><span>Date</span><span>March 26, 2026</span></div>
+      <div class="ps-row"><span>Vehicle</span><span>Standard (max 4)</span></div>
+      <div class="ps-row"><span>Passengers</span><span>3</span></div>
+      <div class="ps-row"><span>Name</span><span>John Smith</span></div>
+      <div class="ps-row"><span>Payment</span><span>Visa ****4242</span></div>
+      <div class="ps-row ps-total"><span>Total Paid</span><span>¥35,140</span></div>
+    </div>
+
+    <div class="instructions">
+      <h3>📋 Instructions for the Day</h3>
+      <ol>
+        <li>Proceed to the <strong>Taxi Sightseeing Counter</strong> at Shimizu Port after disembarking.</li>
+        <li>Show your <strong>Booking Number (R-20260326-001)</strong> to the staff.</li>
+        <li>You will receive a <strong>Waiting Card</strong> with your queue number.</li>
+        <li>When your taxi arrives, the staff will guide you to your vehicle.</li>
+        <li>Enjoy your trip! 🗻</li>
+      </ol>
+    </div>
+
+    <div class="info-banner">
+      <strong>Tour Reservation Form (PDF)</strong> has been attached to your confirmation email. Please keep it for your records.
+    </div>
+
+    <button class="btn-secondary" onclick="goTo('screen-lang')">Return to Top</button>
+
+    <div class="footer">
+      <p>Contact: info@shizuoka-taas.travel</p>
+      <p>Emergency on the day: +81-XXX-XXX-XXXX</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function goTo(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function selectVehicle(el) {
+  document.querySelectorAll('.vehicle-type-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function toggleAgree() {
+  const box = document.getElementById('agreeBox');
+  const btn = document.getElementById('btnProceedPay');
+  setTimeout(() => { btn.disabled = !box.checked; }, 10);
+}
+</script>
+</body>
+</html>

@@ -131,7 +131,128 @@
       <label>Password / パスワード</label>
       <input type="password" placeholder="パスワード" value="****">
     </div>
-    <button class="btn-primary" onclick="goTo('staff-order')">Login / ログイン</button>
+    <button class="btn-primary" onclick="goTo('role-select')">Login / ログイン</button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN 1.5: Role Selection (役割選択) -->
+<!-- ============================================================ -->
+<div class="screen" id="role-select">
+  <div style="background: var(--staff-blue); padding: 12px 16px; color: #fff; display:flex; justify-content:space-between; align-items:center;">
+    <div>
+      <div class="sh-title">役割選択</div>
+      <div class="sh-info">Staff: YY | 2026/03/26 | Norwegian Spirit</div>
+    </div>
+    <button class="btn-back" onclick="goTo('staff-login')" style="font-size:13px; border:1px solid rgba(255,255,255,0.3); padding:6px 12px; border-radius:6px;">Logout</button>
+  </div>
+  <div class="content" style="padding-top:32px;">
+    <div style="text-align:center; margin-bottom:24px;">
+      <div style="font-size:16px; font-weight:700;">担当業務を選択してください</div>
+      <div style="font-size:12px; color:var(--text-light); margin-top:4px;">Select your role for today</div>
+    </div>
+
+    <div class="role-card" onclick="goTo('staff-order')" style="background:var(--card); border:2px solid var(--border); border-radius:12px; padding:20px; margin-bottom:12px; cursor:pointer; transition:all 0.2s;">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div style="font-size:36px;">🏪</div>
+        <div>
+          <div style="font-size:16px; font-weight:700;">営業・受注入力</div>
+          <div style="font-size:12px; color:var(--text-light);">手配旅行デスク（露天営業）</div>
+          <div style="font-size:11px; color:var(--accent); margin-top:2px;">契約合意 → 受注入力 → 受付番号発行</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="role-card" onclick="goTo('staff-payment-desk')" style="background:var(--card); border:2px solid var(--border); border-radius:12px; padding:20px; margin-bottom:12px; cursor:pointer; transition:all 0.2s;">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div style="font-size:36px;">💳</div>
+        <div>
+          <div style="font-size:16px; font-weight:700;">決済処理</div>
+          <div style="font-size:12px; color:var(--text-light);">決済デスク（移動車両）</div>
+          <div style="font-size:11px; color:var(--accent); margin-top:2px;">受付番号検索 → mPOS/Web決済 → W番号カード</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="role-card" onclick="goTo('dispatch-search')" style="background:var(--card); border:2px solid #e67e22; border-radius:12px; padding:20px; margin-bottom:12px; cursor:pointer; transition:all 0.2s;">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div style="font-size:36px;">🚕</div>
+        <div>
+          <div style="font-size:16px; font-weight:700; color:var(--accent);">配車入力 <span style="background:var(--accent); color:#fff; font-size:10px; padding:2px 6px; border-radius:4px;">NEW</span></div>
+          <div style="font-size:12px; color:var(--text-light);">タクシー乗り場</div>
+          <div style="font-size:11px; color:var(--accent); margin-top:2px;">受付番号検索 → 乗務員・車両引当 → 指示書印刷 → LINE/WhatsApp送信</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="role-card" onclick="goTo('driver-report')" style="background:var(--card); border:2px solid var(--border); border-radius:12px; padding:20px; margin-bottom:12px; cursor:pointer; transition:all 0.2s;">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div style="font-size:36px;">📝</div>
+        <div>
+          <div style="font-size:16px; font-weight:700;">運行完了報告（乗務員用）</div>
+          <div style="font-size:12px; color:var(--text-light);">メールリンクからアクセス（ログイン不要）</div>
+          <div style="font-size:11px; color:var(--accent); margin-top:2px;">行き先・到着時刻・備考を入力</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN: Payment Desk (決済デスク) -->
+<!-- ============================================================ -->
+<div class="screen" id="staff-payment-desk">
+  <div class="staff-header">
+    <div class="sh-left">
+      <button class="btn-back" onclick="goTo('role-select')">&larr;</button>
+      <div>
+        <div class="sh-title">💳 決済デスク</div>
+        <div class="sh-info">Staff: YY | 2026/03/26 | Norwegian Spirit</div>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="quick-section">
+      <h3>受付番号で検索</h3>
+      <div style="display:flex; gap:8px;">
+        <input type="text" placeholder="受付番号（例: R-001）" value="R-001" style="flex:1; padding:14px; border:2px solid var(--staff-accent); border-radius:8px; font-size:18px; font-weight:700;">
+        <button class="btn-primary" style="width:80px; border-radius:8px;" onclick="document.getElementById('payment-desk-result').style.display='block'">検索</button>
+      </div>
+    </div>
+    <div id="payment-desk-result" style="display:block;">
+      <div class="payment-confirm-box">
+        <h4>受注内容</h4>
+        <div class="pc-row"><span>受付番号</span><span><strong>R-001</strong></span></div>
+        <div class="pc-row"><span>コース</span><span>富士宮 4h</span></div>
+        <div class="pc-row"><span>車両</span><span>普通車 × 1台</span></div>
+        <div class="pc-row"><span>人数</span><span>3名</span></div>
+        <div class="pc-row"><span>顧客名</span><span>John Smith</span></div>
+        <div class="pc-row" style="font-weight:700; font-size:18px; border-top:2px solid #f1c40f; margin-top:6px; padding-top:6px;"><span>合計</span><span>¥35,140</span></div>
+      </div>
+      <div class="quick-section">
+        <h3>決済方法</h3>
+        <div class="vehicle-toggle">
+          <div class="vt-btn selected" onclick="selectType(this)"><strong>💳</strong>mPOS決済</div>
+          <div class="vt-btn" onclick="selectType(this)"><strong>📱</strong>Web決済</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>決済完了番号</label>
+        <input type="text" placeholder="mPOS端末の番号" value="TXN-20260326-001">
+      </div>
+      <div class="quick-section">
+        <h3>ウェイティング番号</h3>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <span style="font-size:16px; font-weight:700;">W-</span>
+          <input type="text" value="040" style="padding:14px; border:2px solid var(--accent); border-radius:8px; font-size:22px; font-weight:700; width:100px; text-align:center;">
+          <span style="font-size:12px; color:var(--text-light);">カードから読取り</span>
+        </div>
+      </div>
+      <div style="background:#e8f8f0; border:1px solid #27ae60; border-radius:8px; padding:12px; margin:16px 0; font-size:13px;">
+        <strong>📋 手順:</strong> ①mPOS決済 → ②番号入力 → ③W番号カードに受付番号を手書き → ④カードを顧客へ → ⑤クレカ控えシール保存 → ⑥決済完了
+      </div>
+      <button class="btn-primary btn-success" onclick="goTo('staff-complete')" style="font-size:18px;">✓ 決済完了</button>
+    </div>
   </div>
 </div>
 
@@ -416,6 +537,402 @@
     </div>
 
     <div style="height:20px;"></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN: Dispatch Search (配車 - 受付番号検索) -->
+<!-- ============================================================ -->
+<div class="screen" id="dispatch-search">
+  <div class="staff-header" style="background:#7d4e00;">
+    <div class="sh-left">
+      <button class="btn-back" onclick="goTo('role-select')">&larr;</button>
+      <div>
+        <div class="sh-title">🚕 配車入力（タクシー乗り場）</div>
+        <div class="sh-info">配車担当: YY | 2026/03/26</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:6px;">
+      <span style="background:rgba(255,255,255,0.2); padding:4px 8px; border-radius:6px; font-size:11px;">配車待ち: <strong>5</strong></span>
+      <span style="background:rgba(255,255,255,0.2); padding:4px 8px; border-radius:6px; font-size:11px;">運行中: <strong>8</strong></span>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Search -->
+    <div class="quick-section">
+      <h3>受付番号で検索（カードに手書きされた番号）</h3>
+      <div style="display:flex; gap:8px;">
+        <input type="text" placeholder="受付番号（例: R-005）" value="R-005" style="flex:1; padding:14px; border:2px solid var(--accent); border-radius:8px; font-size:20px; font-weight:700; text-align:center;">
+        <button class="btn-primary" style="width:80px; border-radius:8px; background:var(--accent);" onclick="goTo('dispatch-input')">検索</button>
+      </div>
+    </div>
+
+    <!-- Pending list -->
+    <div class="quick-section">
+      <h3>配車待ちリスト（決済済み・未配車）</h3>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+
+        <div onclick="goTo('dispatch-input')" style="background:var(--card); border:2px solid var(--accent); border-radius:8px; padding:12px; cursor:pointer; transition:all 0.2s;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-weight:700; font-size:16px;">R-005</span>
+              <span style="font-size:12px; color:var(--text-light); margin-left:6px;">W-005</span>
+            </div>
+            <span class="badge" style="background:#fef3e0; color:var(--accent);">配車待ち</span>
+          </div>
+          <div style="font-size:13px; margin-top:4px;">Emma Wilson | 河口湖 6h | 普通車×1 | 4名 | ¥54,300</div>
+        </div>
+
+        <div onclick="goTo('dispatch-input')" style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-weight:700; font-size:16px;">R-006</span>
+              <span style="font-size:12px; color:var(--text-light); margin-left:6px;">—</span>
+            </div>
+            <span class="badge" style="background:#fef3e0; color:var(--accent);">配車待ち</span>
+          </div>
+          <div style="font-size:13px; margin-top:4px;">田中太郎 | フリー 2h | 普通車×1 | 2名 | ¥15,400</div>
+        </div>
+
+        <div onclick="goTo('dispatch-input')" style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-weight:700; font-size:16px;">R-007</span>
+              <span style="font-size:12px; color:var(--text-light); margin-left:6px;">W-007</span>
+            </div>
+            <span class="badge" style="background:#fef3e0; color:var(--accent);">配車待ち</span>
+          </div>
+          <div style="font-size:13px; margin-top:4px;">Sarah Brown | 三保日本平 3h | 普通車×1 | 2名 | ¥20,100</div>
+        </div>
+
+        <div style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-weight:700; font-size:16px;">R-008</span>
+              <span style="font-size:12px; color:var(--text-light); margin-left:6px;">W-008</span>
+            </div>
+            <span class="badge" style="background:#fef3e0; color:var(--accent);">配車待ち</span>
+          </div>
+          <div style="font-size:13px; margin-top:4px;">Michael Chen | 富士宮 4h | 大型×2 | 8名 | ¥93,400</div>
+        </div>
+
+        <div style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-weight:700; font-size:16px;">R-009</span>
+              <span style="font-size:12px; color:var(--text-light); margin-left:6px;">W-009</span>
+            </div>
+            <span class="badge" style="background:#fef3e0; color:var(--accent);">配車待ち</span>
+          </div>
+          <div style="font-size:13px; margin-top:4px;">Anne Smith | 龍華寺 3h | 普通車×1 | 3名 | ¥20,100</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN: Dispatch Input (配車入力 - メイン) -->
+<!-- ============================================================ -->
+<div class="screen" id="dispatch-input">
+  <div class="staff-header" style="background:#7d4e00;">
+    <div class="sh-left">
+      <button class="btn-back" onclick="goTo('dispatch-search')">&larr;</button>
+      <div>
+        <div class="sh-title">🚕 配車入力</div>
+        <div class="sh-info">R-005 | 配車担当: YY</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- 受注・決済情報（読み取り専用） -->
+    <div class="summary-card" style="background:#fff8e1; border:1px solid #f9a825;">
+      <h4 style="color:#7d4e00;">📋 受注情報（決済済み）</h4>
+      <div class="sc-row"><span>受付番号</span><span><strong style="font-size:18px;">R-005</strong></span></div>
+      <div class="sc-row"><span>W番号</span><span><strong>W-005</strong></span></div>
+      <div class="sc-row"><span>顧客名</span><span>Emma Wilson</span></div>
+      <div class="sc-row"><span>コース</span><span>河口湖 6h</span></div>
+      <div class="sc-row"><span>車両タイプ</span><span>普通車</span></div>
+      <div class="sc-row"><span>台数</span><span>1台</span></div>
+      <div class="sc-row"><span>人数</span><span>4名</span></div>
+      <div class="sc-row"><span>言語</span><span>English</span></div>
+      <div class="sc-row"><span>国籍</span><span>British</span></div>
+      <div class="sc-row sc-total"><span>金額</span><span>¥54,300</span></div>
+    </div>
+
+    <!-- ウェイティング番号（未入力の場合ここで入力） -->
+    <div class="quick-section">
+      <h3>ウェイティング番号確認</h3>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <span style="font-size:16px; font-weight:700;">W-</span>
+        <input type="text" value="005" style="padding:12px; border:2px solid var(--accent); border-radius:8px; font-size:20px; font-weight:700; width:100px; text-align:center;">
+        <span style="font-size:12px; color:var(--success);">✓ 入力済み</span>
+      </div>
+    </div>
+
+    <!-- 台数分の配車情報 -->
+    <div class="quick-section">
+      <h3>🚗 台目 1 / 1 — タクシー情報</h3>
+
+      <div class="form-group">
+        <label>タクシー会社（マスタから選択）</label>
+        <select style="border:2px solid var(--accent);">
+          <option value="">タクシー会社を選択...</option>
+          <option>みなとタクシー</option>
+          <option selected>静鉄タクシー</option>
+          <option>うど交通</option>
+          <option>駿河交通</option>
+          <option>日の丸交通</option>
+          <option>パンダタクシー</option>
+          <option>南急観光</option>
+          <option>静清交通</option>
+          <option>ひかりタクシー</option>
+          <option>羽衣タクシー</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>乗務員名（マスタから選択 or 手入力）</label>
+        <select style="border:2px solid var(--accent);">
+          <option value="">乗務員を選択...</option>
+          <option selected>鈴木</option>
+          <option>増田</option>
+          <option>池田</option>
+          <option>小沼</option>
+          <option>大多和</option>
+          <option>澤西</option>
+          <option>稲葉</option>
+        </select>
+      </div>
+
+      <div style="display:flex; gap:8px;">
+        <div class="form-group" style="flex:1;">
+          <label>車両番号（手入力）</label>
+          <input type="text" placeholder="例: 静岡 500 あ 1234" value="静岡 500 あ 5678">
+        </div>
+        <div class="form-group" style="width:120px;">
+          <label>車両タイプ</label>
+          <select>
+            <option selected>普通車</option>
+            <option>大型車</option>
+            <option>特大車</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>乗務員メールアドレス</label>
+        <input type="email" placeholder="指示書PDF送信先" value="suzuki@shizutetsu-taxi.co.jp">
+      </div>
+    </div>
+
+    <!-- 出発時刻 -->
+    <div class="quick-section">
+      <h3>出発予定時刻</h3>
+      <input type="time" value="09:15" style="padding:14px; border:2px solid var(--accent); border-radius:8px; font-size:22px; font-weight:700; width:160px; text-align:center;">
+    </div>
+
+    <div style="height:80px;"></div>
+  </div>
+
+  <div class="sticky-bottom">
+    <button class="btn-primary" onclick="goTo('dispatch-confirm')" style="font-size:18px; background:var(--accent);">
+      運行指示書を作成 →
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN: Dispatch Confirm (配車確定 - 指示書プレビュー・送信) -->
+<!-- ============================================================ -->
+<div class="screen" id="dispatch-confirm">
+  <div class="staff-header" style="background:#7d4e00;">
+    <div class="sh-left">
+      <button class="btn-back" onclick="goTo('dispatch-input')">&larr;</button>
+      <div>
+        <div class="sh-title">📄 運行指示書プレビュー</div>
+        <div class="sh-info">R-005 | W-005</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- PDF Preview (simplified) -->
+    <div style="background:#fff; border:2px solid var(--border); border-radius:10px; padding:16px; margin-bottom:16px;">
+      <div style="text-align:center; font-weight:700; font-size:15px; border-bottom:2px solid var(--text); padding-bottom:8px; margin-bottom:12px;">
+        運行指示書 / Tour Reservation Form
+      </div>
+      <table style="width:100%; border-collapse:collapse; font-size:12px;">
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600; width:30%;">受付番号</td><td style="padding:6px; border:1px solid #ccc;"><strong>R-005</strong> / W-005</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">コース</td><td style="padding:6px; border:1px solid #ccc;">河口湖コース（6時間）</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">顧客名</td><td style="padding:6px; border:1px solid #ccc;">Emma Wilson（4名・British）</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">出発</td><td style="padding:6px; border:1px solid #ccc;">09:15 清水港ターミナル</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">帰着予定</td><td style="padding:6px; border:1px solid #ccc;">15:15 清水港 / 河岸の市</td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">タクシー会社</td><td style="padding:6px; border:1px solid #ccc;">静鉄タクシー</td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">乗務員</td><td style="padding:6px; border:1px solid #ccc;">鈴木</td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">車両</td><td style="padding:6px; border:1px solid #ccc;">普通車 / 静岡 500 あ 5678</td></tr>
+      </table>
+      <div style="margin-top:10px; padding:8px; border:1px solid #e74c3c; border-radius:4px; font-size:11px; color:#c0392b;">
+        <strong>ドライバーさんへ：</strong>重要事項が裏面に記載されています。必ずご確認ください。
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="action-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="action-btn" style="border-color:var(--accent);" onclick="alert('プリンターへ送信中...\n台数分(1枚)印刷します')">
+        <div class="ab-icon">🖨️</div>
+        <div class="ab-label">指示書を印刷</div>
+        <div style="font-size:10px; color:var(--text-light);">現場プリンターで出力</div>
+      </div>
+      <div class="action-btn" style="border-color:var(--staff-accent);" onclick="alert('乗務員 鈴木 へメール送信\nsuzuki@shizutetsu-taxi.co.jp\n件名：【運行指示】W-005 Emma Wilson様')">
+        <div class="ab-icon">📧</div>
+        <div class="ab-label">乗務員へメール</div>
+        <div style="font-size:10px; color:var(--text-light);">指示書PDF添付</div>
+      </div>
+    </div>
+
+    <div class="action-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="action-btn" onclick="alert('乗務員LINEグループへ送信')">
+        <div class="ab-icon">💬</div>
+        <div class="ab-label">乗務員LINEへ</div>
+        <div style="font-size:10px; color:var(--text-light);">運行情報を送信</div>
+      </div>
+      <div class="action-btn" onclick="alert('顧客WhatsAppへ送信\n+44-XXX-XXX-XXXX')">
+        <div class="ab-icon">📱</div>
+        <div class="ab-label">顧客WhatsAppへ</div>
+        <div style="font-size:10px; color:var(--text-light);">配車情報を通知</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;">
+      <button class="btn-primary btn-success" onclick="goTo('dispatch-done')" style="font-size:18px;">
+        ✓ 配車完了
+      </button>
+    </div>
+
+    <div style="height:20px;"></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN: Dispatch Done (配車完了) -->
+<!-- ============================================================ -->
+<div class="screen" id="dispatch-done">
+  <div class="staff-header" style="background:#1e8449;">
+    <div class="sh-left">
+      <div>
+        <div class="sh-title">✓ 配車完了</div>
+        <div class="sh-info">R-005 | W-005 | 配車担当: YY</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="confirm-hero">
+      <div class="confirm-check">✓</div>
+      <h2 style="color:var(--success);">配車完了</h2>
+      <p>運行指示書をドライバーへ手渡しください</p>
+    </div>
+
+    <div class="summary-card" style="background:#e8f8f0;">
+      <h4 style="color:#1e8449;">配車サマリー</h4>
+      <div class="sc-row"><span>受付番号</span><span>R-005 / W-005</span></div>
+      <div class="sc-row"><span>顧客</span><span>Emma Wilson（4名）</span></div>
+      <div class="sc-row"><span>コース</span><span>河口湖 6h</span></div>
+      <div class="sc-row"><span>タクシー会社</span><span>静鉄タクシー</span></div>
+      <div class="sc-row"><span>乗務員</span><span>鈴木</span></div>
+      <div class="sc-row"><span>車両</span><span>普通車 / 静岡 500 あ 5678</span></div>
+      <div class="sc-row"><span>出発予定</span><span>09:15</span></div>
+      <div class="sc-row"><span>ステータス</span><span style="color:var(--success); font-weight:700;">配車済み ✓</span></div>
+    </div>
+
+    <div style="background:#fff3cd; border:1px solid #ffc107; border-radius:8px; padding:12px; font-size:13px; margin:16px 0;">
+      <strong>📋 次のアクション:</strong><br>
+      1. 印刷した指示書をドライバーに手渡し<br>
+      2. 顧客をドライバーの車両へ案内
+    </div>
+
+    <button class="btn-primary" onclick="goTo('dispatch-search')" style="font-size:18px; background:var(--accent);">
+      🚕 次の配車へ（残り4件）
+    </button>
+
+    <div style="height:20px;"></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN: Driver Report (乗務員 運行完了報告) -->
+<!-- ============================================================ -->
+<div class="screen" id="driver-report">
+  <div style="background:var(--staff-blue); padding:14px 16px; color:#fff; text-align:center;">
+    <div style="font-size:12px; opacity:0.7;">DRIVER REPORT / 運行完了報告</div>
+    <div style="font-size:16px; font-weight:700;">Shimizu Port Smart Transfer</div>
+    <div style="font-size:11px; opacity:0.6;">ログイン不要 — メールリンクからアクセス</div>
+  </div>
+
+  <div class="content">
+    <div class="summary-card">
+      <h4>運行情報</h4>
+      <div class="sc-row"><span>受付番号</span><span>R-005 / W-005</span></div>
+      <div class="sc-row"><span>コース</span><span>河口湖 6h</span></div>
+      <div class="sc-row"><span>顧客</span><span>Emma Wilson（4名）</span></div>
+      <div class="sc-row"><span>出発時刻</span><span>09:15</span></div>
+      <div class="sc-row"><span>乗務員</span><span>鈴木（静鉄タクシー）</span></div>
+    </div>
+
+    <div class="quick-section">
+      <h3>実際の行き先（選択 or 手入力）</h3>
+      <div class="form-group">
+        <select>
+          <option>河口湖・山中湖</option>
+          <option>富士宮</option>
+          <option>三保・日本平</option>
+          <option>龍華寺</option>
+          <option>その他（下記に入力）</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <input type="text" placeholder="その他の行き先があれば入力">
+      </div>
+    </div>
+
+    <div class="quick-section">
+      <h3>到着時刻（帰庫時刻）</h3>
+      <input type="time" value="15:10" style="padding:14px; border:2px solid var(--staff-accent); border-radius:8px; font-size:22px; font-weight:700; width:160px;">
+    </div>
+
+    <div class="quick-section">
+      <h3>備考</h3>
+      <textarea rows="3" placeholder="特記事項があれば入力&#10;例: 白糸の滝で30分追加、渋滞で15分遅延 等" style="width:100%; padding:12px; border:1px solid var(--border); border-radius:8px; font-size:14px;"></textarea>
+    </div>
+
+    <button class="btn-primary btn-success" onclick="goTo('driver-report-done')" style="font-size:18px;">
+      送信
+    </button>
+  </div>
+</div>
+
+<!-- SCREEN: Driver Report Done -->
+<div class="screen" id="driver-report-done">
+  <div style="background:var(--staff-blue); padding:14px 16px; color:#fff; text-align:center;">
+    <div style="font-size:16px; font-weight:700;">運行完了報告</div>
+  </div>
+  <div class="content">
+    <div class="confirm-hero">
+      <div class="confirm-check">✓</div>
+      <h2 style="color:var(--success);">報告完了</h2>
+      <p>ありがとうございました。<br>安全運転お疲れさまでした。</p>
+    </div>
+    <div class="summary-card" style="background:#e8f8f0;">
+      <div class="sc-row"><span>受付番号</span><span>R-005</span></div>
+      <div class="sc-row"><span>ステータス</span><span style="color:var(--success); font-weight:700;">運行完了 ✓</span></div>
+      <div class="sc-row"><span>帰着時刻</span><span>15:10</span></div>
+    </div>
+    <div style="text-align:center; font-size:13px; color:var(--text-light); margin-top:20px;">
+      このページを閉じてください
+    </div>
   </div>
 </div>
 

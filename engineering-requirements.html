@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジニア向け要件伝達書 — 清水港スマート交通手配システム</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f8f9fa; color: #2c3e50; line-height: 1.7; }
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
+  h1 { font-size: 28px; color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 12px; margin-bottom: 8px; }
+  .subtitle { font-size: 14px; color: #7f8c8d; margin-bottom: 32px; }
+  h2 { font-size: 22px; color: #1a5276; margin: 40px 0 16px; padding: 8px 0; border-bottom: 2px solid #dce1e6; }
+  h3 { font-size: 17px; color: #2c3e50; margin: 24px 0 10px; }
+  h4 { font-size: 15px; color: #e67e22; margin: 18px 0 8px; }
+  p { margin-bottom: 10px; font-size: 14px; }
+  ul, ol { margin: 8px 0 16px 20px; font-size: 14px; }
+  li { margin-bottom: 4px; }
+  li li { margin-bottom: 2px; }
+
+  .card { background: #fff; border: 1px solid #dce1e6; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+  .card.highlight { border-left: 4px solid #2980b9; }
+  .card.warn { border-left: 4px solid #e67e22; }
+  .card.danger { border-left: 4px solid #e74c3c; }
+  .card.success { border-left: 4px solid #27ae60; }
+  .card h3 { margin-top: 0; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 13px; }
+  th, td { padding: 8px 10px; border: 1px solid #dce1e6; text-align: left; }
+  th { background: #f0f2f5; font-weight: 600; font-size: 12px; color: #7f8c8d; }
+  td { vertical-align: top; }
+  tr:hover { background: #f8f9fb; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; margin-right: 4px; }
+  .badge-req { background: #fdedec; color: #e74c3c; }
+  .badge-opt { background: #eaf2f8; color: #2980b9; }
+  .badge-skill { background: #e8f8f0; color: #27ae60; }
+  .badge-api { background: #f4ecf7; color: #8e44ad; }
+  .badge-warn { background: #fef9e7; color: #d68910; }
+
+  .flow-box { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; margin: 12px 0; }
+  .flow-step { background: #eaf2f8; border: 1px solid #aed6f1; border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; color: #1a5276; }
+  .flow-arrow { color: #bdc3c7; font-size: 16px; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .tech-item { background: #fff; border: 1px solid #dce1e6; border-radius: 8px; padding: 12px; }
+  .tech-item h4 { margin: 0 0 6px; color: #1a5276; font-size: 14px; }
+  .tech-item p { font-size: 12px; color: #7f8c8d; margin: 0; }
+
+  .entity-table td:first-child { font-weight: 600; white-space: nowrap; }
+  .priority-high { color: #e74c3c; font-weight: 700; }
+  .priority-mid { color: #e67e22; font-weight: 600; }
+  .priority-low { color: #27ae60; }
+
+  code { background: #f0f2f5; padding: 1px 4px; border-radius: 3px; font-size: 12px; font-family: 'Menlo', monospace; }
+
+  .toc { background: #fff; border: 1px solid #dce1e6; border-radius: 10px; padding: 20px; margin-bottom: 24px; }
+  .toc h3 { margin-top: 0; color: #1a5276; }
+  .toc ol { margin: 8px 0 0 20px; }
+  .toc li { margin-bottom: 4px; }
+  .toc a { color: #2980b9; text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  .screen-flow { background: #1a252f; color: #fff; border-radius: 10px; padding: 20px; margin: 16px 0; font-size: 13px; }
+  .screen-flow h4 { color: #5dade2; margin: 0 0 8px; }
+
+  @media print {
+    body { background: #fff; }
+    .container { max-width: 100%; }
+    h2 { page-break-before: always; }
+    h2:first-of-type { page-break-before: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>清水港スマート交通手配システム<br>エンジニア向け要件伝達書</h1>
+<p class="subtitle">Shimizu Port Smart Transfer System — Engineering Requirements Document<br>
+Version 1.0 | 2026年3月31日 | 株式会社静岡TaaSトラベル</p>
+
+<div class="toc">
+  <h3>目次</h3>
+  <ol>
+    <li><a href="#overview">システム概要・全体像</a></li>
+    <li><a href="#architecture">システム構成・技術スタック</a></li>
+    <li><a href="#data-model">データモデル・エンティティ設計</a></li>
+    <li><a href="#url-a">URL A: 顧客向け予約サイト</a></li>
+    <li><a href="#url-b">URL B: スタッフ専用 対面販売端末</a></li>
+    <li><a href="#admin">管理画面（Admin Dashboard）</a></li>
+    <li><a href="#portcall">寄港情報登録・業務分析</a></li>
+    <li><a href="#integrations">外部連携・API</a></li>
+    <li><a href="#security">セキュリティ要件</a></li>
+    <li><a href="#legal">法令対応・旅行業法</a></li>
+    <li><a href="#skills">必要なエンジニアスキル</a></li>
+    <li><a href="#phases">開発フェーズ・優先度</a></li>
+    <li><a href="#qa">品質・テスト要件</a></li>
+    <li><a href="#non-functional">非機能要件</a></li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="overview">1. システム概要・全体像</h2>
+<!-- ============================================================ -->
+
+<div class="card highlight">
+  <h3>プロジェクト概要</h3>
+  <p>清水港に寄港するクルーズ船の乗客（主に外国人観光客）向けに、タクシーチャーター観光ツアーの予約・販売・配車・運行管理を行うWebシステムです。</p>
+  <p><strong>現状の課題:</strong> 紙ベースの受注管理、手書きの運行指示書、Excelでの集計 → これらを統合的なWebシステムで効率化します。</p>
+</div>
+
+<h3>システム全体フロー</h3>
+<div class="screen-flow">
+  <h4>業務の時系列フロー</h4>
+  <p><strong>事前準備（前日〜数日前）</strong></p>
+  <div class="flow-box">
+    <span class="flow-step">寄港情報登録</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">船名・入出港時刻・W番号枠を設定</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">事前予約受付（URL A）</span>
+  </div>
+  <p style="margin-top:12px;"><strong>当日（対面販売）</strong></p>
+  <div class="flow-box">
+    <span class="flow-step">営業がURL Bで受注入力</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">決済デスクでmPOS/Web決済</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">配車担当が車両・乗務員引当</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">運行指示書PDF生成</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">乗務員にLINE/メール送信</span>
+  </div>
+  <p style="margin-top:12px;"><strong>運行中〜完了</strong></p>
+  <div class="flow-box">
+    <span class="flow-step">乗務員がツアー実施</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">乗務員がスマホで運行完了報告</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">管理画面で実績確認・集計</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">行政レポート出力</span>
+  </div>
+</div>
+
+<h3>4つのフロントエンド</h3>
+<table>
+  <thead><tr><th>ID</th><th>名称</th><th>ユーザー</th><th>デバイス</th><th>認証</th><th>画面数</th></tr></thead>
+  <tbody>
+    <tr><td><strong>URL A</strong></td><td>顧客向け予約サイト</td><td>クルーズ船乗客（外国人）</td><td>スマートフォン</td><td>不要</td><td>7画面</td></tr>
+    <tr><td><strong>URL B</strong></td><td>スタッフ対面販売端末</td><td>営業 / 決済 / 配車 / 乗務員</td><td>タブレット / スマホ</td><td>スタッフコード認証</td><td>12画面</td></tr>
+    <tr><td><strong>Admin</strong></td><td>管理画面</td><td>マネージャー</td><td>PC（デスクトップ）</td><td>ログイン認証</td><td>5画面</td></tr>
+    <tr><td><strong>分析</strong></td><td>寄港管理 / 業務分析</td><td>マネージャー / 経営層</td><td>PC（デスクトップ）</td><td>ログイン認証</td><td>7画面</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="architecture">2. システム構成・技術スタック</h2>
+<!-- ============================================================ -->
+
+<div class="card warn">
+  <h3>推奨技術スタック（参考）</h3>
+  <p>以下は推奨案です。エンジニアの判断で最適な技術を選定してください。</p>
+</div>
+
+<div class="tech-grid">
+  <div class="tech-item">
+    <h4>フロントエンド</h4>
+    <p><strong>React / Next.js</strong> or <strong>Nuxt.js (Vue)</strong><br>
+    URL A: モバイルファースト（SPA）<br>
+    URL B: タブレット最適化<br>
+    Admin: デスクトップ（サイドバーレイアウト）<br>
+    多言語対応（i18n）: 5言語</p>
+  </div>
+  <div class="tech-item">
+    <h4>バックエンド</h4>
+    <p><strong>Node.js (Express/Fastify)</strong> or <strong>Python (Django/FastAPI)</strong> or <strong>Ruby on Rails</strong><br>
+    REST API or GraphQL<br>
+    PDF生成エンジン必須<br>
+    WebSocket（リアルタイム更新用）</p>
+  </div>
+  <div class="tech-item">
+    <h4>データベース</h4>
+    <p><strong>PostgreSQL</strong>（推奨）<br>
+    リレーショナルDB必須（受注・配車・集計の整合性）<br>
+    時系列データの分析クエリ対応</p>
+  </div>
+  <div class="tech-item">
+    <h4>インフラ</h4>
+    <p><strong>Vercel / AWS / GCP</strong><br>
+    CDN（多言語静的アセット配信）<br>
+    SSL必須（決済あり）<br>
+    ファイルストレージ（PDF保管）</p>
+  </div>
+</div>
+
+<h3>システム構成図</h3>
+<div class="card">
+<pre style="font-size:12px; line-height:1.5; overflow-x:auto;">
+┌─────────────────────────────────────────────────────────────┐
+│                     フロントエンド                              │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐     │
+│  │  URL A   │  │  URL B   │  │  Admin   │  │  分析    │     │
+│  │ (顧客)   │  │ (スタッフ) │  │ (管理者)  │  │ (経営)   │     │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘     │
+└───────┼──────────────┼──────────────┼──────────────┼──────────┘
+        │              │              │              │
+        └──────────────┴──────┬───────┴──────────────┘
+                              │ REST API / WebSocket
+                    ┌─────────┴─────────┐
+                    │   API サーバー     │
+                    │   (認証/認可)      │
+                    └────┬────┬────┬────┘
+          ┌──────────────┤    │    ├──────────────┐
+          │              │    │    │              │
+    ┌─────┴─────┐  ┌─────┴────┴┐  ┌┴────────┐  ┌─┴──────────┐
+    │ PostgreSQL│  │ PDF Engine │  │ Storage │  │ 外部連携    │
+    │ (メインDB) │  │ (帳票生成)  │  │ (PDF等) │  │ Stripe     │
+    └───────────┘  └────────────┘  └─────────┘  │ LINE API   │
+                                                │ WhatsApp   │
+                                                │ Email/SMTP │
+                                                │ mPOS連携   │
+                                                └────────────┘
+</pre>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="data-model">3. データモデル・エンティティ設計</h2>
+<!-- ============================================================ -->
+
+<div class="card danger">
+  <h3>重要: 番号体系</h3>
+  <p>本システムには<strong>2種類の番号</strong>が存在し、混同厳禁です。</p>
+  <table>
+    <tr><th>番号</th><th>名称</th><th>発行タイミング</th><th>形式</th><th>用途</th></tr>
+    <tr><td><strong>受付番号</strong></td><td>Reception Number</td><td>受注入力時に自動採番</td><td><code>R-YYYYMMDD-NNN</code></td><td>システム内の一意識別子。全工程で使用</td></tr>
+    <tr><td><strong>W番号</strong></td><td>Waiting Number</td><td>決済完了時に物理カードから読取り</td><td><code>W-NNN</code></td><td>顧客が乗車待ち時に使う物理カードの番号。寄港日ごとにリセット</td></tr>
+  </table>
+  <p><strong>注意:</strong> W番号は寄港情報登録で事前に枠（ワンウェイ用 / チャーター用）を設定。物理カードに印刷済みの連番を使用。</p>
+</div>
+
+<h3>主要エンティティ</h3>
+<table class="entity-table">
+  <thead><tr><th>エンティティ</th><th>主要カラム</th><th>備考</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>寄港情報<br><code>port_calls</code></td>
+      <td>id, date, day_of_week, ship_id, arrival_time, departure_time, stay_duration(算出), passenger_capacity, weather, fuji_visibility, desk_deployed, w_number_oneway_start, w_number_oneway_end, w_number_charter_start, w_number_charter_end, status(draft/registered/active/completed), notes</td>
+      <td>全受注の親エンティティ。寄港日ごとに1レコード。</td>
+    </tr>
+    <tr>
+      <td>クルーズ船マスタ<br><code>ships</code></td>
+      <td>id, name, name_en, passenger_capacity, operator, notes</td>
+      <td>船名の統一管理。営業がバラバラに入力するのを防止。</td>
+    </tr>
+    <tr>
+      <td>受注<br><code>orders</code></td>
+      <td>id, reception_number, port_call_id, w_number, course_id, vehicle_type, vehicle_count, passenger_count, customer_name, customer_email, customer_phone, nationality, preferred_language, special_requests, order_route(instant/advance/qr), sales_amount, procurement_amount, payment_status, payment_method, payment_txn_id, staff_code, status(pending/paid/dispatched/in_progress/completed), created_at</td>
+      <td>中心テーブル。1受注=1グループ（複数台の場合もある）。売上(sales)と仕入(procurement)を分離管理。</td>
+    </tr>
+    <tr>
+      <td>配車<br><code>dispatches</code></td>
+      <td>id, order_id, vehicle_number(1,2...), taxi_company_id, driver_id, car_number, vehicle_type, driver_email, departure_time, return_time, instruction_pdf_url, line_sent, whatsapp_sent, status(assigned/in_progress/completed)</td>
+      <td>1受注に対してN台の配車（vehicle_count分）。車両単位でPDF生成。</td>
+    </tr>
+    <tr>
+      <td>運行完了報告<br><code>driver_reports</code></td>
+      <td>id, dispatch_id, actual_destination, return_time, notes, submitted_at</td>
+      <td>乗務員がメールリンクから入力。ログイン不要。</td>
+    </tr>
+    <tr>
+      <td>コースマスタ<br><code>courses</code></td>
+      <td>id, name, name_en, duration_hours, max_passengers_standard, max_passengers_large, price_standard, price_large, destinations(JSON), included_items, excluded_items, is_active, sort_order</td>
+      <td>コース内容・料金・行程をマスタ管理。多言語対応。</td>
+    </tr>
+    <tr>
+      <td>タクシー会社マスタ<br><code>taxi_companies</code></td>
+      <td>id, name, contact_phone, contact_email, is_active</td>
+      <td>手配先。法人タクシー + 個人タクシーあり。約20社。</td>
+    </tr>
+    <tr>
+      <td>乗務員マスタ<br><code>drivers</code></td>
+      <td>id, name, taxi_company_id, email, phone, is_active</td>
+      <td>タクシー会社に紐づく。メールで運行指示書を受信。</td>
+    </tr>
+    <tr>
+      <td>スタッフ<br><code>staff</code></td>
+      <td>id, code(2文字), name, role(sales/payment/dispatch/admin), password_hash</td>
+      <td>2文字コードでログイン（例: YY, HE, SO）</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>ER図（主要リレーション）</h3>
+<div class="card">
+<pre style="font-size:11px; line-height:1.5; overflow-x:auto;">
+ships ──1:N── port_calls ──1:N── orders ──1:N── dispatches ──1:1── driver_reports
+                                   │                │
+                                   │                ├── taxi_companies
+                                   │                └── drivers
+                                   │
+                                   ├── courses
+                                   └── staff
+</pre>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="url-a">4. URL A: 顧客向け予約サイト</h2>
+<!-- ============================================================ -->
+
+<h3>画面遷移フロー（7画面）</h3>
+<div class="flow-box">
+  <span class="flow-step">言語選択</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-step">コース一覧</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-step">コース詳細</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-step">予約フォーム</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-step">旅行条件書</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-step">決済</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-step">完了</span>
+</div>
+
+<h4>実装上の重要ポイント</h4>
+<table>
+  <thead><tr><th>項目</th><th>詳細</th><th>優先度</th></tr></thead>
+  <tbody>
+    <tr><td>多言語対応（i18n）</td><td>英語・日本語・中国語・韓国語・スペイン語の5言語。コース名・説明・行程すべて翻訳が必要。<br><strong>言語切替後もセッション維持必須。</strong></td><td class="priority-high">必須</td></tr>
+    <tr><td>モバイルファースト</td><td>max-width: 480px ベース設計。クルーズ船乗客がスマホからアクセスする想定。<br>船内WiFi環境を考慮し<strong>軽量な実装</strong>が必要。</td><td class="priority-high">必須</td></tr>
+    <tr><td>Stripe決済</td><td>クレジットカード決済。PCI DSS準拠。SSL必須。<br>通貨: JPY（日本円）。外国人顧客なので<strong>海外発行カード対応</strong>必須。</td><td class="priority-high">必須</td></tr>
+    <tr><td>旅行条件書の法的同意</td><td>旅行業法に基づく「募集型企画旅行契約」の条件書。チェックボックスで明示的同意。<br>同意なしでは決済に進めない仕様。</td><td class="priority-high">必須</td></tr>
+    <tr><td>予約確認メール</td><td>決済完了後に自動送信。運行指示書PDFを添付。<br>Booking Number、当日の集合手順を記載。</td><td class="priority-high">必須</td></tr>
+    <tr><td>料金計算ロジック</td><td><strong>車両単位料金</strong>（人数割りではない）。普通車/大型車で料金が異なる。<br>コースマスタの料金を参照。税込表示。</td><td class="priority-high">必須</td></tr>
+    <tr><td>受付番号の自動採番</td><td>形式: <code>R-YYYYMMDD-NNN</code>。日付+連番。<br>事前予約と当日即売で<strong>同一連番体系</strong>を使用。競合制御が必要。</td><td class="priority-high">必須</td></tr>
+  </tbody>
+</table>
+
+<h4>予約フォームの入力項目</h4>
+<table>
+  <thead><tr><th>項目</th><th>型</th><th>必須</th><th>備考</th></tr></thead>
+  <tbody>
+    <tr><td>Name</td><td>text</td><td>○</td><td>アルファベット入力想定</td></tr>
+    <tr><td>Email</td><td>email</td><td>○</td><td>確認メール送信先</td></tr>
+    <tr><td>WhatsApp / Phone</td><td>tel</td><td>○</td><td>国際番号（+XX形式）。当日緊急連絡用</td></tr>
+    <tr><td>Passengers</td><td>select</td><td>○</td><td>1〜4（普通車）/ 1〜6（大型車）</td></tr>
+    <tr><td>Preferred Language</td><td>select</td><td>○</td><td>English / Japanese / No preference</td></tr>
+    <tr><td>Nationality</td><td>select</td><td>○</td><td>10カ国 + Other。分析・レポート用</td></tr>
+    <tr><td>Cruise Ship</td><td>select</td><td>○</td><td>寄港情報マスタから動的取得</td></tr>
+    <tr><td>Special Requests</td><td>textarea</td><td>-</td><td>車椅子、チャイルドシート等</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="url-b">5. URL B: スタッフ専用 対面販売端末</h2>
+<!-- ============================================================ -->
+
+<h3>画面遷移フロー（12画面、4ロール）</h3>
+<div class="screen-flow">
+  <h4>ロール別フロー</h4>
+  <p><strong>営業:</strong> ログイン → 役割選択 → 受注入力 → 決済 → 完了</p>
+  <p><strong>決済:</strong> ログイン → 役割選択 → 受付番号検索 → mPOS/Web決済 → W番号入力 → 完了</p>
+  <p><strong>配車:</strong> ログイン → 役割選択 → 受付番号検索 → 乗務員・車両引当 → 指示書PDF → LINE/WhatsApp送信 → 完了</p>
+  <p><strong>乗務員:</strong> メールリンクから直接アクセス（ログイン不要） → 運行完了報告 → 送信</p>
+</div>
+
+<h4>実装上の重要ポイント</h4>
+<table>
+  <thead><tr><th>項目</th><th>詳細</th><th>優先度</th></tr></thead>
+  <tbody>
+    <tr><td>ロールベースUI</td><td>ログイン後に役割を選択。営業/決済/配車/乗務員で<strong>表示画面が異なる</strong>。<br>同一スタッフが日によって異なる役割を担う。</td><td class="priority-high">必須</td></tr>
+    <tr><td>mPOS連携</td><td>外部mPOS端末のトランザクションIDを<strong>手動入力</strong>する運用。API連携ではない。<br>決済自体はmPOS端末側で実施し、システムにはID記録のみ。</td><td class="priority-mid">重要</td></tr>
+    <tr><td>リアルタイム同期</td><td>複数スタッフが同時に受注入力するため、<strong>受付番号の採番競合</strong>を防ぐ。<br>配車状況もリアルタイムで反映（WebSocket推奨）。</td><td class="priority-high">必須</td></tr>
+    <tr><td>オフライン対応</td><td>清水港の通信環境が不安定な場合がある。最低限<strong>受注入力のオフライン対応</strong>を検討。<br>（PWA / Service Worker）</td><td class="priority-mid">検討</td></tr>
+    <tr><td>タッチ操作最適化</td><td>屋外で手袋着用の場合あり。ボタンサイズは最低44px × 44px。<br>数値入力は+/-ステッパーを使用。</td><td class="priority-mid">重要</td></tr>
+    <tr><td>配車の複数台対応</td><td>1受注で複数台の車両を手配する場合がある。<br>車両ごとに異なるタクシー会社・乗務員を割り当て可能。<br>車両ごとに個別の運行指示書PDFを生成。</td><td class="priority-high">必須</td></tr>
+    <tr><td>乗務員報告リンク</td><td>認証不要のワンタイムURL。配車確定時にメール送信。<br>有効期限: 当日中。セキュリティ上、受注詳細の閲覧のみ許可。</td><td class="priority-mid">重要</td></tr>
+  </tbody>
+</table>
+
+<div class="card warn">
+  <h3>運用上の特殊フロー</h3>
+  <p><strong>W番号カードの物理運用:</strong></p>
+  <ol>
+    <li>寄港情報登録で W番号の枠を事前設定（例: W-001〜W-060）</li>
+    <li>物理カード（プラスチック製、番号印刷済み）を準備</li>
+    <li>決済完了時に、スタッフが物理カードの番号をシステムに手入力</li>
+    <li>カードに受付番号を手書きし、顧客に渡す</li>
+    <li>顧客はこのカードを持ってタクシー乗り場で待機</li>
+    <li>配車担当がカードの番号で受注を特定し、車両を割り当て</li>
+  </ol>
+  <p><strong>→ W番号は「物理カードとの紐付け」がキモ。バーコード/QR化は将来検討。</strong></p>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="admin">6. 管理画面（Admin Dashboard）</h2>
+<!-- ============================================================ -->
+
+<h3>画面一覧（5画面）</h3>
+<table>
+  <thead><tr><th>画面</th><th>機能</th><th>主要データ</th></tr></thead>
+  <tbody>
+    <tr><td>ダッシュボード</td><td>当日の受注状況をリアルタイム表示</td><td>取扱高、仕入額、未完了件数、受注一覧テーブル</td></tr>
+    <tr><td>受注一覧</td><td>全受注の検索・フィルタ・CSV出力</td><td>受付No, W番号, 顧客名, 国籍, コース, 車種, 台数, 人数, 売上, 仕入, 決済, ルート, ステータス, 担当</td></tr>
+    <tr><td>配車管理</td><td>配車待ち/運行中/完了の管理</td><td>カード形式で配車情報を入力・確認</td></tr>
+    <tr><td>運行指示書</td><td>PDFプレビュー・印刷・メール送信</td><td>運行指示書の全項目</td></tr>
+    <tr><td>運行実績管理</td><td>コース別/国籍別/タクシー会社別/ルート別の集計</td><td>横棒グラフ + 数値</td></tr>
+  </tbody>
+</table>
+
+<h4>実装上の重要ポイント</h4>
+<table>
+  <thead><tr><th>項目</th><th>詳細</th></tr></thead>
+  <tbody>
+    <tr><td><strong>売上 vs 仕入の分離管理</strong></td><td>受注一覧では「売上（顧客請求額）」と「仕入（タクシー会社への支払額）」を別カラムで管理。<br>粗利 = 売上 - 仕入 の計算が必要。</td></tr>
+    <tr><td><strong>ヘッダーの寄港コンテキスト</strong></td><td>画面上部に常に「本日の日付 / クルーズ船名 / 入出港時刻 / ログインユーザー」を表示。<br>寄港情報マスタから自動取得。</td></tr>
+    <tr><td><strong>未入力チェック機能</strong></td><td>仕入額未入力、配車未完了、運行完了報告未提出などを一括検出。<br>当日の業務終了前に漏れを確認するための機能。</td></tr>
+    <tr><td><strong>CSV出力</strong></td><td>受注一覧、運行実績のCSV出力。Excelでの二次加工を想定。<br>文字コード: UTF-8 with BOM（Excel対応）。</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="portcall">7. 寄港情報登録・業務分析</h2>
+<!-- ============================================================ -->
+
+<div class="card danger">
+  <h3>なぜ「寄港情報登録」が必要か</h3>
+  <p>対面販売を一斉に開始する時点で、各営業が「クルーズ船名」をバラバラに入力するのはNG。</p>
+  <p><strong>→ 事前に管理者が寄港情報を登録し、営業スタッフの受注入力画面に自動反映させる。</strong></p>
+  <p>これにより、船名・日付・天気情報が全スタッフで統一され、集計・分析の精度が保証されます。</p>
+</div>
+
+<h3>データ階層構造</h3>
+<div class="card">
+<pre style="font-size:12px; line-height:1.6;">
+年月（2026年4月）
+ ├── 15日 → セレブリティ・ミレニアム号 → 天気 → W番号（結果件数データ）
+ │                                              ├── ワンウェイ → 受付番号 → 営業 / 商品 / 車両 / ドライバー
+ │                                              └── チャーター → 受付番号 → 営業 / 商品 / 車両 / ドライバー
+ │
+ └── 18日 → セレブリティ号 → 天気 → W番号（結果件数データ）
+                                        ├── ワンウェイ → ...
+                                        └── チャーター → ...
+</pre>
+</div>
+
+<h3>業務分析で必要な集計軸</h3>
+<table>
+  <thead><tr><th>分析画面</th><th>集計軸</th><th>データソース</th></tr></thead>
+  <tbody>
+    <tr><td>業務分析</td><td>寄港数推移、チャーター実績推移、全国ランキング</td><td>port_calls + 外部データ（国土交通省）</td></tr>
+    <tr><td>クルーズ船ランキング</td><td>船別 取扱高 / 寄港回数 / 前年比</td><td>orders GROUP BY ship_id</td></tr>
+    <tr><td>人気ツアー分析</td><td>行き先別 件数 / 年度比較</td><td>orders GROUP BY course_id（+ 実際の行き先）</td></tr>
+    <tr><td>タクシー会社分析</td><td>会社別 件数 / 年度比較</td><td>dispatches GROUP BY taxi_company_id</td></tr>
+    <tr><td>天気×売上分析</td><td>天候 / 富士山 / 滞在時間 × 取扱高</td><td>orders JOIN port_calls</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="integrations">8. 外部連携・API</h2>
+<!-- ============================================================ -->
+
+<table>
+  <thead><tr><th>連携先</th><th>用途</th><th>実装方法</th><th>優先度</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="badge badge-api">Stripe</span></td>
+      <td>クレジットカード決済（URL A 事前予約）</td>
+      <td>Stripe.js + Payment Intents API<br>Webhook で決済完了を受信<br>海外カード対応必須</td>
+      <td class="priority-high">必須</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-api">mPOS</span></td>
+      <td>対面決済（URL B 当日即売）</td>
+      <td>mPOS端末の<strong>トランザクションIDを手動入力</strong>する運用。<br>API連携は現時点では不要（将来検討）。</td>
+      <td class="priority-mid">重要</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-api">Email (SMTP)</span></td>
+      <td>予約確認メール、運行指示書送信、乗務員報告リンク送信</td>
+      <td>SendGrid / Amazon SES / Resend 等<br>PDF添付対応。多言語テンプレート。</td>
+      <td class="priority-high">必須</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-api">PDF生成</span></td>
+      <td>運行指示書 / 旅行行程書 / 旅行条件書</td>
+      <td>Puppeteer / wkhtmltopdf / React-PDF 等<br>A4縦レイアウト。日英2言語対応。<br>行程表・ドライバー注意事項を含む。</td>
+      <td class="priority-high">必須</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-api">LINE Messaging API</span></td>
+      <td>乗務員グループへの配車通知</td>
+      <td>LINE Official Account + Messaging API<br>グループ送信。配車情報テキスト + PDF。</td>
+      <td class="priority-mid">重要</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-api">WhatsApp Business API</span></td>
+      <td>外国人顧客への配車完了通知</td>
+      <td>WhatsApp Business Cloud API<br>テンプレートメッセージ（事前承認要）。</td>
+      <td class="priority-mid">重要</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-api">プリンター</span></td>
+      <td>現地での運行指示書印刷</td>
+      <td>ブラウザのwindow.print()またはネットワークプリンター連携<br>モバイルプリンター（レシートサイズ or A4）対応。</td>
+      <td class="priority-mid">重要</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="security">9. セキュリティ要件</h2>
+<!-- ============================================================ -->
+
+<table>
+  <thead><tr><th>項目</th><th>要件</th></tr></thead>
+  <tbody>
+    <tr><td>通信暗号化</td><td>全ページ HTTPS（SSL/TLS）必須。Stripe利用のため必須。</td></tr>
+    <tr><td>認証</td><td><strong>URL A:</strong> 認証不要（公開サイト）<br><strong>URL B:</strong> スタッフコード + パスワード。セッション管理（JWT or Cookie）<br><strong>Admin:</strong> ID + パスワード + ロール制御<br><strong>乗務員報告:</strong> ワンタイムURL（署名付きトークン）、当日有効期限</td></tr>
+    <tr><td>個人情報保護</td><td>顧客名・連絡先・国籍は個人情報。日本の個人情報保護法に準拠。<br>外国人の個人情報を扱うため、GDPR等の配慮も検討。</td></tr>
+    <tr><td>決済情報</td><td>カード情報は<strong>一切サーバーに保存しない</strong>（Stripeトークン化）。<br>PCI DSS SAQ A-EP 準拠。</td></tr>
+    <tr><td>権限制御</td><td>管理画面のCSV出力・マスタ編集は管理者権限のみ。<br>スタッフは自分の役割の画面のみアクセス可能。</td></tr>
+    <tr><td>SQL Injection / XSS</td><td>パラメータバインド必須。ユーザー入力のサニタイズ。CSP設定。</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="legal">10. 法令対応・旅行業法</h2>
+<!-- ============================================================ -->
+
+<div class="card danger">
+  <h3>旅行業法上の位置づけ</h3>
+  <p>本サービスは<strong>「募集型企画旅行」</strong>（パッケージツアー）に該当します。旅行業法に基づき以下が必要です。</p>
+  <ul>
+    <li><strong>旅行条件書の事前交付:</strong> 予約前に旅行条件書を提示し、顧客の明示的な同意を取得。電磁的方法（Web画面上）での交付可。</li>
+    <li><strong>取消料規定の明示:</strong>
+      <ul>
+        <li>7日前まで: 無料</li>
+        <li>3〜6日前: 旅行代金の30%</li>
+        <li>1〜2日前: 旅行代金の50%</li>
+        <li>当日: 旅行代金の100%</li>
+      </ul>
+    </li>
+    <li><strong>旅行業務取扱管理者の明示:</strong> サイト上に記載必須</li>
+    <li><strong>運行指示書の保管:</strong> 帳票として一定期間保管義務</li>
+    <li><strong>行政報告:</strong> 国土交通省への定期報告（CSV/PDF出力機能で対応）</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="skills">11. 必要なエンジニアスキル</h2>
+<!-- ============================================================ -->
+
+<h3>必須スキル</h3>
+<table>
+  <thead><tr><th>領域</th><th>スキル</th><th>理由</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="badge badge-skill">フロント</span></td>
+      <td>React or Vue.js + TypeScript</td>
+      <td>4つのフロントエンド（モバイル/タブレット/PC）を効率的に開発。コンポーネント再利用。</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-skill">フロント</span></td>
+      <td>レスポンシブデザイン + PWA</td>
+      <td>モバイルファースト設計。オフライン対応（Service Worker）の実装経験。</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-skill">フロント</span></td>
+      <td>多言語対応（i18n）</td>
+      <td>5言語のUI切替。react-intl / vue-i18n 等の実装経験。</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-skill">バックエンド</span></td>
+      <td>REST API設計 + DB設計</td>
+      <td>受注→決済→配車の複雑なステータス遷移。トランザクション管理。</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-skill">バックエンド</span></td>
+      <td>認証・認可</td>
+      <td>ロールベースアクセス制御（RBAC）。JWT / セッション管理。ワンタイムURL生成。</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-skill">決済</span></td>
+      <td>Stripe Integration</td>
+      <td>Payment Intents API、Webhook処理、エラーハンドリング、海外カード対応。</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-skill">PDF</span></td>
+      <td>PDF生成</td>
+      <td>運行指示書のA4レイアウト生成。テーブル、行程表、注意事項。日英バイリンガル。</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-skill">DB</span></td>
+      <td>PostgreSQL + 集計SQL</td>
+      <td>年度別/船別/コース別/タクシー会社別の複雑な集計クエリ。GROUP BY、WINDOW関数。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>あると望ましいスキル</h3>
+<table>
+  <thead><tr><th>領域</th><th>スキル</th><th>理由</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-opt">通信</span></td><td>WebSocket / リアルタイム通信</td><td>複数スタッフの同時操作でリアルタイム反映（配車状況など）</td></tr>
+    <tr><td><span class="badge badge-opt">API</span></td><td>LINE Messaging API</td><td>乗務員グループへの配車通知送信</td></tr>
+    <tr><td><span class="badge badge-opt">API</span></td><td>WhatsApp Business API</td><td>外国人顧客への配車通知。テンプレートメッセージの事前申請経験</td></tr>
+    <tr><td><span class="badge badge-opt">メール</span></td><td>トランザクションメール (SendGrid等)</td><td>予約確認・PDF添付・多言語テンプレート</td></tr>
+    <tr><td><span class="badge badge-opt">インフラ</span></td><td>CI/CD + コンテナ</td><td>ステージング/本番環境の管理。Docker / Kubernetes</td></tr>
+    <tr><td><span class="badge badge-opt">データ</span></td><td>データ可視化</td><td>分析ダッシュボードのグラフ・チャート実装（Chart.js / Recharts等）</td></tr>
+  </tbody>
+</table>
+
+<h3>チーム構成（推奨）</h3>
+<table>
+  <thead><tr><th>役割</th><th>人数</th><th>担当範囲</th></tr></thead>
+  <tbody>
+    <tr><td>フロントエンドエンジニア</td><td>1〜2名</td><td>URL A（顧客向け）+ URL B（スタッフ）+ Admin/分析画面</td></tr>
+    <tr><td>バックエンドエンジニア</td><td>1〜2名</td><td>API設計、DB設計、Stripe連携、PDF生成、認証</td></tr>
+    <tr><td>フルスタック or テックリード</td><td>1名</td><td>アーキテクチャ設計、外部API連携、デプロイ、コードレビュー</td></tr>
+    <tr><td>デザイナー（パートタイム）</td><td>0.5名</td><td>UI/UX改善、多言語レイアウト調整、印刷レイアウト</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="phases">12. 開発フェーズ・優先度</h2>
+<!-- ============================================================ -->
+
+<table>
+  <thead><tr><th>フェーズ</th><th>スコープ</th><th>優先度</th><th>依存関係</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>Phase 1<br>基盤構築</strong></td>
+      <td>
+        <ul>
+          <li>DB設計・マスタデータ投入</li>
+          <li>認証基盤（スタッフログイン）</li>
+          <li>寄港情報登録（Admin）</li>
+          <li>コース/タクシー会社/乗務員マスタ管理</li>
+        </ul>
+      </td>
+      <td class="priority-high">最優先</td>
+      <td>なし</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 2<br>当日業務</strong></td>
+      <td>
+        <ul>
+          <li>URL B: 受注入力（営業）</li>
+          <li>URL B: 決済処理</li>
+          <li>URL B: 配車入力</li>
+          <li>Admin: ダッシュボード / 受注一覧</li>
+          <li>PDF: 運行指示書生成</li>
+        </ul>
+      </td>
+      <td class="priority-high">最優先</td>
+      <td>Phase 1</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 3<br>顧客予約</strong></td>
+      <td>
+        <ul>
+          <li>URL A: 全7画面（予約フロー）</li>
+          <li>Stripe決済連携</li>
+          <li>予約確認メール + PDF添付</li>
+          <li>多言語対応（5言語）</li>
+        </ul>
+      </td>
+      <td class="priority-mid">重要</td>
+      <td>Phase 1</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 4<br>通知・連携</strong></td>
+      <td>
+        <ul>
+          <li>乗務員: 運行完了報告（ワンタイムURL）</li>
+          <li>LINE送信（乗務員グループ）</li>
+          <li>WhatsApp送信（顧客通知）</li>
+          <li>メール送信（運行指示書）</li>
+        </ul>
+      </td>
+      <td class="priority-mid">重要</td>
+      <td>Phase 2</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 5<br>分析・レポート</strong></td>
+      <td>
+        <ul>
+          <li>業務分析ダッシュボード</li>
+          <li>クルーズ船ランキング</li>
+          <li>人気ツアー分析</li>
+          <li>タクシー会社分析</li>
+          <li>天気×売上分析</li>
+          <li>CSV出力 / 行政レポート</li>
+        </ul>
+      </td>
+      <td class="priority-low">後続</td>
+      <td>Phase 2（実績データ蓄積後）</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="qa">13. 品質・テスト要件</h2>
+<!-- ============================================================ -->
+
+<table>
+  <thead><tr><th>テスト種別</th><th>対象</th><th>内容</th></tr></thead>
+  <tbody>
+    <tr><td>ユニットテスト</td><td>料金計算、採番ロジック、ステータス遷移</td><td>受付番号の一意性、料金計算の正確性、状態遷移の整合性</td></tr>
+    <tr><td>結合テスト</td><td>受注→決済→配車の一連のフロー</td><td>データの整合性、同時操作時の競合</td></tr>
+    <tr><td>E2Eテスト</td><td>URL A 予約フロー全体</td><td>言語選択→コース選択→予約→条件書同意→決済→完了メール</td></tr>
+    <tr><td>負荷テスト</td><td>複数スタッフ同時操作</td><td>10名以上の営業が同時に受注入力する想定。受付番号の競合なし</td></tr>
+    <tr><td>多言語テスト</td><td>全5言語の表示確認</td><td>レイアウト崩れ、翻訳漏れ、日付/通貨フォーマット</td></tr>
+    <tr><td>印刷テスト</td><td>運行指示書PDF</td><td>A4用紙での印字確認。文字切れ、レイアウト崩れ</td></tr>
+    <tr><td>決済テスト</td><td>Stripe テスト環境</td><td>成功/失敗/タイムアウト/3Dセキュア。テストカード番号使用</td></tr>
+    <tr><td>モバイルテスト</td><td>URL A / URL B</td><td>iOS Safari, Android Chrome での動作確認。タッチ操作。</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="non-functional">14. 非機能要件</h2>
+<!-- ============================================================ -->
+
+<table>
+  <thead><tr><th>項目</th><th>要件</th></tr></thead>
+  <tbody>
+    <tr><td>可用性</td><td>寄港日は<strong>朝6時〜夜8時が稼働時間</strong>。この時間帯のダウンは業務に致命的。<br>メンテナンスは深夜に実施。</td></tr>
+    <tr><td>応答速度</td><td>受注入力画面: 1秒以内に応答。決済処理: 3秒以内。<br>分析画面の集計: 5秒以内（キャッシュ許容）。</td></tr>
+    <tr><td>同時接続</td><td>当日業務: 最大15名程度の同時操作（営業5名 + 決済2名 + 配車2名 + 管理2名 + 予備）<br>URL A: 同時50セッション程度（クルーズ船乗客）</td></tr>
+    <tr><td>データ保持</td><td>受注データ: 最低5年間保持（旅行業法上の帳票保管義務）<br>分析データ: 過去3年分をダッシュボードに表示</td></tr>
+    <tr><td>バックアップ</td><td>日次自動バックアップ。30日間保持。</td></tr>
+    <tr><td>ブラウザ対応</td><td>Chrome最新版（必須）、Safari最新版（URL A用）、Edge最新版<br>IE非対応</td></tr>
+    <tr><td>通信環境</td><td>清水港の現地は通信が不安定な場合あり。<br>最低限の入力操作はオフラインでも可能にする設計を検討（PWA）。</td></tr>
+  </tbody>
+</table>
+
+<div class="card success" style="margin-top:32px;">
+  <h3>モックアップの確認方法</h3>
+  <p>全画面のインタラクティブなモックアップは以下のURLで確認できます。</p>
+  <ul>
+    <li><strong>本番URL:</strong> <a href="https://shimizu-port-smart-transfer.vercel.app" target="_blank">https://shimizu-port-smart-transfer.vercel.app</a></li>
+    <li><strong>GitHub:</strong> <a href="https://github.com/kimotsukikengo-rgb/shimizu-port-smart-transfer" target="_blank">https://github.com/kimotsukikengo-rgb/shimizu-port-smart-transfer</a></li>
+  </ul>
+  <p>各モックアップHTMLファイルのボタン・リンクは実際に画面遷移が動作します。</p>
+</div>
+
+<div style="text-align:center; margin-top:40px; padding:20px; color:#7f8c8d; font-size:12px; border-top:1px solid #dce1e6;">
+  &copy; 2026 株式会社静岡TaaSトラベル — エンジニア向け要件伝達書 v1.0
+</div>
+
+</div>
+</body>
+</html>

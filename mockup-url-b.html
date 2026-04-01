@@ -688,7 +688,7 @@
             </div>
             <span class="badge" style="background:#fef3e0; color:var(--accent);">寄港待ち</span>
           </div>
-          <div style="font-size:13px; margin-top:4px;">Emma Wilson | 富士宮 4h | <strong>3台13名</strong>（普通4名+普通3名+大型6名） | ¥116,980</div>
+          <div style="font-size:13px; margin-top:4px;">Emma Wilson | 富士宮 4h | <strong>3台13名</strong>（普通4名+普通3名+大型6名） | W-005〜007 | ¥116,980</div>
         </div>
 
         <div onclick="goTo('dispatch-input')" style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer;">
@@ -758,7 +758,7 @@
     <div class="summary-card" style="background:#fff8e1; border:1px solid #f9a825;">
       <h4 style="color:#7d4e00;">📋 受注情報（決済済み）</h4>
       <div class="sc-row"><span>受付番号</span><span><strong style="font-size:18px;">R-005</strong></span></div>
-      <div class="sc-row"><span>W番号</span><span><strong>W-005</strong></span></div>
+      <div class="sc-row"><span>W番号</span><span><strong>W-005, W-006, W-007</strong>（3台分）</span></div>
       <div class="sc-row"><span>顧客名</span><span>Emma Wilson</span></div>
       <div class="sc-row"><span>コース</span><span>富士宮 4h</span></div>
       <div style="border-top:1px dashed rgba(0,0,0,0.1); border-bottom:1px dashed rgba(0,0,0,0.1); padding:6px 0; margin:4px 0;">
@@ -773,13 +773,33 @@
       <div class="sc-row sc-total"><span>金額</span><span>¥116,980</span></div>
     </div>
 
-    <!-- ウェイティング番号（未入力の場合ここで入力） -->
+    <!-- ウェイティング番号（車両ごとに1枚＝3台口は3つ） -->
     <div class="quick-section">
-      <h3>ウェイティング番号確認</h3>
-      <div style="display:flex; gap:8px; align-items:center;">
-        <span style="font-size:16px; font-weight:700;">W-</span>
-        <input type="text" value="005" style="padding:12px; border:2px solid var(--accent); border-radius:8px; font-size:20px; font-weight:700; width:100px; text-align:center;">
-        <span style="font-size:12px; color:var(--success);">✓ 入力済み</span>
+      <h3>ウェイティング番号確認（車両ごとに1枚）</h3>
+      <div style="font-size:12px; color:var(--text-light); margin-bottom:8px;">W番号カードは車両1台につき1枚。3台口の場合、W番号を3つ使用します。</div>
+      <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div style="font-size:10px; color:var(--accent); font-weight:600;">1台目</div>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <span style="font-size:14px; font-weight:700;">W-</span>
+            <input type="text" value="005" style="padding:10px; border:2px solid var(--accent); border-radius:8px; font-size:18px; font-weight:700; width:70px; text-align:center;">
+          </div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:10px; color:var(--staff-accent); font-weight:600;">2台目</div>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <span style="font-size:14px; font-weight:700;">W-</span>
+            <input type="text" value="006" style="padding:10px; border:2px solid var(--staff-accent); border-radius:8px; font-size:18px; font-weight:700; width:70px; text-align:center;">
+          </div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:10px; color:#8e44ad; font-weight:600;">3台目</div>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <span style="font-size:14px; font-weight:700;">W-</span>
+            <input type="text" value="007" style="padding:10px; border:2px solid #8e44ad; border-radius:8px; font-size:18px; font-weight:700; width:70px; text-align:center;">
+          </div>
+        </div>
+        <span style="font-size:12px; color:var(--success);">✓ 全3枚入力済み</span>
       </div>
     </div>
 
@@ -787,7 +807,7 @@
     <!-- Car 1 of 3 -->
     <div class="quick-section" style="background:#fff; border:2px solid var(--accent); border-radius:10px; padding:14px; margin-bottom:12px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <h3 style="margin:0; border:none; padding:0;">🚗 1台目 / 3台 — 普通車・4名乗車</h3>
+        <h3 style="margin:0; border:none; padding:0;">🚗 1台目 / 3台 — W-005 普通車・4名</h3>
         <span style="background:var(--accent); color:#fff; padding:3px 8px; border-radius:4px; font-size:11px; font-weight:700;">指示書 1/3</span>
       </div>
 
@@ -839,7 +859,7 @@
     <!-- Car 2 of 3 -->
     <div class="quick-section" style="background:#fff; border:2px solid var(--staff-accent); border-radius:10px; padding:14px; margin-bottom:12px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <h3 style="margin:0; border:none; padding:0;">🚗 2台目 / 3台 — 普通車・3名乗車</h3>
+        <h3 style="margin:0; border:none; padding:0;">🚗 2台目 / 3台 — W-006 普通車・3名</h3>
         <span style="background:var(--staff-accent); color:#fff; padding:3px 8px; border-radius:4px; font-size:11px; font-weight:700;">指示書 2/3</span>
       </div>
       <div class="form-group">
@@ -869,7 +889,7 @@
     <!-- Car 3 of 3 -->
     <div class="quick-section" style="background:#fff; border:2px solid #8e44ad; border-radius:10px; padding:14px; margin-bottom:12px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <h3 style="margin:0; border:none; padding:0;">🚐 3台目 / 3台 — 大型車・6名乗車</h3>
+        <h3 style="margin:0; border:none; padding:0;">🚐 3台目 / 3台 — W-007 大型車・6名</h3>
         <span style="background:#8e44ad; color:#fff; padding:3px 8px; border-radius:4px; font-size:11px; font-weight:700;">指示書 3/3</span>
       </div>
       <div class="form-group">
@@ -921,7 +941,7 @@
       <button class="btn-back" onclick="goTo('dispatch-input')">&larr;</button>
       <div>
         <div class="sh-title">📄 運行指示書プレビュー</div>
-        <div class="sh-info">R-005 | W-005</div>
+        <div class="sh-info">R-005 | W-005〜007（3台分）</div>
       </div>
     </div>
   </div>
@@ -929,9 +949,9 @@
   <div class="content">
     <!-- Tab selector for 3 instruction sheets -->
     <div style="display:flex; gap:2px; margin-bottom:12px;">
-      <div id="pdf-tab-1" onclick="showPdfTab(1)" style="flex:1; padding:8px; text-align:center; background:var(--accent); color:#fff; border-radius:6px 0 0 6px; font-size:12px; font-weight:700; cursor:pointer;">1台目 普通車 4名</div>
-      <div id="pdf-tab-2" onclick="showPdfTab(2)" style="flex:1; padding:8px; text-align:center; background:#eaf2f8; color:var(--primary-light); font-size:12px; font-weight:700; cursor:pointer;">2台目 普通車 3名</div>
-      <div id="pdf-tab-3" onclick="showPdfTab(3)" style="flex:1; padding:8px; text-align:center; background:#f4ecf7; color:#8e44ad; border-radius:0 6px 6px 0; font-size:12px; font-weight:700; cursor:pointer;">3台目 大型車 6名</div>
+      <div id="pdf-tab-1" onclick="showPdfTab(1)" style="flex:1; padding:8px; text-align:center; background:var(--accent); color:#fff; border-radius:6px 0 0 6px; font-size:12px; font-weight:700; cursor:pointer;">W-005 普通4名</div>
+      <div id="pdf-tab-2" onclick="showPdfTab(2)" style="flex:1; padding:8px; text-align:center; background:#eaf2f8; color:var(--primary-light); font-size:12px; font-weight:700; cursor:pointer;">W-006 普通3名</div>
+      <div id="pdf-tab-3" onclick="showPdfTab(3)" style="flex:1; padding:8px; text-align:center; background:#f4ecf7; color:#8e44ad; border-radius:0 6px 6px 0; font-size:12px; font-weight:700; cursor:pointer;">W-007 大型6名</div>
     </div>
 
     <!-- PDF 1/3 -->
@@ -941,7 +961,8 @@
         <span style="background:var(--accent); color:#fff; padding:3px 10px; border-radius:4px; font-size:12px; font-weight:700;">1/3枚目</span>
       </div>
       <table style="width:100%; border-collapse:collapse; font-size:12px;">
-        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600; width:30%;">受付番号</td><td style="padding:6px; border:1px solid #ccc;"><strong>R-005</strong> / W-005</td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600; width:30%;">受付番号</td><td style="padding:6px; border:1px solid #ccc;"><strong>R-005</strong></td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">W番号</td><td style="padding:6px; border:1px solid #ccc;"><strong style="font-size:16px;">W-005</strong>（1台目/全3台 W-005〜007）</td></tr>
         <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">コース</td><td style="padding:6px; border:1px solid #ccc;">富士宮コース（4時間）</td></tr>
         <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">顧客名</td><td style="padding:6px; border:1px solid #ccc;">Emma Wilson（British）</td></tr>
         <tr style="background:#fef9e7;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">この車両の乗車人数</td><td style="padding:6px; border:1px solid #ccc;"><strong style="font-size:16px; color:var(--accent);">4名</strong>（全3台 合計13名中）</td></tr>
@@ -980,7 +1001,8 @@
         <span style="background:var(--staff-accent); color:#fff; padding:3px 10px; border-radius:4px; font-size:12px; font-weight:700;">2/3枚目</span>
       </div>
       <table style="width:100%; border-collapse:collapse; font-size:12px;">
-        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600; width:30%;">受付番号</td><td style="padding:6px; border:1px solid #ccc;"><strong>R-005</strong> / W-005</td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600; width:30%;">受付番号</td><td style="padding:6px; border:1px solid #ccc;"><strong>R-005</strong></td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">W番号</td><td style="padding:6px; border:1px solid #ccc;"><strong style="font-size:16px;">W-006</strong>（2台目/全3台 W-005〜007）</td></tr>
         <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">コース</td><td style="padding:6px; border:1px solid #ccc;">富士宮コース（4時間）</td></tr>
         <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">顧客名</td><td style="padding:6px; border:1px solid #ccc;">Emma Wilson（British）</td></tr>
         <tr style="background:#fef9e7;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">この車両の乗車人数</td><td style="padding:6px; border:1px solid #ccc;"><strong style="font-size:16px; color:var(--staff-accent);">3名</strong>（全3台 合計13名中）</td></tr>
@@ -1015,7 +1037,8 @@
         <span style="background:#8e44ad; color:#fff; padding:3px 10px; border-radius:4px; font-size:12px; font-weight:700;">3/3枚目</span>
       </div>
       <table style="width:100%; border-collapse:collapse; font-size:12px;">
-        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600; width:30%;">受付番号</td><td style="padding:6px; border:1px solid #ccc;"><strong>R-005</strong> / W-005</td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600; width:30%;">受付番号</td><td style="padding:6px; border:1px solid #ccc;"><strong>R-005</strong></td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">W番号</td><td style="padding:6px; border:1px solid #ccc;"><strong style="font-size:16px;">W-007</strong>（3台目/全3台 W-005〜007）</td></tr>
         <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">コース</td><td style="padding:6px; border:1px solid #ccc;">富士宮コース（4時間）</td></tr>
         <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">顧客名</td><td style="padding:6px; border:1px solid #ccc;">Emma Wilson（British）</td></tr>
         <tr style="background:#fef9e7;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">この車両の乗車人数</td><td style="padding:6px; border:1px solid #ccc;"><strong style="font-size:16px; color:#8e44ad;">6名</strong>（全3台 合計13名中）</td></tr>
@@ -1088,7 +1111,7 @@
     <div class="sh-left">
       <div>
         <div class="sh-title">✓ 配車完了</div>
-        <div class="sh-info">R-005 | W-005 | 配車担当: YY</div>
+        <div class="sh-info">R-005 | W-005〜007 | 配車担当: YY</div>
       </div>
     </div>
   </div>
@@ -1102,14 +1125,15 @@
 
     <div class="summary-card" style="background:#e8f8f0;">
       <h4 style="color:#1e8449;">配車サマリー</h4>
-      <div class="sc-row"><span>受付番号</span><span>R-005 / W-005</span></div>
+      <div class="sc-row"><span>受付番号</span><span>R-005</span></div>
+      <div class="sc-row"><span>W番号</span><span>W-005, W-006, W-007（3台分）</span></div>
       <div class="sc-row"><span>顧客</span><span>Emma Wilson（合計13名）</span></div>
       <div class="sc-row"><span>コース</span><span>富士宮 4h</span></div>
       <div style="border-top:1px dashed rgba(0,0,0,0.1); padding:6px 0; margin:4px 0;">
         <div style="font-size:11px; font-weight:600; color:#1e8449; margin-bottom:4px;">配車内訳（指示書3枚）:</div>
-        <div class="sc-row" style="padding:2px 0; font-size:12px;"><span style="padding-left:6px;">1台目: 🚗 普通車 4名</span><span>鈴木（静鉄）</span></div>
-        <div class="sc-row" style="padding:2px 0; font-size:12px;"><span style="padding-left:6px;">2台目: 🚗 普通車 3名</span><span>増田（うど交通）</span></div>
-        <div class="sc-row" style="padding:2px 0; font-size:12px;"><span style="padding-left:6px;">3台目: 🚐 大型車 6名</span><span>池田（みなと）</span></div>
+        <div class="sc-row" style="padding:2px 0; font-size:12px;"><span style="padding-left:6px;">W-005: 🚗 普通車 4名</span><span>鈴木（静鉄）</span></div>
+        <div class="sc-row" style="padding:2px 0; font-size:12px;"><span style="padding-left:6px;">W-006: 🚗 普通車 3名</span><span>増田（うど交通）</span></div>
+        <div class="sc-row" style="padding:2px 0; font-size:12px;"><span style="padding-left:6px;">W-007: 🚐 大型車 6名</span><span>池田（みなと）</span></div>
       </div>
       <div class="sc-row"><span>出発予定</span><span>09:15</span></div>
       <div class="sc-row"><span>ステータス</span><span style="color:var(--success); font-weight:700;">運行完了 ✓</span></div>

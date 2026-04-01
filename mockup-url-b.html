@@ -426,6 +426,60 @@
       </div>
     </div>
 
+    <!-- Option items -->
+    <div class="quick-section">
+      <h3>オプション項目（任意）</h3>
+      <div style="font-size:12px; color:var(--text-light); margin-bottom:10px;">ガイド料・施設入場料など追加料金がある場合に入力してください。</div>
+
+      <!-- Option 1 -->
+      <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+        <div style="flex:1;">
+          <input type="text" placeholder="項目名（例: ガイド料）" value="英語ガイド料" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; font-size:14px;">
+        </div>
+        <div style="width:120px;">
+          <div style="display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden;">
+            <span style="padding:0 6px; font-size:13px; color:var(--text-light); background:#f8f9fa;">¥</span>
+            <input type="number" value="5000" style="width:100%; padding:10px 6px; border:none; font-size:14px; font-weight:600; text-align:right;">
+          </div>
+        </div>
+        <button style="background:none; border:none; color:var(--danger); font-size:18px; cursor:pointer; padding:0 4px;">×</button>
+      </div>
+
+      <!-- Option 2 -->
+      <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+        <div style="flex:1;">
+          <input type="text" placeholder="項目名（例: 施設入場料）" value="久能山東照宮 入場料" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; font-size:14px;">
+        </div>
+        <div style="width:120px;">
+          <div style="display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden;">
+            <span style="padding:0 6px; font-size:13px; color:var(--text-light); background:#f8f9fa;">¥</span>
+            <input type="number" value="6500" style="width:100%; padding:10px 6px; border:none; font-size:14px; font-weight:600; text-align:right;">
+          </div>
+        </div>
+        <button style="background:none; border:none; color:var(--danger); font-size:18px; cursor:pointer; padding:0 4px;">×</button>
+      </div>
+
+      <!-- Option 3 (empty) -->
+      <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+        <div style="flex:1;">
+          <input type="text" placeholder="項目名（例: 駐車場代）" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; font-size:14px;">
+        </div>
+        <div style="width:120px;">
+          <div style="display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden;">
+            <span style="padding:0 6px; font-size:13px; color:var(--text-light); background:#f8f9fa;">¥</span>
+            <input type="number" placeholder="0" style="width:100%; padding:10px 6px; border:none; font-size:14px; font-weight:600; text-align:right;">
+          </div>
+        </div>
+        <button style="background:none; border:none; color:var(--text-light); font-size:18px; cursor:pointer; padding:0 4px;">×</button>
+      </div>
+
+      <!-- Option subtotal -->
+      <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:13px; color:var(--accent); font-weight:600; border-top:1px dashed var(--border); margin-top:4px;">
+        <span>オプション小計</span>
+        <span>¥11,500</span>
+      </div>
+    </div>
+
     <!-- Auto-calculated summary -->
     <div class="summary-card">
       <h4>受注サマリー</h4>
@@ -437,8 +491,15 @@
         <div class="sc-row" style="padding:2px 0;"><span style="padding-left:8px;">3台目: 🚐 大型車</span><span>6名 … ¥46,700</span></div>
       </div>
       <div class="sc-row"><span>合計台数 / 人数</span><span>3台 / 13名</span></div>
+      <div class="sc-row"><span>車両料金 小計</span><span>¥116,980</span></div>
+      <div style="border-bottom:1px solid rgba(0,0,0,0.06); padding:6px 0;">
+        <div style="font-size:12px; color:var(--accent); font-weight:600; margin-bottom:4px;">オプション:</div>
+        <div class="sc-row" style="padding:2px 0;"><span style="padding-left:8px;">英語ガイド料</span><span>¥5,000</span></div>
+        <div class="sc-row" style="padding:2px 0;"><span style="padding-left:8px;">久能山東照宮 入場料</span><span>¥6,500</span></div>
+      </div>
+      <div class="sc-row"><span>オプション小計</span><span>¥11,500</span></div>
       <div class="sc-row"><span>運行指示書</span><span>3枚発行</span></div>
-      <div class="sc-row sc-total"><span>合計金額</span><span>¥116,980</span></div>
+      <div class="sc-row sc-total"><span>合計金額</span><span>¥128,480</span></div>
     </div>
 
     <div style="height: 80px;"></div>
@@ -482,9 +543,15 @@
         <div class="pc-row" style="padding:2px 0;"><span>2台目: 🚗 普通車</span><span>3名 … ¥35,140</span></div>
         <div class="pc-row" style="padding:2px 0;"><span>3台目: 🚐 大型車</span><span>6名 … ¥46,700</span></div>
       </div>
-      <div class="pc-row"><span>合計</span><span>3台 / 13名</span></div>
+      <div class="pc-row"><span>車両料金</span><span>¥116,980</span></div>
+      <div style="margin:6px 0; padding:8px; background:#fff; border-radius:6px;">
+        <div style="font-size:11px; font-weight:600; color:var(--accent); margin-bottom:4px;">オプション:</div>
+        <div class="pc-row" style="padding:2px 0;"><span>英語ガイド料</span><span>¥5,000</span></div>
+        <div class="pc-row" style="padding:2px 0;"><span>久能山東照宮 入場料</span><span>¥6,500</span></div>
+      </div>
+      <div class="pc-row"><span>オプション小計</span><span>¥11,500</span></div>
       <div class="pc-row" style="font-weight:700; font-size:18px; border-top:2px solid #f1c40f; margin-top:6px; padding-top:6px;">
-        <span>合計</span><span>¥116,980</span>
+        <span>合計</span><span>¥128,480</span>
       </div>
     </div>
 
@@ -564,9 +631,15 @@
         <div class="sc-row" style="padding:1px 0;"><span style="padding-left:8px;">3台目: 🚐 大型車</span><span>6名</span></div>
       </div>
       <div class="sc-row"><span>合計</span><span>3台 / 13名</span></div>
+      <div class="sc-row"><span>車両料金</span><span>¥116,980</span></div>
+      <div style="border-top:1px solid rgba(0,0,0,0.06); padding:4px 0;">
+        <div class="sc-row" style="padding:1px 0; font-size:12px;"><span style="padding-left:8px; color:var(--accent);">英語ガイド料</span><span>¥5,000</span></div>
+        <div class="sc-row" style="padding:1px 0; font-size:12px;"><span style="padding-left:8px; color:var(--accent);">久能山東照宮 入場料</span><span>¥6,500</span></div>
+      </div>
+      <div class="sc-row"><span>オプション小計</span><span>¥11,500</span></div>
       <div class="sc-row"><span>決済</span><span>mPOS (TXN-20260326-001)</span></div>
       <div class="sc-row"><span>受注ルート</span><span class="badge badge-instant">即売</span></div>
-      <div class="sc-row sc-total"><span>金額</span><span>¥116,980</span></div>
+      <div class="sc-row sc-total"><span>金額</span><span>¥128,480</span></div>
     </div>
 
     <div class="quick-section">

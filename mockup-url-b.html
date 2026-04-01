@@ -660,8 +660,8 @@
       </div>
     </div>
     <div style="display:flex; gap:6px;">
-      <span style="background:rgba(255,255,255,0.2); padding:4px 8px; border-radius:6px; font-size:11px;">配車待ち: <strong>5</strong></span>
-      <span style="background:rgba(255,255,255,0.2); padding:4px 8px; border-radius:6px; font-size:11px;">運行中: <strong>8</strong></span>
+      <span style="background:rgba(255,255,255,0.2); padding:4px 8px; border-radius:6px; font-size:11px;">寄港待ち: <strong>7</strong></span>
+      <span style="background:rgba(255,255,255,0.2); padding:4px 8px; border-radius:6px; font-size:11px;">運行完了: <strong>29</strong></span>
     </div>
   </div>
 
@@ -677,7 +677,7 @@
 
     <!-- Pending list -->
     <div class="quick-section">
-      <h3>配車待ちリスト（決済済み・未配車）</h3>
+      <h3>寄港待ちリスト（配車入力待ち）</h3>
       <div style="display:flex; flex-direction:column; gap:8px;">
 
         <div onclick="goTo('dispatch-input')" style="background:var(--card); border:2px solid var(--accent); border-radius:8px; padding:12px; cursor:pointer; transition:all 0.2s;">
@@ -686,7 +686,7 @@
               <span style="font-weight:700; font-size:16px;">R-005</span>
               <span style="font-size:12px; color:var(--text-light); margin-left:6px;">W-005</span>
             </div>
-            <span class="badge" style="background:#fef3e0; color:var(--accent);">配車待ち</span>
+            <span class="badge" style="background:#fef3e0; color:var(--accent);">寄港待ち</span>
           </div>
           <div style="font-size:13px; margin-top:4px;">Emma Wilson | 富士宮 4h | <strong>3台13名</strong>（普通4名+普通3名+大型6名） | ¥116,980</div>
         </div>
@@ -697,7 +697,7 @@
               <span style="font-weight:700; font-size:16px;">R-006</span>
               <span style="font-size:12px; color:var(--text-light); margin-left:6px;">—</span>
             </div>
-            <span class="badge" style="background:#fef3e0; color:var(--accent);">配車待ち</span>
+            <span class="badge" style="background:#fef3e0; color:var(--accent);">寄港待ち</span>
           </div>
           <div style="font-size:13px; margin-top:4px;">田中太郎 | フリー 2h | 普通車×1 | 2名 | ¥15,400</div>
         </div>
@@ -708,7 +708,7 @@
               <span style="font-weight:700; font-size:16px;">R-007</span>
               <span style="font-size:12px; color:var(--text-light); margin-left:6px;">W-007</span>
             </div>
-            <span class="badge" style="background:#fef3e0; color:var(--accent);">配車待ち</span>
+            <span class="badge" style="background:#fef3e0; color:var(--accent);">寄港待ち</span>
           </div>
           <div style="font-size:13px; margin-top:4px;">Sarah Brown | 三保日本平 3h | 普通車×1 | 2名 | ¥20,100</div>
         </div>
@@ -719,7 +719,7 @@
               <span style="font-weight:700; font-size:16px;">R-008</span>
               <span style="font-size:12px; color:var(--text-light); margin-left:6px;">W-008</span>
             </div>
-            <span class="badge" style="background:#fef3e0; color:var(--accent);">配車待ち</span>
+            <span class="badge" style="background:#fef3e0; color:var(--accent);">寄港待ち</span>
           </div>
           <div style="font-size:13px; margin-top:4px;">Michael Chen | 富士宮 4h | 大型×2 | 8名 | ¥93,400</div>
         </div>
@@ -730,7 +730,7 @@
               <span style="font-weight:700; font-size:16px;">R-009</span>
               <span style="font-size:12px; color:var(--text-light); margin-left:6px;">W-009</span>
             </div>
-            <span class="badge" style="background:#fef3e0; color:var(--accent);">配車待ち</span>
+            <span class="badge" style="background:#fef3e0; color:var(--accent);">寄港待ち</span>
           </div>
           <div style="font-size:13px; margin-top:4px;">Anne Smith | 龍華寺 3h | 普通車×1 | 3名 | ¥20,100</div>
         </div>
@@ -1112,7 +1112,7 @@
         <div class="sc-row" style="padding:2px 0; font-size:12px;"><span style="padding-left:6px;">3台目: 🚐 大型車 6名</span><span>池田（みなと）</span></div>
       </div>
       <div class="sc-row"><span>出発予定</span><span>09:15</span></div>
-      <div class="sc-row"><span>ステータス</span><span style="color:var(--success); font-weight:700;">配車済み ✓</span></div>
+      <div class="sc-row"><span>ステータス</span><span style="color:var(--success); font-weight:700;">運行完了 ✓</span></div>
     </div>
 
     <div style="background:#fff3cd; border:1px solid #ffc107; border-radius:8px; padding:12px; font-size:13px; margin:16px 0;">

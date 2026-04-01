@@ -173,9 +173,9 @@
             <div class="sc-sub">¥685,200</div>
           </div>
           <div class="stat-card warn">
-            <div class="sc-label">未完了運行</div>
-            <div class="sc-value">5<small style="font-size:14px;">件</small></div>
-            <div class="sc-sub">寄港待ち</div>
+            <div class="sc-label">寄港待ち</div>
+            <div class="sc-value">7<small style="font-size:14px;">件</small></div>
+            <div class="sc-sub">未出発</div>
           </div>
           <div class="stat-card good">
             <div class="sc-label">運行完了</div>
@@ -186,7 +186,7 @@
 
         <!-- Status filter -->
         <div class="filter-bar">
-          <select><option>全ステータス</option><option>未決済</option><option>決済済み</option><option>配車済み</option><option>運行完了</option></select>
+          <select><option>全ステータス</option><option>寄港待ち</option><option>運行完了</option></select>
           <select><option>全受注ルート</option><option>即売</option><option>事前予約</option><option>QRコード</option></select>
           <select><option>全コース</option><option>富士宮</option><option>三保・日本平</option><option>龍華寺</option><option>河口湖</option></select>
           <input type="text" placeholder="🔍 受付番号・名前で検索...">
@@ -250,7 +250,7 @@
                 <td>5</td>
                 <td>¥46,700</td>
                 <td><span class="badge badge-instant">即売</span></td>
-                <td><span class="badge badge-dispatched">配車済み</span></td>
+                <td><span class="badge badge-completed">運行完了</span></td>
                 <td>YY</td>
               </tr>
               <tr>
@@ -262,7 +262,7 @@
                 <td>7</td>
                 <td>¥40,200</td>
                 <td><span class="badge badge-qr">QR</span></td>
-                <td><span class="badge badge-dispatched">配車済み</span></td>
+                <td><span class="badge badge-completed">運行完了</span></td>
                 <td>SO</td>
               </tr>
               <tr>
@@ -334,28 +334,28 @@
                 <td>富士宮 4h</td><td>普通</td><td>1</td><td>3</td>
                 <td>¥35,140</td><td>¥26,800</td><td><span class="badge badge-paid">Card</span></td>
                 <td><span class="badge badge-instant">即売</span></td>
-                <td><span class="badge badge-completed">完了</span></td><td>YY</td>
+                <td><span class="badge badge-completed">運行完了</span></td><td>YY</td>
               </tr>
               <tr>
                 <td><strong>R-002</strong></td><td>W-002</td><td>Maria Garcia</td><td>ES</td>
                 <td>三保・日本平 3h</td><td>普通</td><td>1</td><td>2</td>
                 <td>¥20,100</td><td>¥15,300</td><td><span class="badge badge-paid">Card</span></td>
                 <td><span class="badge badge-reserve">予約</span></td>
-                <td><span class="badge badge-completed">完了</span></td><td>HE</td>
+                <td><span class="badge badge-completed">運行完了</span></td><td>HE</td>
               </tr>
               <tr>
                 <td><strong>R-003</strong></td><td>W-003</td><td>David Lee</td><td>AU</td>
                 <td>富士宮 4h</td><td>大型</td><td>1</td><td>5</td>
                 <td>¥46,700</td><td>¥35,600</td><td><span class="badge badge-paid">Card</span></td>
                 <td><span class="badge badge-instant">即売</span></td>
-                <td><span class="badge badge-dispatched">運行中</span></td><td>YY</td>
+                <td><span class="badge badge-completed">運行完了</span></td><td>YY</td>
               </tr>
               <tr>
                 <td><strong>R-004</strong></td><td>W-004</td><td>Chen Wei</td><td>CN</td>
                 <td>龍華寺 3h</td><td>普通</td><td>2</td><td>7</td>
                 <td>¥40,200</td><td>¥30,600</td><td><span class="badge badge-paid">Card</span></td>
                 <td><span class="badge badge-qr">QR</span></td>
-                <td><span class="badge badge-dispatched">運行中</span></td><td>SO</td>
+                <td><span class="badge badge-completed">運行完了</span></td><td>SO</td>
               </tr>
               <tr>
                 <td><strong>R-005</strong></td><td>W-005</td><td>Emma Wilson</td><td>UK</td>
@@ -371,10 +371,9 @@
 
       <!-- ===== Dispatch ===== -->
       <div class="screen" id="dispatch">
-        <div class="stats-grid" style="grid-template-columns: repeat(3,1fr); margin-bottom:16px;">
-          <div class="stat-card warn"><div class="sc-label">寄港待ち</div><div class="sc-value">5</div></div>
-          <div class="stat-card highlight"><div class="sc-label">運行中</div><div class="sc-value">8</div></div>
-          <div class="stat-card good"><div class="sc-label">運行完了</div><div class="sc-value">23</div></div>
+        <div class="stats-grid" style="grid-template-columns: repeat(2,1fr); margin-bottom:16px;">
+          <div class="stat-card warn"><div class="sc-label">寄港待ち</div><div class="sc-value">7</div></div>
+          <div class="stat-card good"><div class="sc-label">運行完了</div><div class="sc-value">29</div></div>
         </div>
 
         <div class="dispatch-grid">
@@ -428,8 +427,8 @@
           </div>
 
           <!-- In progress -->
-          <div class="dispatch-card" style="border-left:4px solid var(--primary-light);">
-            <h4>R-003 <span class="badge badge-dispatched">運行中</span></h4>
+          <div class="dispatch-card" style="border-left:4px solid var(--success);">
+            <h4>R-003 <span class="badge badge-completed">運行完了</span></h4>
             <div class="dc-row"><span>顧客</span><span>David Lee (AU)</span></div>
             <div class="dc-row"><span>コース</span><span>富士宮 4h</span></div>
             <div class="dc-row"><span>タクシー</span><span>みなとタクシー</span></div>
@@ -440,8 +439,8 @@
             </div>
           </div>
 
-          <div class="dispatch-card" style="border-left:4px solid var(--primary-light);">
-            <h4>R-004 <span class="badge badge-dispatched">運行中</span></h4>
+          <div class="dispatch-card" style="border-left:4px solid var(--success);">
+            <h4>R-004 <span class="badge badge-completed">運行完了</span></h4>
             <div class="dc-row"><span>顧客</span><span>Chen Wei (CN)</span></div>
             <div class="dc-row"><span>コース</span><span>龍華寺 3h</span></div>
             <div class="dc-row"><span>タクシー</span><span>うど交通 ×2台</span></div>

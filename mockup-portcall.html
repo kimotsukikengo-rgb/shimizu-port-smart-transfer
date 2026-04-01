@@ -350,7 +350,7 @@
                 <div class="pc-info-item"><span class="pc-info-label">滞在時間</span><span class="pc-info-value">11:00</span></div>
                 <div class="pc-info-item"><span class="pc-info-label">乗客数</span><span class="pc-info-value">約2,100名</span></div>
                 <div class="pc-info-item"><span class="pc-info-label">W番号</span><span class="pc-info-value">W-001〜W-060</span></div>
-                <div class="pc-info-item"><span class="pc-info-label">区分</span><span class="pc-info-value">ワンウェイ / チャーター</span></div>
+                <div class="pc-info-item"><span class="pc-info-label">区分</span><span class="pc-info-value">共通連番</span></div>
               </div>
             </div>
             <div class="pc-footer">
@@ -376,7 +376,7 @@
                 <div class="pc-info-item"><span class="pc-info-label">滞在時間</span><span class="pc-info-value">9:00</span></div>
                 <div class="pc-info-item"><span class="pc-info-label">乗客数</span><span class="pc-info-value">約2,800名</span></div>
                 <div class="pc-info-item"><span class="pc-info-label">W番号</span><span class="pc-info-value">W-001〜W-070</span></div>
-                <div class="pc-info-item"><span class="pc-info-label">区分</span><span class="pc-info-value">ワンウェイ / チャーター</span></div>
+                <div class="pc-info-item"><span class="pc-info-label">区分</span><span class="pc-info-value">共通連番</span></div>
               </div>
             </div>
             <div class="pc-footer">
@@ -402,7 +402,7 @@
                 <div class="pc-info-item"><span class="pc-info-label">滞在時間</span><span class="pc-info-value">12:00</span></div>
                 <div class="pc-info-item"><span class="pc-info-label">乗客数</span><span class="pc-info-value">約2,000名</span></div>
                 <div class="pc-info-item"><span class="pc-info-label">W番号</span><span class="pc-info-value">W-001〜W-060</span></div>
-                <div class="pc-info-item"><span class="pc-info-label">区分</span><span class="pc-info-value">ワンウェイ / チャーター</span></div>
+                <div class="pc-info-item"><span class="pc-info-label">区分</span><span class="pc-info-value">共通連番</span></div>
               </div>
             </div>
             <div class="pc-footer">
@@ -448,7 +448,7 @@
                 <div class="pc-info-item"><span class="pc-info-label">滞在時間</span><span class="pc-info-value">10:00</span></div>
                 <div class="pc-info-item"><span class="pc-info-label">乗客数</span><span class="pc-info-value">約2,000名</span></div>
                 <div class="pc-info-item"><span class="pc-info-label">W番号</span><span class="pc-info-value">W-001〜W-055</span></div>
-                <div class="pc-info-item"><span class="pc-info-label">区分</span><span class="pc-info-value">ワンウェイ / チャーター</span></div>
+                <div class="pc-info-item"><span class="pc-info-label">区分</span><span class="pc-info-value">共通連番</span></div>
               </div>
             </div>
             <div class="pc-footer">
@@ -605,49 +605,29 @@
         </div>
 
         <div class="form-card">
-          <h3>② W番号・区分設定</h3>
-          <p style="font-size:13px; color:var(--text-light); margin-bottom:16px;">ワンウェイ・チャーターそれぞれのW番号（ウェイティング番号）の範囲を設定します。</p>
+          <h3>② W番号設定</h3>
+          <p style="font-size:13px; color:var(--text-light); margin-bottom:16px;">W番号（ウェイティング番号）の範囲を設定します。チャーター・ワンウェイ共通の連番です。</p>
 
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
-            <!-- One-way -->
-            <div style="border:2px solid var(--primary-light); border-radius:10px; padding:16px;">
-              <div style="font-size:15px; font-weight:700; color:var(--primary); margin-bottom:12px;">ワンウェイ（メーター）</div>
-              <div class="form-group">
-                <label>W番号 範囲</label>
-                <div class="w-range">
-                  <span style="font-weight:700;">W-</span>
-                  <input type="text" value="001" style="width:70px;">
-                  <span class="w-sep">〜</span>
-                  <span style="font-weight:700;">W-</span>
-                  <input type="text" value="030" style="width:70px;">
-                </div>
-                <div class="hint">発行枚数: 30枚</div>
+          <div style="border:2px solid var(--primary-light); border-radius:10px; padding:16px; max-width:400px;">
+            <div style="font-size:15px; font-weight:700; color:var(--primary); margin-bottom:12px;">W番号 共通連番</div>
+            <div class="form-group">
+              <label>W番号 範囲</label>
+              <div class="w-range">
+                <span style="font-weight:700;">W-</span>
+                <input type="text" value="001" style="width:70px;">
+                <span class="w-sep">〜</span>
+                <span style="font-weight:700;">W-</span>
+                <input type="text" value="060" style="width:70px;">
               </div>
-              <div class="form-group">
-                <label>予想手配台数</label>
-                <input type="number" value="15" style="width:100px;">
-              </div>
+              <div class="hint">発行枚数: 60枚（チャーター + ワンウェイ共通）</div>
             </div>
-
-            <!-- Charter -->
-            <div style="border:2px solid var(--accent); border-radius:10px; padding:16px;">
-              <div style="font-size:15px; font-weight:700; color:var(--accent); margin-bottom:12px;">チャーター（貸切）</div>
-              <div class="form-group">
-                <label>W番号 範囲</label>
-                <div class="w-range">
-                  <span style="font-weight:700;">W-</span>
-                  <input type="text" value="001" style="width:70px;">
-                  <span class="w-sep">〜</span>
-                  <span style="font-weight:700;">W-</span>
-                  <input type="text" value="040" style="width:70px;">
-                </div>
-                <div class="hint">発行枚数: 40枚</div>
-              </div>
-              <div class="form-group">
-                <label>予想手配台数</label>
-                <input type="number" value="25" style="width:100px;">
-              </div>
+            <div class="form-group">
+              <label>予想手配台数</label>
+              <input type="number" value="40" style="width:100px;">
             </div>
+          </div>
+          <div style="margin-top:12px; font-size:12px; color:var(--text-light);">
+            ※ ワンウェイの区分設定は不要。チャーターとワンウェイでW番号が被らないよう共通連番で管理します。
           </div>
         </div>
 

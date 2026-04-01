@@ -317,34 +317,86 @@
       </div>
     </div>
 
-    <!-- Vehicle type -->
+    <!-- Vehicle list (per-vehicle type + passengers) -->
     <div class="quick-section">
-      <h3>車両タイプ</h3>
-      <div class="vehicle-toggle">
-        <div class="vt-btn selected" onclick="selectType(this)"><strong>🚗 普通車</strong>4名まで</div>
-        <div class="vt-btn" onclick="selectType(this)"><strong>🚐 大型車</strong>6名まで</div>
-      </div>
-    </div>
+      <h3>車両・人数入力</h3>
+      <div style="font-size:12px; color:var(--text-light); margin-bottom:10px;">車両ごとに車種と乗車人数を入力してください。運行指示書は車両ごとに1枚発行されます。</div>
 
-    <!-- Number of cars -->
-    <div class="quick-section">
-      <h3>台数</h3>
-      <div class="num-input">
-        <div class="num-btn">−</div>
-        <div class="num-val">1</div>
-        <div class="num-btn">+</div>
-        <span style="font-size:13px; color:var(--text-light);">台</span>
+      <!-- Vehicle 1 -->
+      <div style="background:var(--card); border:2px solid var(--staff-accent); border-radius:10px; padding:12px; margin-bottom:8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:700; color:var(--staff-accent); font-size:14px;">🚗 1台目</span>
+          <span style="font-size:11px; color:var(--text-light);">指示書 1/3</span>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <div style="flex:1;">
+            <select style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; font-size:14px; font-weight:600;">
+              <option selected>🚗 普通車（4名まで）</option>
+              <option>🚐 大型車（6名まで）</option>
+            </select>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <div class="num-btn" style="width:36px; height:36px; font-size:16px;">−</div>
+            <div style="font-size:22px; font-weight:700; width:32px; text-align:center;">4</div>
+            <div class="num-btn" style="width:36px; height:36px; font-size:16px;">+</div>
+            <span style="font-size:13px; color:var(--text-light);">名</span>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- Passenger count -->
-    <div class="quick-section">
-      <h3>人数</h3>
-      <div class="num-input">
-        <div class="num-btn">−</div>
-        <div class="num-val">3</div>
-        <div class="num-btn">+</div>
-        <span style="font-size:13px; color:var(--text-light);">名</span>
+      <!-- Vehicle 2 -->
+      <div style="background:var(--card); border:2px solid var(--staff-accent); border-radius:10px; padding:12px; margin-bottom:8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:700; color:var(--staff-accent); font-size:14px;">🚗 2台目</span>
+          <button style="background:none; border:none; color:var(--danger); font-size:18px; cursor:pointer; padding:0 4px;">×</button>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <div style="flex:1;">
+            <select style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; font-size:14px; font-weight:600;">
+              <option selected>🚗 普通車（4名まで）</option>
+              <option>🚐 大型車（6名まで）</option>
+            </select>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <div class="num-btn" style="width:36px; height:36px; font-size:16px;">−</div>
+            <div style="font-size:22px; font-weight:700; width:32px; text-align:center;">3</div>
+            <div class="num-btn" style="width:36px; height:36px; font-size:16px;">+</div>
+            <span style="font-size:13px; color:var(--text-light);">名</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle 3 -->
+      <div style="background:var(--card); border:2px solid var(--accent); border-radius:10px; padding:12px; margin-bottom:8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:700; color:var(--accent); font-size:14px;">🚐 3台目</span>
+          <button style="background:none; border:none; color:var(--danger); font-size:18px; cursor:pointer; padding:0 4px;">×</button>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <div style="flex:1;">
+            <select style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; font-size:14px; font-weight:600;">
+              <option>🚗 普通車（4名まで）</option>
+              <option selected>🚐 大型車（6名まで）</option>
+            </select>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <div class="num-btn" style="width:36px; height:36px; font-size:16px;">−</div>
+            <div style="font-size:22px; font-weight:700; width:32px; text-align:center;">6</div>
+            <div class="num-btn" style="width:36px; height:36px; font-size:16px;">+</div>
+            <span style="font-size:13px; color:var(--text-light);">名</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add vehicle button -->
+      <button onclick="alert('4台目を追加')" style="width:100%; padding:12px; border:2px dashed var(--border); border-radius:10px; background:none; font-size:14px; color:var(--staff-accent); cursor:pointer; font-weight:600;">
+        ＋ 車両を追加
+      </button>
+
+      <!-- Total summary -->
+      <div style="margin-top:10px; padding:10px; background:#eaf2f8; border-radius:8px; display:flex; justify-content:space-between; font-size:14px; font-weight:600;">
+        <span>合計: 3台 / 13名</span>
+        <span style="color:var(--text-light);">指示書: 3枚発行</span>
       </div>
     </div>
 
@@ -378,10 +430,15 @@
     <div class="summary-card">
       <h4>受注サマリー</h4>
       <div class="sc-row"><span>コース</span><span>富士宮 4h</span></div>
-      <div class="sc-row"><span>車両</span><span>普通車 × 1台</span></div>
-      <div class="sc-row"><span>人数</span><span>3名</span></div>
-      <div class="sc-row"><span>手配運賃</span><span>¥35,140</span></div>
-      <div class="sc-row sc-total"><span>合計金額</span><span>¥35,140</span></div>
+      <div style="border-bottom:1px solid rgba(0,0,0,0.06); padding:6px 0;">
+        <div style="font-size:12px; color:var(--primary); font-weight:600; margin-bottom:4px;">車両内訳:</div>
+        <div class="sc-row" style="padding:2px 0;"><span style="padding-left:8px;">1台目: 🚗 普通車</span><span>4名 … ¥35,140</span></div>
+        <div class="sc-row" style="padding:2px 0;"><span style="padding-left:8px;">2台目: 🚗 普通車</span><span>3名 … ¥35,140</span></div>
+        <div class="sc-row" style="padding:2px 0;"><span style="padding-left:8px;">3台目: 🚐 大型車</span><span>6名 … ¥46,700</span></div>
+      </div>
+      <div class="sc-row"><span>合計台数 / 人数</span><span>3台 / 13名</span></div>
+      <div class="sc-row"><span>運行指示書</span><span>3枚発行</span></div>
+      <div class="sc-row sc-total"><span>合計金額</span><span>¥116,980</span></div>
     </div>
 
     <div style="height: 80px;"></div>
@@ -418,11 +475,16 @@
     <div class="payment-confirm-box">
       <h4>受注内容確認</h4>
       <div class="pc-row"><span>コース</span><span>富士宮 4h</span></div>
-      <div class="pc-row"><span>車両</span><span>普通車 × 1台</span></div>
-      <div class="pc-row"><span>人数</span><span>3名</span></div>
       <div class="pc-row"><span>顧客名</span><span>John Smith</span></div>
+      <div style="margin:6px 0; padding:8px; background:#fff; border-radius:6px;">
+        <div style="font-size:11px; font-weight:600; color:#7d6608; margin-bottom:4px;">車両内訳（指示書 3枚）:</div>
+        <div class="pc-row" style="padding:2px 0;"><span>1台目: 🚗 普通車</span><span>4名 … ¥35,140</span></div>
+        <div class="pc-row" style="padding:2px 0;"><span>2台目: 🚗 普通車</span><span>3名 … ¥35,140</span></div>
+        <div class="pc-row" style="padding:2px 0;"><span>3台目: 🚐 大型車</span><span>6名 … ¥46,700</span></div>
+      </div>
+      <div class="pc-row"><span>合計</span><span>3台 / 13名</span></div>
       <div class="pc-row" style="font-weight:700; font-size:18px; border-top:2px solid #f1c40f; margin-top:6px; padding-top:6px;">
-        <span>合計</span><span>¥35,140</span>
+        <span>合計</span><span>¥116,980</span>
       </div>
     </div>
 
@@ -495,11 +557,16 @@
       <div class="sc-row"><span>受付番号</span><span>R-001</span></div>
       <div class="sc-row"><span>顧客名</span><span>John Smith</span></div>
       <div class="sc-row"><span>コース</span><span>富士宮 4h</span></div>
-      <div class="sc-row"><span>車両</span><span>普通車 × 1台</span></div>
-      <div class="sc-row"><span>人数</span><span>3名</span></div>
+      <div style="border-top:1px solid rgba(0,0,0,0.06); border-bottom:1px solid rgba(0,0,0,0.06); padding:6px 0; margin:4px 0;">
+        <div style="font-size:11px; font-weight:600; color:var(--primary); margin-bottom:2px;">車両内訳（指示書 3枚）:</div>
+        <div class="sc-row" style="padding:1px 0;"><span style="padding-left:8px;">1台目: 🚗 普通車</span><span>4名</span></div>
+        <div class="sc-row" style="padding:1px 0;"><span style="padding-left:8px;">2台目: 🚗 普通車</span><span>3名</span></div>
+        <div class="sc-row" style="padding:1px 0;"><span style="padding-left:8px;">3台目: 🚐 大型車</span><span>6名</span></div>
+      </div>
+      <div class="sc-row"><span>合計</span><span>3台 / 13名</span></div>
       <div class="sc-row"><span>決済</span><span>mPOS (TXN-20260326-001)</span></div>
       <div class="sc-row"><span>受注ルート</span><span class="badge badge-instant">即売</span></div>
-      <div class="sc-row sc-total"><span>金額</span><span>¥35,140</span></div>
+      <div class="sc-row sc-total"><span>金額</span><span>¥116,980</span></div>
     </div>
 
     <div class="quick-section">
@@ -581,7 +648,7 @@
             </div>
             <span class="badge" style="background:#fef3e0; color:var(--accent);">配車待ち</span>
           </div>
-          <div style="font-size:13px; margin-top:4px;">Emma Wilson | 河口湖 6h | 普通車×1 | 4名 | ¥54,300</div>
+          <div style="font-size:13px; margin-top:4px;">Emma Wilson | 富士宮 4h | <strong>3台13名</strong>（普通4名+普通3名+大型6名） | ¥116,980</div>
         </div>
 
         <div onclick="goTo('dispatch-input')" style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer;">
@@ -653,13 +720,17 @@
       <div class="sc-row"><span>受付番号</span><span><strong style="font-size:18px;">R-005</strong></span></div>
       <div class="sc-row"><span>W番号</span><span><strong>W-005</strong></span></div>
       <div class="sc-row"><span>顧客名</span><span>Emma Wilson</span></div>
-      <div class="sc-row"><span>コース</span><span>河口湖 6h</span></div>
-      <div class="sc-row"><span>車両タイプ</span><span>普通車</span></div>
-      <div class="sc-row"><span>台数</span><span>1台</span></div>
-      <div class="sc-row"><span>人数</span><span>4名</span></div>
+      <div class="sc-row"><span>コース</span><span>富士宮 4h</span></div>
+      <div style="border-top:1px dashed rgba(0,0,0,0.1); border-bottom:1px dashed rgba(0,0,0,0.1); padding:6px 0; margin:4px 0;">
+        <div style="font-size:11px; font-weight:600; color:#7d4e00; margin-bottom:4px;">車両内訳（指示書 3枚発行）:</div>
+        <div class="sc-row" style="padding:2px 0; font-size:13px;"><span style="padding-left:6px;">1台目: 🚗 普通車</span><span><strong>4名</strong> … ¥35,140</span></div>
+        <div class="sc-row" style="padding:2px 0; font-size:13px;"><span style="padding-left:6px;">2台目: 🚗 普通車</span><span><strong>3名</strong> … ¥35,140</span></div>
+        <div class="sc-row" style="padding:2px 0; font-size:13px;"><span style="padding-left:6px;">3台目: 🚐 大型車</span><span><strong>6名</strong> … ¥46,700</span></div>
+      </div>
+      <div class="sc-row"><span>合計</span><span>3台 / 13名</span></div>
       <div class="sc-row"><span>言語</span><span>English</span></div>
       <div class="sc-row"><span>国籍</span><span>British</span></div>
-      <div class="sc-row sc-total"><span>金額</span><span>¥54,300</span></div>
+      <div class="sc-row sc-total"><span>金額</span><span>¥116,980</span></div>
     </div>
 
     <!-- ウェイティング番号（未入力の場合ここで入力） -->
@@ -673,11 +744,15 @@
     </div>
 
     <!-- 台数分の配車情報 -->
-    <div class="quick-section">
-      <h3>🚗 台目 1 / 1 — タクシー情報</h3>
+    <!-- Car 1 of 3 -->
+    <div class="quick-section" style="background:#fff; border:2px solid var(--accent); border-radius:10px; padding:14px; margin-bottom:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3 style="margin:0; border:none; padding:0;">🚗 1台目 / 3台 — 普通車・4名乗車</h3>
+        <span style="background:var(--accent); color:#fff; padding:3px 8px; border-radius:4px; font-size:11px; font-weight:700;">指示書 1/3</span>
+      </div>
 
       <div class="form-group">
-        <label>タクシー会社（マスタから選択）</label>
+        <label>タクシー会社</label>
         <select style="border:2px solid var(--accent);">
           <option value="">タクシー会社を選択...</option>
           <option>みなとタクシー</option>
@@ -692,9 +767,8 @@
           <option>羽衣タクシー</option>
         </select>
       </div>
-
       <div class="form-group">
-        <label>乗務員名（マスタから選択 or 手入力）</label>
+        <label>乗務員名</label>
         <select style="border:2px solid var(--accent);">
           <option value="">乗務員を選択...</option>
           <option selected>鈴木</option>
@@ -706,31 +780,85 @@
           <option>稲葉</option>
         </select>
       </div>
-
       <div style="display:flex; gap:8px;">
         <div class="form-group" style="flex:1;">
-          <label>車両番号（手入力）</label>
-          <input type="text" placeholder="例: 静岡 500 あ 1234" value="静岡 500 あ 5678">
+          <label>車両番号</label>
+          <input type="text" value="静岡 500 あ 5678">
         </div>
-        <div class="form-group" style="width:120px;">
-          <label>車両タイプ</label>
-          <select>
-            <option selected>普通車</option>
-            <option>大型車</option>
-            <option>特大車</option>
-          </select>
+        <div class="form-group" style="width:100px;">
+          <label>車種</label>
+          <input type="text" value="普通車" readonly style="background:#f0f2f5;">
         </div>
       </div>
-
       <div class="form-group">
-        <label>乗務員メールアドレス</label>
-        <input type="email" placeholder="指示書PDF送信先" value="suzuki@shizutetsu-taxi.co.jp">
+        <label>乗務員メール</label>
+        <input type="email" value="suzuki@shizutetsu-taxi.co.jp">
+      </div>
+    </div>
+
+    <!-- Car 2 of 3 -->
+    <div class="quick-section" style="background:#fff; border:2px solid var(--staff-accent); border-radius:10px; padding:14px; margin-bottom:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3 style="margin:0; border:none; padding:0;">🚗 2台目 / 3台 — 普通車・3名乗車</h3>
+        <span style="background:var(--staff-accent); color:#fff; padding:3px 8px; border-radius:4px; font-size:11px; font-weight:700;">指示書 2/3</span>
+      </div>
+      <div class="form-group">
+        <label>タクシー会社</label>
+        <select><option value="">タクシー会社を選択...</option><option>みなとタクシー</option><option selected>うど交通</option><option>駿河交通</option></select>
+      </div>
+      <div class="form-group">
+        <label>乗務員名</label>
+        <select><option value="">乗務員を選択...</option><option selected>増田</option><option>池田</option></select>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <div class="form-group" style="flex:1;">
+          <label>車両番号</label>
+          <input type="text" value="静岡 500 い 9012">
+        </div>
+        <div class="form-group" style="width:100px;">
+          <label>車種</label>
+          <input type="text" value="普通車" readonly style="background:#f0f2f5;">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>乗務員メール</label>
+        <input type="email" value="masuda@udo-taxi.co.jp">
+      </div>
+    </div>
+
+    <!-- Car 3 of 3 -->
+    <div class="quick-section" style="background:#fff; border:2px solid #8e44ad; border-radius:10px; padding:14px; margin-bottom:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3 style="margin:0; border:none; padding:0;">🚐 3台目 / 3台 — 大型車・6名乗車</h3>
+        <span style="background:#8e44ad; color:#fff; padding:3px 8px; border-radius:4px; font-size:11px; font-weight:700;">指示書 3/3</span>
+      </div>
+      <div class="form-group">
+        <label>タクシー会社</label>
+        <select><option value="">タクシー会社を選択...</option><option selected>みなとタクシー</option><option>駿河交通</option></select>
+      </div>
+      <div class="form-group">
+        <label>乗務員名</label>
+        <select><option value="">乗務員を選択...</option><option selected>池田</option></select>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <div class="form-group" style="flex:1;">
+          <label>車両番号</label>
+          <input type="text" value="静岡 500 う 3456">
+        </div>
+        <div class="form-group" style="width:100px;">
+          <label>車種</label>
+          <input type="text" value="大型車" readonly style="background:#f0f2f5;">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>乗務員メール</label>
+        <input type="email" value="ikeda@minato-taxi.co.jp">
       </div>
     </div>
 
     <!-- 出発時刻 -->
     <div class="quick-section">
-      <h3>出発予定時刻</h3>
+      <h3>出発予定時刻（全車共通）</h3>
       <input type="time" value="09:15" style="padding:14px; border:2px solid var(--accent); border-radius:8px; font-size:22px; font-weight:700; width:160px; text-align:center;">
     </div>
 
@@ -759,37 +887,90 @@
   </div>
 
   <div class="content">
-    <!-- PDF Preview (simplified) -->
-    <div style="background:#fff; border:2px solid var(--border); border-radius:10px; padding:16px; margin-bottom:16px;">
-      <div style="text-align:center; font-weight:700; font-size:15px; border-bottom:2px solid var(--text); padding-bottom:8px; margin-bottom:12px;">
-        運行指示書 / Tour Reservation Form
+    <!-- Tab selector for 3 instruction sheets -->
+    <div style="display:flex; gap:2px; margin-bottom:12px;">
+      <div id="pdf-tab-1" onclick="showPdfTab(1)" style="flex:1; padding:8px; text-align:center; background:var(--accent); color:#fff; border-radius:6px 0 0 6px; font-size:12px; font-weight:700; cursor:pointer;">1台目 普通車 4名</div>
+      <div id="pdf-tab-2" onclick="showPdfTab(2)" style="flex:1; padding:8px; text-align:center; background:#eaf2f8; color:var(--primary-light); font-size:12px; font-weight:700; cursor:pointer;">2台目 普通車 3名</div>
+      <div id="pdf-tab-3" onclick="showPdfTab(3)" style="flex:1; padding:8px; text-align:center; background:#f4ecf7; color:#8e44ad; border-radius:0 6px 6px 0; font-size:12px; font-weight:700; cursor:pointer;">3台目 大型車 6名</div>
+    </div>
+
+    <!-- PDF 1/3 -->
+    <div id="pdf-preview-1" style="background:#fff; border:2px solid var(--accent); border-radius:10px; padding:16px; margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--text); padding-bottom:8px; margin-bottom:12px;">
+        <span style="font-weight:700; font-size:15px;">運行指示書 / Tour Reservation Form</span>
+        <span style="background:var(--accent); color:#fff; padding:3px 10px; border-radius:4px; font-size:12px; font-weight:700;">1/3枚目</span>
       </div>
       <table style="width:100%; border-collapse:collapse; font-size:12px;">
         <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600; width:30%;">受付番号</td><td style="padding:6px; border:1px solid #ccc;"><strong>R-005</strong> / W-005</td></tr>
-        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">コース</td><td style="padding:6px; border:1px solid #ccc;">河口湖コース（6時間）</td></tr>
-        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">顧客名</td><td style="padding:6px; border:1px solid #ccc;">Emma Wilson（4名・British）</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">コース</td><td style="padding:6px; border:1px solid #ccc;">富士宮コース（4時間）</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">顧客名</td><td style="padding:6px; border:1px solid #ccc;">Emma Wilson（British）</td></tr>
+        <tr style="background:#fef9e7;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">この車両の乗車人数</td><td style="padding:6px; border:1px solid #ccc;"><strong style="font-size:16px; color:var(--accent);">4名</strong>（全3台 合計13名中）</td></tr>
         <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">出発</td><td style="padding:6px; border:1px solid #ccc;">09:15 清水港ターミナル</td></tr>
-        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">帰着予定</td><td style="padding:6px; border:1px solid #ccc;">15:15 清水港 / 河岸の市</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">帰着予定</td><td style="padding:6px; border:1px solid #ccc;">13:15 清水港 / 河岸の市</td></tr>
         <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">タクシー会社</td><td style="padding:6px; border:1px solid #ccc;">静鉄タクシー</td></tr>
         <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">乗務員</td><td style="padding:6px; border:1px solid #ccc;">鈴木</td></tr>
-        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">車両</td><td style="padding:6px; border:1px solid #ccc;">普通車 / 静岡 500 あ 5678</td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">車両</td><td style="padding:6px; border:1px solid #ccc;">🚗 普通車 / 静岡 500 あ 5678</td></tr>
       </table>
       <div style="margin-top:10px; padding:8px; border:1px solid #e74c3c; border-radius:4px; font-size:11px; color:#c0392b;">
-        <strong>ドライバーさんへ：</strong>重要事項が裏面に記載されています。必ずご確認ください。
+        <strong>ドライバーさんへ：</strong>重要事項が裏面に記載されています。必ずご確認ください。<br>※ この受注は3台口です。他2台と一緒に行動してください。
+      </div>
+    </div>
+
+    <!-- PDF 2/3 -->
+    <div id="pdf-preview-2" style="display:none; background:#fff; border:2px solid var(--staff-accent); border-radius:10px; padding:16px; margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--text); padding-bottom:8px; margin-bottom:12px;">
+        <span style="font-weight:700; font-size:15px;">運行指示書 / Tour Reservation Form</span>
+        <span style="background:var(--staff-accent); color:#fff; padding:3px 10px; border-radius:4px; font-size:12px; font-weight:700;">2/3枚目</span>
+      </div>
+      <table style="width:100%; border-collapse:collapse; font-size:12px;">
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600; width:30%;">受付番号</td><td style="padding:6px; border:1px solid #ccc;"><strong>R-005</strong> / W-005</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">コース</td><td style="padding:6px; border:1px solid #ccc;">富士宮コース（4時間）</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">顧客名</td><td style="padding:6px; border:1px solid #ccc;">Emma Wilson（British）</td></tr>
+        <tr style="background:#fef9e7;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">この車両の乗車人数</td><td style="padding:6px; border:1px solid #ccc;"><strong style="font-size:16px; color:var(--staff-accent);">3名</strong>（全3台 合計13名中）</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">出発</td><td style="padding:6px; border:1px solid #ccc;">09:15 清水港ターミナル</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">帰着予定</td><td style="padding:6px; border:1px solid #ccc;">13:15 清水港 / 河岸の市</td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">タクシー会社</td><td style="padding:6px; border:1px solid #ccc;">うど交通</td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">乗務員</td><td style="padding:6px; border:1px solid #ccc;">増田</td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">車両</td><td style="padding:6px; border:1px solid #ccc;">🚗 普通車 / 静岡 500 い 9012</td></tr>
+      </table>
+      <div style="margin-top:10px; padding:8px; border:1px solid #e74c3c; border-radius:4px; font-size:11px; color:#c0392b;">
+        <strong>ドライバーさんへ：</strong>重要事項が裏面に記載されています。必ずご確認ください。<br>※ この受注は3台口です。他2台と一緒に行動してください。
+      </div>
+    </div>
+
+    <!-- PDF 3/3 -->
+    <div id="pdf-preview-3" style="display:none; background:#fff; border:2px solid #8e44ad; border-radius:10px; padding:16px; margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--text); padding-bottom:8px; margin-bottom:12px;">
+        <span style="font-weight:700; font-size:15px;">運行指示書 / Tour Reservation Form</span>
+        <span style="background:#8e44ad; color:#fff; padding:3px 10px; border-radius:4px; font-size:12px; font-weight:700;">3/3枚目</span>
+      </div>
+      <table style="width:100%; border-collapse:collapse; font-size:12px;">
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600; width:30%;">受付番号</td><td style="padding:6px; border:1px solid #ccc;"><strong>R-005</strong> / W-005</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">コース</td><td style="padding:6px; border:1px solid #ccc;">富士宮コース（4時間）</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">顧客名</td><td style="padding:6px; border:1px solid #ccc;">Emma Wilson（British）</td></tr>
+        <tr style="background:#fef9e7;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">この車両の乗車人数</td><td style="padding:6px; border:1px solid #ccc;"><strong style="font-size:16px; color:#8e44ad;">6名</strong>（全3台 合計13名中）</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">出発</td><td style="padding:6px; border:1px solid #ccc;">09:15 清水港ターミナル</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">帰着予定</td><td style="padding:6px; border:1px solid #ccc;">13:15 清水港 / 河岸の市</td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">タクシー会社</td><td style="padding:6px; border:1px solid #ccc;">みなとタクシー</td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">乗務員</td><td style="padding:6px; border:1px solid #ccc;">池田</td></tr>
+        <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">車両</td><td style="padding:6px; border:1px solid #ccc;">🚐 大型車 / 静岡 500 う 3456</td></tr>
+      </table>
+      <div style="margin-top:10px; padding:8px; border:1px solid #e74c3c; border-radius:4px; font-size:11px; color:#c0392b;">
+        <strong>ドライバーさんへ：</strong>重要事項が裏面に記載されています。必ずご確認ください。<br>※ この受注は3台口です。他2台と一緒に行動してください。
       </div>
     </div>
 
     <!-- Action buttons -->
     <div class="action-grid" style="grid-template-columns: 1fr 1fr;">
-      <div class="action-btn" style="border-color:var(--accent);" onclick="alert('プリンターへ送信中...\n台数分(1枚)印刷します')">
+      <div class="action-btn" style="border-color:var(--accent);" onclick="alert('プリンターへ送信中...\n3台分（3枚）印刷します\n\n1枚目: 普通車・4名 → 鈴木\n2枚目: 普通車・3名 → 増田\n3枚目: 大型車・6名 → 池田')">
         <div class="ab-icon">🖨️</div>
-        <div class="ab-label">指示書を印刷</div>
-        <div style="font-size:10px; color:var(--text-light);">現場プリンターで出力</div>
+        <div class="ab-label">指示書を印刷（3枚）</div>
+        <div style="font-size:10px; color:var(--text-light);">車両ごとに1枚ずつ出力</div>
       </div>
-      <div class="action-btn" style="border-color:var(--staff-accent);" onclick="alert('乗務員 鈴木 へメール送信\nsuzuki@shizutetsu-taxi.co.jp\n件名：【運行指示】W-005 Emma Wilson様')">
+      <div class="action-btn" style="border-color:var(--staff-accent);" onclick="alert('3名の乗務員へ個別にメール送信\n\n① 鈴木 → suzuki@shizutetsu-taxi.co.jp\n② 増田 → masuda@udo-taxi.co.jp\n③ 池田 → ikeda@minato-taxi.co.jp\n\n件名：【運行指示】W-005 Emma Wilson様')">
         <div class="ab-icon">📧</div>
-        <div class="ab-label">乗務員へメール</div>
-        <div style="font-size:10px; color:var(--text-light);">指示書PDF添付</div>
+        <div class="ab-label">各乗務員へメール</div>
+        <div style="font-size:10px; color:var(--text-light);">各車両の指示書PDFを個別送信</div>
       </div>
     </div>
 
@@ -839,11 +1020,14 @@
     <div class="summary-card" style="background:#e8f8f0;">
       <h4 style="color:#1e8449;">配車サマリー</h4>
       <div class="sc-row"><span>受付番号</span><span>R-005 / W-005</span></div>
-      <div class="sc-row"><span>顧客</span><span>Emma Wilson（4名）</span></div>
-      <div class="sc-row"><span>コース</span><span>河口湖 6h</span></div>
-      <div class="sc-row"><span>タクシー会社</span><span>静鉄タクシー</span></div>
-      <div class="sc-row"><span>乗務員</span><span>鈴木</span></div>
-      <div class="sc-row"><span>車両</span><span>普通車 / 静岡 500 あ 5678</span></div>
+      <div class="sc-row"><span>顧客</span><span>Emma Wilson（合計13名）</span></div>
+      <div class="sc-row"><span>コース</span><span>富士宮 4h</span></div>
+      <div style="border-top:1px dashed rgba(0,0,0,0.1); padding:6px 0; margin:4px 0;">
+        <div style="font-size:11px; font-weight:600; color:#1e8449; margin-bottom:4px;">配車内訳（指示書3枚）:</div>
+        <div class="sc-row" style="padding:2px 0; font-size:12px;"><span style="padding-left:6px;">1台目: 🚗 普通車 4名</span><span>鈴木（静鉄）</span></div>
+        <div class="sc-row" style="padding:2px 0; font-size:12px;"><span style="padding-left:6px;">2台目: 🚗 普通車 3名</span><span>増田（うど交通）</span></div>
+        <div class="sc-row" style="padding:2px 0; font-size:12px;"><span style="padding-left:6px;">3台目: 🚐 大型車 6名</span><span>池田（みなと）</span></div>
+      </div>
       <div class="sc-row"><span>出発予定</span><span>09:15</span></div>
       <div class="sc-row"><span>ステータス</span><span style="color:var(--success); font-weight:700;">配車済み ✓</span></div>
     </div>
@@ -949,6 +1133,14 @@ function selectCourse(el) {
 function selectType(el) {
   el.parentElement.querySelectorAll('.vt-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
+}
+function showPdfTab(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('pdf-preview-'+i).style.display = (i===n) ? 'block' : 'none';
+    var tab = document.getElementById('pdf-tab-'+i);
+    if(i===n) { tab.style.background = (i===1?'var(--accent)':i===2?'var(--staff-accent)':'#8e44ad'); tab.style.color='#fff'; }
+    else { tab.style.background = (i===1?'#fef5e7':i===2?'#eaf2f8':'#f4ecf7'); tab.style.color=(i===1?'var(--accent)':i===2?'var(--staff-accent)':'#8e44ad'); }
+  });
 }
 </script>
 </body>

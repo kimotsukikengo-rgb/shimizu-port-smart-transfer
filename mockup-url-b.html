@@ -156,9 +156,20 @@
       <div style="display:flex; align-items:center; gap:14px;">
         <div style="font-size:36px;">🏪</div>
         <div>
-          <div style="font-size:16px; font-weight:700;">営業・受注入力・決済</div>
+          <div style="font-size:16px; font-weight:700;">受注入力</div>
           <div style="font-size:12px; color:var(--text-light);">手配旅行デスク（露天営業）</div>
-          <div style="font-size:11px; color:var(--accent); margin-top:2px;">契約合意 → 受注入力 → mPOS決済 → 受付番号発行</div>
+          <div style="font-size:11px; color:var(--accent); margin-top:2px;">契約合意 → 受注入力 → 受付番号発行</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="role-card" onclick="goTo('staff-payment-desk')" style="background:var(--card); border:2px solid #3498db; border-radius:12px; padding:20px; margin-bottom:12px; cursor:pointer; transition:all 0.2s;">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div style="font-size:36px;">💳</div>
+        <div>
+          <div style="font-size:16px; font-weight:700; color:var(--staff-accent);">決済</div>
+          <div style="font-size:12px; color:var(--text-light);">決済デスク</div>
+          <div style="font-size:11px; color:var(--staff-accent); margin-top:2px;">受付番号確認 → 内容確認（修正） → mPOS決済 → W番号入力 → 決済完了</div>
         </div>
       </div>
     </div>
@@ -167,9 +178,20 @@
       <div style="display:flex; align-items:center; gap:14px;">
         <div style="font-size:36px;">🚕</div>
         <div>
-          <div style="font-size:16px; font-weight:700; color:var(--accent);">配車入力 <span style="background:var(--accent); color:#fff; font-size:10px; padding:2px 6px; border-radius:4px;">NEW</span></div>
+          <div style="font-size:16px; font-weight:700; color:var(--accent);">配車入力</div>
           <div style="font-size:12px; color:var(--text-light);">タクシー乗り場</div>
           <div style="font-size:11px; color:var(--accent); margin-top:2px;">受付番号検索 → 乗務員・車両引当 → 指示書印刷 → LINE/WhatsApp送信</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="role-card" onclick="goTo('order-edit-search')" style="background:var(--card); border:2px solid var(--warning); border-radius:12px; padding:20px; margin-bottom:12px; cursor:pointer; transition:all 0.2s;">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div style="font-size:36px;">✏️</div>
+        <div>
+          <div style="font-size:16px; font-weight:700; color:var(--warning);">受注修正</div>
+          <div style="font-size:12px; color:var(--text-light);">受注登録後の内容変更</div>
+          <div style="font-size:11px; color:var(--warning); margin-top:2px;">受付番号で検索 → 内容修正 → 再登録</div>
         </div>
       </div>
     </div>
@@ -182,6 +204,75 @@
           <div style="font-size:12px; color:var(--text-light);">メールリンクからアクセス（ログイン不要）</div>
           <div style="font-size:11px; color:var(--accent); margin-top:2px;">行き先・到着時刻・備考を入力</div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN: Order Edit Search (受注修正 - 検索) -->
+<!-- ============================================================ -->
+<div class="screen" id="order-edit-search">
+  <div class="staff-header" style="background:#b8860b;">
+    <div class="sh-left">
+      <button class="btn-back" onclick="goTo('role-select')">&larr;</button>
+      <div>
+        <div class="sh-title">✏️ 受注修正</div>
+        <div class="sh-info">Staff: YY | 2026/03/26 | Norwegian Spirit</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="quick-section">
+      <h3>受付番号で検索</h3>
+      <div style="display:flex; gap:8px;">
+        <input type="text" placeholder="受付番号（例: R-001）" value="R-001" style="flex:1; padding:14px; border:2px solid var(--warning); border-radius:8px; font-size:20px; font-weight:700; text-align:center;">
+        <button class="btn-primary" style="width:80px; border-radius:8px; background:var(--warning);" onclick="goTo('staff-order')">検索</button>
+      </div>
+      <div style="font-size:12px; color:var(--text-light); margin-top:8px;">※ 受注完了済み・決済前の案件のみ修正可能</div>
+    </div>
+
+    <!-- 最近の受注リスト -->
+    <div class="quick-section">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h3 style="margin:0;">本日の受注（修正可能案件）</h3>
+        <button class="btn-primary" style="width:auto; padding:8px 16px; font-size:13px; border-radius:6px;">🔄 更新</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div onclick="goTo('staff-order')" style="background:var(--card); border:2px solid var(--warning); border-radius:8px; padding:12px; cursor:pointer;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-weight:700; font-size:16px;">R-001</span>
+              <span style="font-size:12px; color:var(--text-light); margin-left:6px;">営業: YY / 10:23</span>
+            </div>
+            <span class="badge" style="background:#fef3e0; color:var(--accent);">決済待ち</span>
+          </div>
+          <div style="font-size:13px; margin-top:4px;">John Smith | 富士宮 4h | 普通×1 3名 | ¥35,140</div>
+        </div>
+        <div onclick="goTo('staff-order')" style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-weight:700; font-size:16px;">R-002</span>
+              <span style="font-size:12px; color:var(--text-light); margin-left:6px;">営業: HE / 10:41</span>
+            </div>
+            <span class="badge" style="background:#fef3e0; color:var(--accent);">決済待ち</span>
+          </div>
+          <div style="font-size:13px; margin-top:4px;">Maria Garcia | 三保・日本平 3h | 普通×1 2名 | ¥20,100</div>
+        </div>
+        <div onclick="goTo('staff-order')" style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-weight:700; font-size:16px;">R-010</span>
+              <span style="font-size:12px; color:var(--text-light); margin-left:6px;">営業: SO / 11:05</span>
+            </div>
+            <span class="badge" style="background:#fef3e0; color:var(--accent);">決済待ち</span>
+          </div>
+          <div style="font-size:13px; margin-top:4px;">David Lee | 河口湖 6h | 大型×1 5名 | ¥71,500</div>
+        </div>
+      </div>
+      <div style="background:#fef9e7; border:1px solid #f9e79f; border-radius:8px; padding:10px; margin-top:12px; font-size:12px; color:#7d6608;">
+        💡 延長案件の追加決済は、管理画面の受注一覧から対象W番号を検索してください。
       </div>
     </div>
   </div>
@@ -208,6 +299,56 @@
         <button class="btn-primary" style="width:80px; border-radius:8px;" onclick="document.getElementById('payment-desk-result').style.display='block'">検索</button>
       </div>
     </div>
+
+    <!-- 決済待ちリスト -->
+    <div class="quick-section">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h3 style="margin:0;">決済待ちリスト</h3>
+        <button class="btn-primary" style="width:auto; padding:8px 16px; font-size:13px; border-radius:6px;">🔄 更新</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div onclick="document.getElementById('payment-desk-result').style.display='block'" style="background:var(--card); border:2px solid var(--staff-accent); border-radius:8px; padding:12px; cursor:pointer;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-weight:700; font-size:16px;">R-001</span>
+              <span style="font-size:12px; color:var(--text-light); margin-left:6px;">営業: YY</span>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="badge" style="background:#fef3e0; color:var(--accent);">決済待ち</span>
+              <button class="btn-danger" style="font-size:11px; padding:4px 8px; border-radius:4px;" onclick="event.stopPropagation(); openCancelModal('R-001');">キャンセル</button>
+            </div>
+          </div>
+          <div style="font-size:13px; margin-top:4px;">John Smith | 富士宮 4h | 普通×1 3名 | ¥35,140</div>
+        </div>
+        <div style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-weight:700; font-size:16px;">R-002</span>
+              <span style="font-size:12px; color:var(--text-light); margin-left:6px;">営業: HE</span>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="badge" style="background:#fef3e0; color:var(--accent);">決済待ち</span>
+              <button class="btn-danger" style="font-size:11px; padding:4px 8px; border-radius:4px;" onclick="event.stopPropagation(); openCancelModal('R-002');">キャンセル</button>
+            </div>
+          </div>
+          <div style="font-size:13px; margin-top:4px;">Maria Garcia | 三保・日本平 3h | 普通×1 2名 | ¥20,100</div>
+        </div>
+        <div style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-weight:700; font-size:16px;">R-010</span>
+              <span style="font-size:12px; color:var(--text-light); margin-left:6px;">営業: SO</span>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="badge" style="background:#fef3e0; color:var(--accent);">決済待ち</span>
+              <button class="btn-danger" style="font-size:11px; padding:4px 8px; border-radius:4px;" onclick="event.stopPropagation(); openCancelModal('R-010');">キャンセル</button>
+            </div>
+          </div>
+          <div style="font-size:13px; margin-top:4px;">David Lee | 河口湖 6h | 大型×1 5名 | ¥71,500</div>
+        </div>
+      </div>
+    </div>
+
     <div id="payment-desk-result" style="display:block;">
       <div class="payment-confirm-box">
         <h4>受注内容</h4>
@@ -216,23 +357,66 @@
         <div class="pc-row"><span>車両</span><span>普通車 × 1台</span></div>
         <div class="pc-row"><span>人数</span><span>3名</span></div>
         <div class="pc-row"><span>顧客名</span><span>John Smith</span></div>
+        <div class="pc-row"><span>営業担当</span><span>YY / 横山</span></div>
         <div class="pc-row" style="font-weight:700; font-size:18px; border-top:2px solid #f1c40f; margin-top:6px; padding-top:6px;"><span>合計</span><span>¥35,140</span></div>
       </div>
+
+      <!-- W番号入力欄 -->
       <div class="quick-section">
-        <h3>ウェイティング番号</h3>
+        <h3>ウェイティング番号（W番号）</h3>
         <div style="display:flex; gap:8px; align-items:center;">
           <span style="font-size:16px; font-weight:700;">W-</span>
           <input type="text" value="040" style="padding:14px; border:2px solid var(--accent); border-radius:8px; font-size:22px; font-weight:700; width:100px; text-align:center;">
-          <span style="font-size:12px; color:var(--text-light);">カードから読取り</span>
+          <span style="font-size:12px; color:var(--text-light);">W番号カードの数字を入力</span>
         </div>
       </div>
+
+      <!-- 決済方法 -->
+      <div class="quick-section">
+        <h3>決済方法</h3>
+        <div class="vehicle-toggle" style="flex-wrap:wrap;">
+          <div class="vt-btn selected" onclick="selectType(this)" style="flex:1; min-width:110px;"><strong>💳 mPOS</strong></div>
+          <div class="vt-btn" onclick="selectType(this)" style="flex:1; min-width:110px;"><strong>🎟 全旅</strong></div>
+          <div class="vt-btn" onclick="selectType(this)" style="flex:1; min-width:110px;"><strong>💴 現金</strong></div>
+          <div class="vt-btn" onclick="selectType(this)" style="flex:1; min-width:110px;"><strong>🌐 Web</strong></div>
+        </div>
+      </div>
+
+      <!-- 決済担当プルダウン -->
+      <div class="quick-section">
+        <h3>決済担当名</h3>
+        <div class="form-group">
+          <select style="border:2px solid var(--staff-accent);">
+            <option value="">決済担当を選択...</option>
+            <option value="YY" selected>YY / 横山</option>
+            <option value="HE">HE / 平野</option>
+            <option value="SO">SO / 曽根</option>
+            <option value="TK">TK / 高橋</option>
+            <option value="MR">MR / 森田</option>
+          </select>
+        </div>
+      </div>
+
       <div style="background:#e8f8f0; border:1px solid #27ae60; border-radius:8px; padding:12px; margin:16px 0; font-size:13px;">
-        <strong>📋 手順:</strong> ①mPOS端末で決済（システム外） → ②W番号カードに受付番号を手書き → ③カードを顧客へ → ④クレカ控えシール保存 → ⑤決済完了
+        <strong>📋 手順:</strong><br>
+        1. mPOS端末で決済（システム外）<br>
+        2. W番号カードに受注番号シールを貼る<br>
+        3. カードを顧客へ渡す<br>
+        4. W番号カードの数字を上の欄に入力する<br>
+        5. 「決済完了」ボタンを押す
       </div>
       <div style="background:#fef9e7; border:1px solid #f9e79f; border-radius:8px; padding:10px; margin-bottom:16px; font-size:12px; color:#7d6608;">
         ※ 決済番号の入力は不要です。決済はmPOS端末（システム外）で実施します。
       </div>
-      <button class="btn-primary btn-success" onclick="goTo('staff-complete')" style="font-size:18px;">✓ 決済完了</button>
+
+      <div style="display:flex; gap:10px; margin-bottom:12px;">
+        <button class="btn-outline" onclick="goTo('staff-order')" style="flex:1; padding:14px; border-color:var(--warning); color:var(--warning);">✏️ 受注修正</button>
+        <button class="btn-primary btn-success" onclick="goTo('staff-complete')" style="font-size:18px; flex:2;">✓ 決済完了</button>
+      </div>
+
+      <div style="text-align:center; margin-top:8px;">
+        <a href="#" onclick="goTo('staff-order'); return false;" style="font-size:13px; color:var(--staff-accent);">← 受注入力 画面へ戻る</a>
+      </div>
     </div>
   </div>
 </div>
@@ -252,37 +436,51 @@
   </div>
 
   <div class="content">
+    <!-- Clear all button -->
+    <div style="display:flex; justify-content:flex-end; margin-bottom:8px;">
+      <button class="btn-danger" onclick="if(confirm('入力中の内容を全てクリアします。よろしいですか？')){alert('全項目をクリアしました');}" style="font-size:12px; padding:8px 14px;">🗑 全項目クリア</button>
+    </div>
+
+    <!-- Language toggle -->
+    <div class="quick-section">
+      <h3>Language / 表示言語</h3>
+      <div class="vehicle-toggle">
+        <div class="vt-btn selected" onclick="selectType(this)" style="flex:1;"><strong>EN</strong> English</div>
+        <div class="vt-btn" onclick="selectType(this)" style="flex:1;"><strong>JP</strong> 日本語</div>
+      </div>
+    </div>
+
     <!-- Course quick select -->
     <div class="quick-section">
-      <h3>コース選択</h3>
+      <h3>Select Course / コース選択</h3>
       <div class="course-quick-grid">
         <div class="cq-btn selected" onclick="selectCourse(this)">
-          <div class="cq-name">🗻 富士宮</div>
+          <div class="cq-name">🗻 Fujinomiya</div>
           <div class="cq-info">4h</div>
           <div class="cq-price">¥35,140</div>
         </div>
         <div class="cq-btn" onclick="selectCourse(this)">
-          <div class="cq-name">🌲 三保・日本平</div>
+          <div class="cq-name">🌲 Miho & Nihondaira</div>
           <div class="cq-info">3h</div>
           <div class="cq-price">¥20,100</div>
         </div>
         <div class="cq-btn" onclick="selectCourse(this)">
-          <div class="cq-name">🏯 龍華寺</div>
+          <div class="cq-name">🏯 Ryugeji Temple</div>
           <div class="cq-info">3h</div>
           <div class="cq-price">¥20,100</div>
         </div>
         <div class="cq-btn" onclick="selectCourse(this)">
-          <div class="cq-name">🏔️ 三保+富士宮</div>
+          <div class="cq-name">🏔️ Miho + Fujinomiya</div>
           <div class="cq-info">6h</div>
           <div class="cq-price">¥48,700</div>
         </div>
         <div class="cq-btn" onclick="selectCourse(this)">
-          <div class="cq-name">🗺️ 河口湖</div>
+          <div class="cq-name">🗺️ Kawaguchiko</div>
           <div class="cq-info">6h</div>
           <div class="cq-price">¥54,300</div>
         </div>
         <div class="cq-btn" onclick="selectCourse(this)">
-          <div class="cq-name">⏱️ フリー</div>
+          <div class="cq-name">⏱️ Free Plan</div>
           <div class="cq-info">1~8h</div>
           <div class="cq-price">¥7,700/h~</div>
         </div>
@@ -291,7 +489,7 @@
 
     <!-- Vehicle list (per-vehicle type + passengers) -->
     <div class="quick-section">
-      <h3>車両・人数入力</h3>
+      <h3>Vehicle & Passengers / 車両・人数入力</h3>
       <div style="font-size:12px; color:var(--text-light); margin-bottom:10px;">車両ごとに車種と乗車人数を入力してください。運行指示書は車両ごとに1枚発行されます。</div>
 
       <!-- Vehicle 1 -->
@@ -374,17 +572,25 @@
 
     <!-- Customer info (minimal for on-site) -->
     <div class="quick-section">
-      <h3>顧客情報</h3>
+      <h3>Customer Info / 顧客情報</h3>
       <div class="form-group">
         <label>Name / 名前</label>
         <input type="text" placeholder="e.g. John Smith">
       </div>
       <div class="form-group">
-        <label>WhatsApp / Email（任意）</label>
-        <input type="text" placeholder="連絡先（任意）">
+        <label>名前（カタカナ発音） <span style="font-size:11px; color:var(--text-light);">※営業担当が入力</span></label>
+        <input type="text" placeholder="例: ジョン・スミス">
       </div>
       <div class="form-group">
-        <label>国籍</label>
+        <label>WhatsApp Number</label>
+        <input type="text" placeholder="e.g. +1-234-567-8900">
+      </div>
+      <div class="form-group">
+        <label>Mobile Number / 携帯番号（任意）</label>
+        <input type="text" placeholder="e.g. 090-XXXX-XXXX">
+      </div>
+      <div class="form-group">
+        <label>Nationality / 国籍</label>
         <select>
           <option>American</option>
           <option>British</option>
@@ -393,24 +599,44 @@
           <option>German</option>
           <option>French</option>
           <option>Chinese</option>
+          <option>Japanese</option>
           <option>Other</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label>Language Preference / ドライバーの言語についてアンケート</label>
+        <div class="vehicle-toggle">
+          <div class="vt-btn selected" onclick="selectType(this)" style="flex:1;"><strong>🗣</strong> English-speaking Driver preferred</div>
+          <div class="vt-btn" onclick="selectType(this)" style="flex:1;"><strong>🤝</strong> No preference</div>
+        </div>
+        <div style="font-size:11px; color:var(--danger); margin-top:6px; padding:6px 8px; background:#fdedec; border-radius:4px;">
+          注）必ずしも英語対応ドライバーがいるとは限りません。翻訳アプリで会話は可能です。<br>
+          Note: English-speaking drivers are not always available. Communication via translation apps is possible.
+        </div>
       </div>
     </div>
 
     <!-- Drop-off point -->
     <div class="quick-section">
-      <h3>ドロップオフ（降車場所）</h3>
+      <h3>Drop-off Point / ドロップオフ</h3>
       <div class="vehicle-toggle" style="flex-wrap:wrap;">
-        <div class="vt-btn selected" onclick="selectType(this)" style="flex:none; padding:10px 16px;"><strong>🚢</strong> 清水港</div>
-        <div class="vt-btn" onclick="selectType(this)" style="flex:none; padding:10px 16px;"><strong>🐟</strong> フィッシュマーケット</div>
-        <div class="vt-btn" onclick="selectType(this)" style="flex:none; padding:10px 16px;"><strong>🛍️</strong> ショッピングモール</div>
+        <div class="vt-btn selected" onclick="selectType(this)" style="flex:none; padding:10px 16px;"><strong>🚢</strong> Shimizu Port</div>
+        <div class="vt-btn" onclick="selectType(this)" style="flex:none; padding:10px 16px;"><strong>🐟</strong> Fish Market</div>
+        <div class="vt-btn" onclick="selectType(this)" style="flex:none; padding:10px 16px;"><strong>🛍️</strong> Shopping Mall</div>
+      </div>
+    </div>
+
+    <!-- Request / 特記事項 -->
+    <div class="quick-section">
+      <h3>Request / 特記事項</h3>
+      <div class="form-group">
+        <textarea rows="3" placeholder="Any special requests? (e.g. wheelchair accessible, child seat, photo spots...)&#10;ご要望があればご記入ください" style="width:100%; padding:12px; border:1px solid var(--border); border-radius:8px; font-size:14px;"></textarea>
       </div>
     </div>
 
     <!-- Option items -->
     <div class="quick-section">
-      <h3>オプション項目（任意）</h3>
+      <h3>Option Items / オプション項目（任意）</h3>
       <div style="font-size:12px; color:var(--text-light); margin-bottom:10px;">ガイド料・施設入場料など追加料金がある場合に入力してください。</div>
 
       <!-- Option 1 -->
@@ -462,6 +688,21 @@
       </div>
     </div>
 
+    <!-- Sales staff -->
+    <div class="quick-section">
+      <h3>Sales Staff / 営業担当名</h3>
+      <div class="form-group">
+        <select style="border:2px solid var(--staff-accent);">
+          <option value="">営業担当を選択...</option>
+          <option value="YY" selected>YY / 横山</option>
+          <option value="HE">HE / 平野</option>
+          <option value="SO">SO / 曽根</option>
+          <option value="TK">TK / 高橋</option>
+          <option value="MR">MR / 森田</option>
+        </select>
+      </div>
+    </div>
+
     <!-- Auto-calculated summary -->
     <div class="summary-card">
       <h4>受注サマリー</h4>
@@ -481,16 +722,87 @@
       </div>
       <div class="sc-row"><span>オプション小計</span><span>¥11,500</span></div>
       <div class="sc-row"><span>運行指示書</span><span>3枚発行</span></div>
+      <div class="sc-row"><span>営業担当</span><span>YY / 横山</span></div>
       <div class="sc-row sc-total"><span>合計金額</span><span>¥128,480</span></div>
     </div>
 
     <div style="height: 80px;"></div>
   </div>
 
+  <!-- Slide 12: Change button to 受注登録, go to confirmation -->
   <div class="sticky-bottom">
-    <button class="btn-primary" onclick="goTo('staff-payment')" style="font-size:18px;">
-      登録 → 決済へ
+    <button class="btn-primary" onclick="goTo('staff-order-confirm')" style="font-size:18px;">
+      受注登録
     </button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCREEN: Order Confirmation (注文内容確認 / 登録完了) -->
+<!-- ============================================================ -->
+<div class="screen" id="staff-order-confirm">
+  <div class="staff-header">
+    <div class="sh-left">
+      <div>
+        <div class="sh-title">受注登録完了</div>
+        <div class="sh-info">Staff: YY | 2026/03/26</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="confirm-hero">
+      <div class="confirm-check">✓</div>
+      <h2 style="color:var(--success);">受注登録 完了</h2>
+      <p>Order has been registered successfully.</p>
+    </div>
+
+    <div class="receipt-display">
+      <div class="rd-label">受付番号 / Reception No.</div>
+      <div class="rd-value">R-001</div>
+    </div>
+
+    <div class="payment-confirm-box">
+      <h4>注文内容確認</h4>
+      <div class="pc-row"><span>コース</span><span>富士宮 4h</span></div>
+      <div class="pc-row"><span>顧客名</span><span>John Smith</span></div>
+      <div style="margin:6px 0; padding:8px; background:#fff; border-radius:6px;">
+        <div style="font-size:11px; font-weight:600; color:#7d6608; margin-bottom:4px;">車両内訳（指示書 3枚）:</div>
+        <div class="pc-row" style="padding:2px 0;"><span>1台目: 普通車</span><span>4名 … ¥35,140</span></div>
+        <div class="pc-row" style="padding:2px 0;"><span>2台目: 普通車</span><span>3名 … ¥35,140</span></div>
+        <div class="pc-row" style="padding:2px 0;"><span>3台目: 大型車</span><span>6名 … ¥46,700</span></div>
+      </div>
+      <div class="pc-row"><span>オプション小計</span><span>¥11,500</span></div>
+      <div class="pc-row"><span>営業担当</span><span>YY / 横山</span></div>
+      <div class="pc-row" style="font-weight:700; font-size:18px; border-top:2px solid #f1c40f; margin-top:6px; padding-top:6px;">
+        <span>合計</span><span>¥128,480</span>
+      </div>
+    </div>
+
+    <!-- 特記事項表示 -->
+    <div style="background:#fef9e7; border:1px solid #f9e79f; border-radius:8px; padding:10px; margin:12px 0; font-size:12px; color:#7d6608;">
+      <strong>📝 特記事項（Request）:</strong> Please stop at a good photo spot for Mt. Fuji
+    </div>
+
+    <!-- 明細入力どおりの表示 + 手順文言 -->
+    <div style="background:#e8f8f0; border:1px solid #27ae60; border-radius:8px; padding:12px; margin:12px 0; font-size:13px;">
+      <strong>📋 次の手順:</strong><br>
+      1. 画面をお客様に見せて、内容確認<br>
+      2. 注文番号をシールに記入してお客様に渡す<br>
+      3. お客様にシールを持って会計に移動していただく
+    </div>
+
+    <!-- Slide 7: 受注修正 + 新規受注 buttons -->
+    <div style="display:flex; gap:10px; margin:16px 0;">
+      <button class="btn-outline" onclick="goTo('staff-order')" style="flex:1; border-color:var(--warning); color:var(--warning);">
+        ✏️ 受注修正
+      </button>
+      <button class="btn-outline" onclick="goTo('staff-order')" style="flex:1;">
+        ＋ 新規受注画面へ戻る
+      </button>
+    </div>
+
+    <div style="height:20px;"></div>
   </div>
 </div>
 
@@ -541,12 +853,13 @@
       ※ 決済はmPOS端末（システム外）で実施します。決済番号の入力は不要です。
     </div>
 
-    <div class="info-banner" style="background:#e8f8f0; border-color:#27ae60;">
+    <div style="background:#e8f8f0; border:1px solid #27ae60; border-radius:8px; padding:12px;">
       <strong style="color:#1e8449;">💡 操作手順:</strong><br>
       1. mPOS端末で ¥128,480 を決済（システム外）<br>
-      2. W番号カードに受付番号を手書き<br>
+      2. W番号カードに受注番号シールを貼る<br>
       3. カードを顧客へ渡す<br>
-      4. 「決済完了」ボタンを押す
+      4. W番号カードの数字を下の欄に入力する<br>
+      5. 「決済完了」ボタンを押す
     </div>
 
     <div style="height: 80px;"></div>
@@ -576,7 +889,7 @@
     <div class="confirm-hero">
       <div class="confirm-check">✓</div>
       <h2 style="color:var(--success);">受注・決済 完了</h2>
-      <p>受付番号メモを顧客へ手渡し</p>
+      <p>ウェイティングカードに受付番号のシールを貼って、顧客へ手渡し</p>
     </div>
 
     <div class="receipt-display">
@@ -619,14 +932,6 @@
     </div>
 
     <div class="action-grid">
-      <div class="action-btn" onclick="alert('旅行行程書PDF生成中...')">
-        <div class="ab-icon">🖨️</div>
-        <div class="ab-label">行程書印刷</div>
-      </div>
-      <div class="action-btn" onclick="alert('メール送信中...')">
-        <div class="ab-icon">📧</div>
-        <div class="ab-label">メール送信</div>
-      </div>
       <div class="action-btn" onclick="alert('ウェイティングカード印刷中...')">
         <div class="ab-icon">🎫</div>
         <div class="ab-label">Waitingカード</div>
@@ -638,8 +943,8 @@
     </div>
 
     <div style="margin-top:20px;">
-      <button class="btn-primary" onclick="goTo('staff-order')" style="font-size:18px;">
-        ＋ 次の受注へ
+      <button class="btn-primary" onclick="goTo('staff-payment-desk')" style="font-size:18px;">
+        ＋ 次の決済へ
       </button>
     </div>
 
@@ -660,7 +965,7 @@
       </div>
     </div>
     <div style="display:flex; gap:6px;">
-      <span style="background:rgba(255,255,255,0.2); padding:4px 8px; border-radius:6px; font-size:11px;">寄港待ち: <strong>7</strong></span>
+      <span style="background:rgba(255,255,255,0.2); padding:4px 8px; border-radius:6px; font-size:11px;">帰着待ち: <strong>7</strong></span>
       <span style="background:rgba(255,255,255,0.2); padding:4px 8px; border-radius:6px; font-size:11px;">運行完了: <strong>29</strong></span>
     </div>
   </div>
@@ -677,60 +982,83 @@
 
     <!-- Pending list -->
     <div class="quick-section">
-      <h3>寄港待ちリスト（配車入力待ち）</h3>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h3 style="margin:0;">帰着待ちリスト（配車入力待ち）</h3>
+        <button class="btn-primary" style="width:auto; padding:8px 16px; font-size:13px; border-radius:6px;">🔄 更新</button>
+      </div>
       <div style="display:flex; flex-direction:column; gap:8px;">
 
-        <div onclick="goTo('dispatch-input')" style="background:var(--card); border:2px solid var(--accent); border-radius:8px; padding:12px; cursor:pointer; transition:all 0.2s;">
+        <div style="background:var(--card); border:2px solid var(--accent); border-radius:8px; padding:12px; transition:all 0.2s;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
+            <div onclick="goTo('dispatch-input')" style="cursor:pointer;">
               <span style="font-weight:700; font-size:16px;">R-005</span>
               <span style="font-size:12px; color:var(--text-light); margin-left:6px;">W-005</span>
             </div>
-            <span class="badge" style="background:#fef3e0; color:var(--accent);">寄港待ち</span>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="badge" style="background:#e8f5e9; color:#2e7d32;">🗣 EN Driver</span>
+              <span class="badge" style="background:#fef3e0; color:var(--accent);">帰着待ち</span>
+              <button class="btn-danger" style="font-size:11px; padding:4px 8px; border-radius:4px;" onclick="event.stopPropagation(); openCancelModal('R-005');">キャンセル</button>
+            </div>
           </div>
-          <div style="font-size:13px; margin-top:4px;">Emma Wilson | 富士宮 4h | <strong>3台13名</strong>（普通4名+普通3名+大型6名） | W-005〜007 | ¥116,980</div>
+          <div onclick="goTo('dispatch-input')" style="font-size:13px; margin-top:4px; cursor:pointer;">Emma Wilson | 富士宮 4h | <strong>3台13名</strong>（普通4名+普通3名+大型6名） | W-005〜007 | ¥116,980</div>
+          <div style="font-size:12px; color:#7d6608; background:#fef9e7; padding:4px 8px; border-radius:4px; margin-top:4px;">📝 Request: Please stop at a good photo spot for Mt. Fuji</div>
         </div>
 
-        <div onclick="goTo('dispatch-input')" style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer;">
+        <div style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
+            <div onclick="goTo('dispatch-input')" style="cursor:pointer;">
               <span style="font-weight:700; font-size:16px;">R-006</span>
               <span style="font-size:12px; color:var(--text-light); margin-left:6px;">—</span>
             </div>
-            <span class="badge" style="background:#fef3e0; color:var(--accent);">寄港待ち</span>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="badge" style="background:#fef3e0; color:var(--accent);">帰着待ち</span>
+              <button class="btn-danger" style="font-size:11px; padding:4px 8px; border-radius:4px;" onclick="event.stopPropagation(); openCancelModal('R-006');">キャンセル</button>
+            </div>
           </div>
-          <div style="font-size:13px; margin-top:4px;">田中太郎 | フリー 2h | 普通車×1 | 2名 | ¥15,400</div>
+          <div onclick="goTo('dispatch-input')" style="font-size:13px; margin-top:4px; cursor:pointer;">田中太郎 | フリー 2h | 普通車×1 | 2名 | ¥15,400</div>
         </div>
 
-        <div onclick="goTo('dispatch-input')" style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer;">
+        <div style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
+            <div onclick="goTo('dispatch-input')" style="cursor:pointer;">
               <span style="font-weight:700; font-size:16px;">R-007</span>
               <span style="font-size:12px; color:var(--text-light); margin-left:6px;">W-007</span>
             </div>
-            <span class="badge" style="background:#fef3e0; color:var(--accent);">寄港待ち</span>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="badge" style="background:#e8f5e9; color:#2e7d32;">🗣 EN Driver</span>
+              <span class="badge" style="background:#fef3e0; color:var(--accent);">帰着待ち</span>
+              <button class="btn-danger" style="font-size:11px; padding:4px 8px; border-radius:4px;" onclick="event.stopPropagation(); openCancelModal('R-007');">キャンセル</button>
+            </div>
           </div>
-          <div style="font-size:13px; margin-top:4px;">Sarah Brown | 三保日本平 3h | 普通車×1 | 2名 | ¥20,100</div>
+          <div onclick="goTo('dispatch-input')" style="font-size:13px; margin-top:4px; cursor:pointer;">Sarah Brown | 三保日本平 3h | 普通車×1 | 2名 | ¥20,100</div>
+          <div style="font-size:12px; color:#7d6608; background:#fef9e7; padding:4px 8px; border-radius:4px; margin-top:4px;">📝 Request: Wheelchair accessible vehicle needed</div>
         </div>
 
-        <div style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer;">
+        <div style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
+            <div style="cursor:pointer;">
               <span style="font-weight:700; font-size:16px;">R-008</span>
               <span style="font-size:12px; color:var(--text-light); margin-left:6px;">W-008</span>
             </div>
-            <span class="badge" style="background:#fef3e0; color:var(--accent);">寄港待ち</span>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="badge" style="background:#fef3e0; color:var(--accent);">帰着待ち</span>
+              <button class="btn-danger" style="font-size:11px; padding:4px 8px; border-radius:4px;" onclick="event.stopPropagation(); openCancelModal('R-008');">キャンセル</button>
+            </div>
           </div>
           <div style="font-size:13px; margin-top:4px;">Michael Chen | 富士宮 4h | 大型×2 | 8名 | ¥93,400</div>
         </div>
 
-        <div style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer;">
+        <div style="background:var(--card); border:2px solid var(--border); border-radius:8px; padding:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
+            <div style="cursor:pointer;">
               <span style="font-weight:700; font-size:16px;">R-009</span>
               <span style="font-size:12px; color:var(--text-light); margin-left:6px;">W-009</span>
             </div>
-            <span class="badge" style="background:#fef3e0; color:var(--accent);">寄港待ち</span>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="badge" style="background:#e8f5e9; color:#2e7d32;">🗣 EN Driver</span>
+              <span class="badge" style="background:#fef3e0; color:var(--accent);">帰着待ち</span>
+              <button class="btn-danger" style="font-size:11px; padding:4px 8px; border-radius:4px;" onclick="event.stopPropagation(); openCancelModal('R-009');">キャンセル</button>
+            </div>
           </div>
           <div style="font-size:13px; margin-top:4px;">Anne Smith | 龍華寺 3h | 普通車×1 | 3名 | ¥20,100</div>
         </div>
@@ -770,7 +1098,11 @@
       <div class="sc-row"><span>合計</span><span>3台 / 13名</span></div>
       <div class="sc-row"><span>言語</span><span>English</span></div>
       <div class="sc-row"><span>国籍</span><span>British</span></div>
+      <div class="sc-row"><span>英語ドライバー</span><span style="color:#2e7d32; font-weight:700;">✓ 指定あり</span></div>
       <div class="sc-row sc-total"><span>金額</span><span>¥116,980</span></div>
+      <div style="background:#fef9e7; border:1px solid #f9e79f; border-radius:6px; padding:8px; margin-top:8px; font-size:12px; color:#7d6608;">
+        <strong>📝 特記事項（Request）:</strong> Please stop at a good photo spot for Mt. Fuji
+      </div>
     </div>
 
     <!-- ウェイティング番号（車両ごとに1枚＝3台口は3つ） -->
@@ -800,6 +1132,21 @@
           </div>
         </div>
         <span style="font-size:12px; color:var(--success);">✓ 全3枚入力済み</span>
+      </div>
+    </div>
+
+    <!-- 配車担当 -->
+    <div class="quick-section">
+      <h3>配車担当名</h3>
+      <div class="form-group">
+        <select style="border:2px solid var(--accent);">
+          <option value="">配車担当を選択...</option>
+          <option value="YY" selected>YY / 横山</option>
+          <option value="HE">HE / 平野</option>
+          <option value="SO">SO / 曽根</option>
+          <option value="TK">TK / 高橋</option>
+          <option value="MR">MR / 森田</option>
+        </select>
       </div>
     </div>
 
@@ -926,9 +1273,12 @@
   </div>
 
   <div class="sticky-bottom">
-    <button class="btn-primary" onclick="goTo('dispatch-confirm')" style="font-size:18px; background:var(--accent);">
-      運行指示書を作成 →
-    </button>
+    <div style="display:flex; gap:10px;">
+      <button class="btn-danger" onclick="openCancelModal('R-005');" style="padding:14px 20px; font-size:14px;">🗑 キャンセル</button>
+      <button class="btn-primary" onclick="goTo('dispatch-confirm')" style="font-size:18px; background:var(--accent); flex:1;">
+        運行指示書を作成 →
+      </button>
+    </div>
   </div>
 </div>
 
@@ -973,6 +1323,7 @@
         <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">タクシー会社</td><td style="padding:6px; border:1px solid #ccc;">静鉄タクシー</td></tr>
         <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">乗務員</td><td style="padding:6px; border:1px solid #ccc;">鈴木</td></tr>
         <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">車両番号</td><td style="padding:6px; border:1px solid #ccc;">🚗 普通車 / 258</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">営業担当</td><td style="padding:6px; border:1px solid #ccc;">YY / 横山</td></tr>
       </table>
       <!-- Full itinerary -->
       <table style="width:100%; border-collapse:collapse; font-size:11px; margin-top:8px;">
@@ -983,8 +1334,12 @@
         <tr><td style="padding:4px 6px; border:1px solid #ccc;">4</td><td style="padding:4px 6px; border:1px solid #ccc;">世界遺産センター</td><td style="padding:4px 6px; border:1px solid #ccc;">30分</td><td style="padding:4px 6px; border:1px solid #ccc;">休憩</td></tr>
         <tr><td style="padding:4px 6px; border:1px solid #ccc;">5</td><td style="padding:4px 6px; border:1px solid #ccc;">清水港（ドロップオフ）</td><td style="padding:4px 6px; border:1px solid #ccc;">—</td><td style="padding:4px 6px; border:1px solid #ccc;">Drop-off</td></tr>
       </table>
-      <div style="margin-top:10px; padding:8px; border:2px solid #e74c3c; border-radius:4px; font-size:11px; color:#c0392b;">
-        <strong>ドライバーさんへ（特記事項）：</strong><br>
+      <div style="margin-top:10px; padding:8px; border:2px solid #2980b9; border-radius:4px; font-size:11px; color:#1a5276; background:#eaf2f8;">
+        <strong>📝 お客様からの特記事項（受注入力時）：</strong><br>
+        Please stop at a good photo spot for Mt. Fuji
+      </div>
+      <div style="margin-top:6px; padding:8px; border:2px solid #e74c3c; border-radius:4px; font-size:11px; color:#c0392b;">
+        <strong>ドライバーさんへ（固定特記事項）：</strong><br>
         ・この受注は<strong>3台口</strong>です。他2台と一緒に行動してください<br>
         ・写真撮影のお手伝いをお願いします<br>
         ・施設入口でタクシードライバーの旨を伝え、入場料・駐車場は乗務員負担<br>
@@ -1013,6 +1368,7 @@
         <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">タクシー会社</td><td style="padding:6px; border:1px solid #ccc;">うど交通</td></tr>
         <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">乗務員</td><td style="padding:6px; border:1px solid #ccc;">増田</td></tr>
         <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">車両番号</td><td style="padding:6px; border:1px solid #ccc;">🚗 普通車 / 174</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">営業担当</td><td style="padding:6px; border:1px solid #ccc;">YY / 横山</td></tr>
       </table>
       <table style="width:100%; border-collapse:collapse; font-size:11px; margin-top:8px;">
         <tr style="background:#e8e8e8;"><th style="padding:4px 6px; border:1px solid #ccc;">行程</th><th style="padding:4px 6px; border:1px solid #ccc;">行先</th><th style="padding:4px 6px; border:1px solid #ccc;">所要時間</th><th style="padding:4px 6px; border:1px solid #ccc;">特記事項</th></tr>
@@ -1022,8 +1378,12 @@
         <tr><td style="padding:4px 6px; border:1px solid #ccc;">4</td><td style="padding:4px 6px; border:1px solid #ccc;">世界遺産センター</td><td style="padding:4px 6px; border:1px solid #ccc;">30分</td><td style="padding:4px 6px; border:1px solid #ccc;">休憩</td></tr>
         <tr><td style="padding:4px 6px; border:1px solid #ccc;">5</td><td style="padding:4px 6px; border:1px solid #ccc;">清水港（ドロップオフ）</td><td style="padding:4px 6px; border:1px solid #ccc;">—</td><td style="padding:4px 6px; border:1px solid #ccc;">Drop-off</td></tr>
       </table>
-      <div style="margin-top:10px; padding:8px; border:2px solid #e74c3c; border-radius:4px; font-size:11px; color:#c0392b;">
-        <strong>ドライバーさんへ（特記事項）：</strong><br>
+      <div style="margin-top:10px; padding:8px; border:2px solid #2980b9; border-radius:4px; font-size:11px; color:#1a5276; background:#eaf2f8;">
+        <strong>📝 お客様からの特記事項（受注入力時）：</strong><br>
+        Please stop at a good photo spot for Mt. Fuji
+      </div>
+      <div style="margin-top:6px; padding:8px; border:2px solid #e74c3c; border-radius:4px; font-size:11px; color:#c0392b;">
+        <strong>ドライバーさんへ（固定特記事項）：</strong><br>
         ・この受注は<strong>3台口</strong>です。他2台と一緒に行動してください<br>
         ・写真撮影のお手伝い / 施設入口で入場料・駐車場は乗務員負担<br>
         ・<strong>帰着時間を上記欄に手書きで記入してください</strong>
@@ -1049,6 +1409,7 @@
         <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">タクシー会社</td><td style="padding:6px; border:1px solid #ccc;">みなとタクシー</td></tr>
         <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">乗務員</td><td style="padding:6px; border:1px solid #ccc;">池田</td></tr>
         <tr style="background:#f5f5f5;"><td style="padding:6px; border:1px solid #ccc; font-weight:600;">車両番号</td><td style="padding:6px; border:1px solid #ccc;">🚐 大型車 / 412</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ccc; font-weight:600;">営業担当</td><td style="padding:6px; border:1px solid #ccc;">YY / 横山</td></tr>
       </table>
       <table style="width:100%; border-collapse:collapse; font-size:11px; margin-top:8px;">
         <tr style="background:#e8e8e8;"><th style="padding:4px 6px; border:1px solid #ccc;">行程</th><th style="padding:4px 6px; border:1px solid #ccc;">行先</th><th style="padding:4px 6px; border:1px solid #ccc;">所要時間</th><th style="padding:4px 6px; border:1px solid #ccc;">特記事項</th></tr>
@@ -1058,8 +1419,12 @@
         <tr><td style="padding:4px 6px; border:1px solid #ccc;">4</td><td style="padding:4px 6px; border:1px solid #ccc;">世界遺産センター</td><td style="padding:4px 6px; border:1px solid #ccc;">30分</td><td style="padding:4px 6px; border:1px solid #ccc;">休憩</td></tr>
         <tr><td style="padding:4px 6px; border:1px solid #ccc;">5</td><td style="padding:4px 6px; border:1px solid #ccc;">清水港（ドロップオフ）</td><td style="padding:4px 6px; border:1px solid #ccc;">—</td><td style="padding:4px 6px; border:1px solid #ccc;">Drop-off</td></tr>
       </table>
-      <div style="margin-top:10px; padding:8px; border:2px solid #e74c3c; border-radius:4px; font-size:11px; color:#c0392b;">
-        <strong>ドライバーさんへ（特記事項）：</strong><br>
+      <div style="margin-top:10px; padding:8px; border:2px solid #2980b9; border-radius:4px; font-size:11px; color:#1a5276; background:#eaf2f8;">
+        <strong>📝 お客様からの特記事項（受注入力時）：</strong><br>
+        Please stop at a good photo spot for Mt. Fuji
+      </div>
+      <div style="margin-top:6px; padding:8px; border:2px solid #e74c3c; border-radius:4px; font-size:11px; color:#c0392b;">
+        <strong>ドライバーさんへ（固定特記事項）：</strong><br>
         ・この受注は<strong>3台口</strong>です。他2台と一緒に行動してください<br>
         ・写真撮影のお手伝い / 施設入口で入場料・駐車場は乗務員負担<br>
         ・<strong>帰着時間を上記欄に手書きで記入してください</strong>
@@ -1194,9 +1559,118 @@
       <input type="time" value="15:10" style="padding:14px; border:2px solid var(--staff-accent); border-radius:8px; font-size:22px; font-weight:700; width:160px;">
     </div>
 
+    <!-- 延長 -->
     <div class="quick-section">
-      <h3>備考</h3>
-      <textarea rows="3" placeholder="特記事項があれば入力&#10;例: 白糸の滝で30分追加、渋滞で15分遅延 等" style="width:100%; padding:12px; border:1px solid var(--border); border-radius:8px; font-size:14px;"></textarea>
+      <h3>延長・返金</h3>
+      <div style="display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap;">
+        <div class="form-group" style="margin:0; width:140px;">
+          <label style="font-size:12px;">延長時間</label>
+          <select style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; font-size:14px;">
+            <option selected>なし</option>
+            <option>30分</option>
+            <option>1時間</option>
+            <option>1時間30分</option>
+            <option>2時間</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin:0; width:140px;">
+          <label style="font-size:12px;">延長料金</label>
+          <div style="display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden;">
+            <span style="padding:0 6px; font-size:13px; color:var(--text-light); background:#f8f9fa;">¥</span>
+            <input type="number" placeholder="0" style="width:100%; padding:10px 6px; border:none; font-size:14px; font-weight:600; text-align:right;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 決済料金 -->
+    <div class="quick-section">
+      <h3>決済料金・手数料</h3>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <div class="form-group" style="margin:0; flex:1; min-width:130px;">
+          <label style="font-size:12px;">決済料金（税込）</label>
+          <div style="display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden;">
+            <span style="padding:0 6px; font-size:13px; color:var(--text-light); background:#f8f9fa;">¥</span>
+            <input type="number" value="35140" style="width:100%; padding:10px 6px; border:none; font-size:14px; font-weight:600; text-align:right;">
+          </div>
+        </div>
+        <div class="form-group" style="margin:0; flex:1; min-width:130px;">
+          <label style="font-size:12px;">カード手数料（1.3%）</label>
+          <div style="display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden;">
+            <span style="padding:0 6px; font-size:13px; color:var(--text-light); background:#f8f9fa;">¥</span>
+            <input type="number" value="457" style="width:100%; padding:10px 6px; border:none; font-size:14px; font-weight:600; text-align:right;" readonly>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 原価 -->
+    <div class="quick-section">
+      <h3>原価</h3>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="display:flex; gap:8px; align-items:center;">
+          <label style="font-size:12px; width:100px;">タクシー仕入</label>
+          <div style="display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden; flex:1;">
+            <span style="padding:0 6px; font-size:13px; color:var(--text-light); background:#f8f9fa;">¥</span>
+            <input type="number" value="26800" style="width:100%; padding:10px 6px; border:none; font-size:14px; font-weight:600; text-align:right;">
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <label style="font-size:12px; width:100px;">観光施設</label>
+          <div style="display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden; flex:1;">
+            <span style="padding:0 6px; font-size:13px; color:var(--text-light); background:#f8f9fa;">¥</span>
+            <input type="number" placeholder="0" style="width:100%; padding:10px 6px; border:none; font-size:14px; font-weight:600; text-align:right;">
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <label style="font-size:12px; width:100px;">高速料金</label>
+          <div style="display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden; flex:1;">
+            <span style="padding:0 6px; font-size:13px; color:var(--text-light); background:#f8f9fa;">¥</span>
+            <input type="number" placeholder="0" style="width:100%; padding:10px 6px; border:none; font-size:14px; font-weight:600; text-align:right;">
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <label style="font-size:12px; width:100px;">駐車料金</label>
+          <div style="display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden; flex:1;">
+            <span style="padding:0 6px; font-size:13px; color:var(--text-light); background:#f8f9fa;">¥</span>
+            <input type="number" placeholder="0" style="width:100%; padding:10px 6px; border:none; font-size:14px; font-weight:600; text-align:right;">
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <label style="font-size:12px; width:100px;">ガイド料</label>
+          <div style="display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden; flex:1;">
+            <span style="padding:0 6px; font-size:13px; color:var(--text-light); background:#f8f9fa;">¥</span>
+            <input type="number" placeholder="0" style="width:100%; padding:10px 6px; border:none; font-size:14px; font-weight:600; text-align:right;">
+          </div>
+        </div>
+      </div>
+
+      <!-- 小計 -->
+      <div style="margin-top:10px; padding:10px; background:#eaf2f8; border-radius:8px;">
+        <div style="display:flex; justify-content:space-between; font-size:13px; padding:2px 0;"><span>決済料金</span><span>¥35,140</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; padding:2px 0;"><span>延長料金</span><span>¥0</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; padding:2px 0; font-weight:700; border-top:1px solid rgba(0,0,0,0.1); margin-top:4px; padding-top:4px;"><span>小計</span><span>¥35,140</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; padding:2px 0; color:var(--danger);"><span>カード手数料（1.3%）</span><span>−¥457</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; padding:2px 0;"><span>原価合計</span><span>−¥26,800</span></div>
+      </div>
+    </div>
+
+    <div class="quick-section">
+      <h3>顧客満足度・メモ</h3>
+      <div style="display:flex; gap:12px; align-items:flex-end; margin-bottom:10px;">
+        <div class="form-group" style="margin:0;">
+          <label style="font-size:12px;">満足度</label>
+          <select style="width:120px; padding:10px; border:1px solid var(--border); border-radius:6px; font-size:14px;">
+            <option>— 選択 —</option>
+            <option>⭐ 1</option>
+            <option>⭐⭐ 2</option>
+            <option>⭐⭐⭐ 3</option>
+            <option>⭐⭐⭐⭐ 4</option>
+            <option selected>⭐⭐⭐⭐⭐ 5</option>
+          </select>
+        </div>
+      </div>
+      <textarea rows="3" placeholder="メモ（お客様の反応、特記事項など）&#10;例: 白糸の滝で30分追加、渋滞で15分遅延 等" style="width:100%; padding:12px; border:1px solid var(--border); border-radius:8px; font-size:14px;"></textarea>
     </div>
 
     <button class="btn-primary btn-success" onclick="goTo('driver-report-done')" style="font-size:18px;">
@@ -1227,7 +1701,61 @@
   </div>
 </div>
 
+<!-- ============================================================ -->
+<!-- Cancel Reason Modal -->
+<!-- ============================================================ -->
+<div id="cancelModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:12px; padding:24px; max-width:420px; width:90%; box-shadow:0 10px 40px rgba(0,0,0,0.25);">
+    <h3 style="font-size:16px; color:var(--danger); margin-bottom:6px;">🗑 キャンセル処理</h3>
+    <div id="cancelTargetId" style="font-size:13px; color:var(--text-light); margin-bottom:14px;">対象: R-XXX</div>
+
+    <div class="form-group">
+      <label style="font-weight:600;">キャンセル理由（必須）</label>
+      <select id="cancelReasonSelect" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; font-size:14px;">
+        <option value="">理由を選択...</option>
+        <option>お客様都合（気分が変わった）</option>
+        <option>お客様都合（時間が合わない）</option>
+        <option>お客様都合（同行者NG）</option>
+        <option>車両手配不可</option>
+        <option>天候不良</option>
+        <option>誤入力・重複入力</option>
+        <option>その他（下欄に記入）</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label style="font-weight:600;">詳細（任意）</label>
+      <textarea id="cancelReasonNote" rows="3" placeholder="補足があれば記入" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; font-size:13px;"></textarea>
+    </div>
+
+    <div style="background:#fdedec; border:1px solid #f5b7b1; border-radius:6px; padding:10px; font-size:12px; color:#78281f; margin-bottom:14px;">
+      ⚠️ キャンセル後は受注一覧に「キャンセル」ステータスで記録され、売上合計には含まれません（0円計上）。
+    </div>
+
+    <div style="display:flex; gap:10px;">
+      <button class="btn-outline" onclick="closeCancelModal()" style="flex:1; padding:12px;">戻る</button>
+      <button class="btn-danger" onclick="confirmCancel()" style="flex:2; padding:12px; font-size:15px; font-weight:700;">キャンセルを確定</button>
+    </div>
+  </div>
+</div>
+
 <script>
+function openCancelModal(orderId) {
+  document.getElementById('cancelTargetId').textContent = '対象: ' + orderId;
+  document.getElementById('cancelReasonSelect').value = '';
+  document.getElementById('cancelReasonNote').value = '';
+  var m = document.getElementById('cancelModal');
+  m.style.display = 'flex';
+}
+function closeCancelModal() {
+  document.getElementById('cancelModal').style.display = 'none';
+}
+function confirmCancel() {
+  var reason = document.getElementById('cancelReasonSelect').value;
+  if(!reason) { alert('キャンセル理由を選択してください'); return; }
+  alert('キャンセル処理を確定しました。\n理由: ' + reason + '\n受注一覧にキャンセル案件として記録されます。');
+  closeCancelModal();
+}
+
 function goTo(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(screenId).classList.add('active');

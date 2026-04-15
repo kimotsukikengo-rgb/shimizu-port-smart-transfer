@@ -53,6 +53,7 @@
 
   /* Stats cards */
   .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stats-grid-5 { grid-template-columns: repeat(5, 1fr); }
   .stat-card { background: var(--card); border-radius: 10px; padding: 16px; border: 1px solid var(--border); }
   .stat-card .sc-label { font-size: 12px; color: var(--text-light); margin-bottom: 4px; }
   .stat-card .sc-value { font-size: 24px; font-weight: 700; }
@@ -60,6 +61,13 @@
   .stat-card.highlight { border-left: 4px solid var(--primary-light); }
   .stat-card.warn { border-left: 4px solid var(--warning); }
   .stat-card.good { border-left: 4px solid var(--success); }
+  .stat-card.accent { border-left: 4px solid var(--accent); }
+  @media (max-width: 1200px) {
+    .stats-grid-5 { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .stats-grid, .stats-grid-5 { grid-template-columns: 1fr 1fr; }
+  }
 
   /* Table */
   .table-card { background: var(--card); border-radius: 10px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 24px; }
@@ -136,13 +144,14 @@
 
       <div class="sb-section">管理・集計</div>
       <div class="sb-item" onclick="showScreen('report')"><span class="sb-icon">📈</span> 運行実績管理</div>
-      <div class="sb-item"><span class="sb-icon">💰</span> 売上集計</div>
+      <div class="sb-item" onclick="showScreen('sales-report')"><span class="sb-icon">💰</span> 売上集計</div>
       <div class="sb-item"><span class="sb-icon">🏛️</span> 行政レポート</div>
 
       <div class="sb-section">マスタ</div>
-      <div class="sb-item"><span class="sb-icon">🗺️</span> コースマスタ</div>
-      <div class="sb-item"><span class="sb-icon">🚗</span> タクシー会社</div>
-      <div class="sb-item"><span class="sb-icon">👤</span> 乗務員マスタ</div>
+      <div class="sb-item" onclick="showScreen('master-course')"><span class="sb-icon">🗺️</span> コースマスタ</div>
+      <div class="sb-item" onclick="showScreen('master-vehicle')"><span class="sb-icon">🚗</span> 車両マスタ</div>
+      <div class="sb-item" onclick="showScreen('master-driver')"><span class="sb-icon">👤</span> 乗務員マスタ</div>
+      <div class="sb-item" onclick="showScreen('master-staff')"><span class="sb-icon">🏢</span> スタッフマスタ</div>
       <div class="sb-item"><span class="sb-icon">⚙️</span> 設定</div>
     </div>
   </div>
@@ -161,7 +170,7 @@
 
       <!-- ===== Dashboard ===== -->
       <div class="screen active" id="dashboard">
-        <div class="stats-grid">
+        <div class="stats-grid stats-grid-5">
           <div class="stat-card highlight">
             <div class="sc-label">取扱高</div>
             <div class="sc-value">36<small style="font-size:14px;">件</small></div>
@@ -172,8 +181,13 @@
             <div class="sc-value">30<small style="font-size:14px;">件</small></div>
             <div class="sc-sub">¥685,200</div>
           </div>
+          <div class="stat-card good">
+            <div class="sc-label">粗利</div>
+            <div class="sc-value">¥207,200</div>
+            <div class="sc-sub">粗利率 23.2%</div>
+          </div>
           <div class="stat-card warn">
-            <div class="sc-label">寄港待ち</div>
+            <div class="sc-label">帰着待ち</div>
             <div class="sc-value">7<small style="font-size:14px;">件</small></div>
             <div class="sc-sub">未出発</div>
           </div>
@@ -186,7 +200,7 @@
 
         <!-- Status filter -->
         <div class="filter-bar">
-          <select><option>全ステータス</option><option>寄港待ち</option><option>運行完了</option></select>
+          <select><option>全ステータス</option><option>帰着待ち</option><option>運行完了</option></select>
           <select><option>全受注ルート</option><option>即売</option><option>事前予約</option><option>QRコード</option></select>
           <select><option>全コース</option><option>富士宮</option><option>三保・日本平</option><option>龍華寺</option><option>河口湖</option></select>
           <input type="text" placeholder="🔍 受付番号・名前で検索...">
@@ -196,7 +210,7 @@
 
         <div class="table-card">
           <div class="table-header">
-            <h3>本日の受注一覧（直近）</h3>
+            <h3>本日の受注一覧（直近） <span style="font-size:11px; font-weight:400; color:var(--text-light);">※ 行クリックで運行指示書を表示</span></h3>
             <div class="table-actions">
               <button class="btn-sm">更新</button>
             </div>
@@ -204,93 +218,124 @@
           <table>
             <thead>
               <tr>
-                <th>受付No.</th>
                 <th>W番号</th>
-                <th>顧客名</th>
-                <th>コース</th>
-                <th>車両</th>
-                <th>人数</th>
-                <th>金額</th>
-                <th>ルート</th>
                 <th>ステータス</th>
-                <th>担当</th>
+                <th>出発</th>
+                <th>帰着</th>
+                <th>顧客名</th>
+                <th>WhatsApp</th>
+                <th>携帯</th>
+                <th>コース</th>
+                <th>タクシー会社</th>
+                <th>乗務員</th>
+                <th>営業</th>
+                <th>決済</th>
+                <th>配車</th>
+                <th>操作</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td><strong>R-001</strong></td>
-                <td>W-001</td>
+              <tr onclick="showScreen('pdf'); document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active')); document.getElementById('pageTitle').textContent='運行指示書';" style="cursor:pointer;">
+                <td><strong>W-001</strong></td>
+                <td><span class="badge badge-completed">運行完了</span></td>
+                <td>08:20</td>
+                <td>12:15</td>
                 <td>John Smith</td>
+                <td>+1-234-567-8900</td>
+                <td>—</td>
                 <td>富士宮 4h</td>
-                <td>普通 ×1</td>
-                <td>3</td>
-                <td>¥35,140</td>
-                <td><span class="badge badge-instant">即売</span></td>
-                <td><span class="badge badge-completed">運行完了</span></td>
+                <td>みなとタクシー</td>
+                <td>鈴木</td>
                 <td>YY</td>
+                <td>YY</td>
+                <td>YY</td>
+                <td><button class="btn-sm" style="font-size:10px; padding:3px 6px; color:var(--danger); border-color:var(--danger);">キャンセル</button></td>
               </tr>
-              <tr>
-                <td><strong>R-002</strong></td>
-                <td>W-002</td>
+              <tr onclick="showScreen('pdf'); document.getElementById('pageTitle').textContent='運行指示書';" style="cursor:pointer;">
+                <td><strong>W-002</strong></td>
+                <td><span class="badge badge-completed">運行完了</span></td>
+                <td>08:35</td>
+                <td>11:40</td>
                 <td>Maria Garcia</td>
+                <td>+34-XXX-XXX</td>
+                <td>—</td>
                 <td>三保・日本平 3h</td>
-                <td>普通 ×1</td>
-                <td>2</td>
-                <td>¥20,100</td>
-                <td><span class="badge badge-reserve">予約</span></td>
-                <td><span class="badge badge-completed">運行完了</span></td>
+                <td>静鉄タクシー</td>
+                <td>増田</td>
                 <td>HE</td>
+                <td>HE</td>
+                <td>YY</td>
+                <td><button class="btn-sm" style="font-size:10px; padding:3px 6px; color:var(--danger); border-color:var(--danger);">キャンセル</button></td>
               </tr>
-              <tr>
-                <td><strong>R-003</strong></td>
-                <td>W-003</td>
+              <tr onclick="showScreen('pdf'); document.getElementById('pageTitle').textContent='運行指示書';" style="cursor:pointer;">
+                <td><strong>W-003</strong></td>
+                <td><span class="badge badge-completed">運行完了</span></td>
+                <td>08:45</td>
+                <td>12:50</td>
                 <td>David Lee</td>
+                <td>+61-XXX-XXX</td>
+                <td>—</td>
                 <td>富士宮 4h</td>
-                <td>大型 ×1</td>
-                <td>5</td>
-                <td>¥46,700</td>
-                <td><span class="badge badge-instant">即売</span></td>
-                <td><span class="badge badge-completed">運行完了</span></td>
+                <td>うど交通</td>
+                <td>池田</td>
                 <td>YY</td>
-              </tr>
-              <tr>
-                <td><strong>R-004</strong></td>
-                <td>W-004</td>
-                <td>Chen Wei</td>
-                <td>龍華寺 3h</td>
-                <td>普通 ×2</td>
-                <td>7</td>
-                <td>¥40,200</td>
-                <td><span class="badge badge-qr">QR</span></td>
-                <td><span class="badge badge-completed">運行完了</span></td>
+                <td>YY</td>
                 <td>SO</td>
+                <td><button class="btn-sm" style="font-size:10px; padding:3px 6px; color:var(--danger); border-color:var(--danger);">キャンセル</button></td>
               </tr>
-              <tr>
-                <td><strong>R-005</strong></td>
-                <td>W-005</td>
-                <td>Emma Wilson</td>
-                <td>河口湖 6h</td>
-                <td>普通 ×1</td>
-                <td>4</td>
-                <td>¥54,300</td>
-                <td><span class="badge badge-instant">即売</span></td>
-                <td><span class="badge badge-pending">寄港待ち</span></td>
+              <tr onclick="showScreen('pdf'); document.getElementById('pageTitle').textContent='運行指示書';" style="cursor:pointer;">
+                <td><strong>W-004</strong></td>
+                <td><span class="badge badge-completed">運行完了</span></td>
+                <td>09:01</td>
+                <td>12:00</td>
+                <td>Chen Wei</td>
+                <td>+86-XXX-XXX</td>
+                <td>—</td>
+                <td>龍華寺 3h</td>
+                <td>駿河交通</td>
+                <td>小沼</td>
+                <td>SO</td>
+                <td>SO</td>
                 <td>YY</td>
+                <td><button class="btn-sm" style="font-size:10px; padding:3px 6px; color:var(--danger); border-color:var(--danger);">キャンセル</button></td>
               </tr>
-              <tr>
-                <td><strong>R-006</strong></td>
+              <tr onclick="showScreen('pdf'); document.getElementById('pageTitle').textContent='運行指示書';" style="cursor:pointer;">
+                <td><strong>W-005</strong></td>
+                <td><span class="badge badge-pending">帰着待ち</span></td>
+                <td>09:15</td>
+                <td>—</td>
+                <td>Emma Wilson</td>
+                <td>+44-XXX-XXX</td>
+                <td>—</td>
+                <td>河口湖 6h</td>
+                <td>—</td>
+                <td>—</td>
+                <td>YY</td>
+                <td>YY</td>
+                <td>—</td>
+                <td><button class="btn-sm" style="font-size:10px; padding:3px 6px; color:var(--danger); border-color:var(--danger);">キャンセル</button></td>
+              </tr>
+              <tr onclick="showScreen('pdf'); document.getElementById('pageTitle').textContent='運行指示書';" style="cursor:pointer;">
+                <td>—</td>
+                <td><span class="badge badge-pending">帰着待ち</span></td>
+                <td>—</td>
                 <td>—</td>
                 <td>田中太郎</td>
+                <td>—</td>
+                <td>090-1234-5678</td>
                 <td>フリー 2h</td>
-                <td>普通 ×1</td>
-                <td>2</td>
-                <td>¥15,400</td>
-                <td><span class="badge badge-instant">即売</span></td>
-                <td><span class="badge badge-pending">寄港待ち</span></td>
+                <td>—</td>
+                <td>—</td>
                 <td>HE</td>
+                <td>HE</td>
+                <td>—</td>
+                <td><button class="btn-sm" style="font-size:10px; padding:3px 6px; color:var(--danger); border-color:var(--danger);">キャンセル</button></td>
               </tr>
             </tbody>
           </table>
+          <div style="padding:12px 16px; background:#fef9e7; border-top:1px solid var(--border); font-size:12px; color:#7d6608;">
+            💡 キャンセル（返金）扱いの場合、売上合計には含まれません（0円計上）。キャンセルしたW番号は一覧上で取消線表示されます。
+          </div>
         </div>
       </div>
 
@@ -362,7 +407,7 @@
                 <td>河口湖 6h</td><td>普通</td><td>1</td><td>4</td>
                 <td>¥54,300</td><td>—</td><td><span class="badge badge-paid">Card</span></td>
                 <td><span class="badge badge-instant">即売</span></td>
-                <td><span class="badge badge-pending">寄港待ち</span></td><td>YY</td>
+                <td><span class="badge badge-pending">帰着待ち</span></td><td>YY</td>
               </tr>
             </tbody>
           </table>
@@ -372,14 +417,14 @@
       <!-- ===== Dispatch ===== -->
       <div class="screen" id="dispatch">
         <div class="stats-grid" style="grid-template-columns: repeat(2,1fr); margin-bottom:16px;">
-          <div class="stat-card warn"><div class="sc-label">寄港待ち</div><div class="sc-value">7</div></div>
+          <div class="stat-card warn"><div class="sc-label">帰着待ち</div><div class="sc-value">7</div></div>
           <div class="stat-card good"><div class="sc-label">運行完了</div><div class="sc-value">29</div></div>
         </div>
 
         <div class="dispatch-grid">
           <!-- Waiting dispatch -->
           <div class="dispatch-card" style="border-left:4px solid var(--warning);">
-            <h4>R-005 <span class="badge badge-pending">寄港待ち</span></h4>
+            <h4>R-005 <span class="badge badge-pending">帰着待ち</span></h4>
             <div class="dc-row"><span>顧客</span><span>Emma Wilson (UK)</span></div>
             <div class="dc-row"><span>コース</span><span>河口湖 6h</span></div>
             <div class="dc-row"><span>車両</span><span>普通車 × 1台</span></div>
@@ -407,7 +452,7 @@
           </div>
 
           <div class="dispatch-card" style="border-left:4px solid var(--warning);">
-            <h4>R-006 <span class="badge badge-pending">寄港待ち</span></h4>
+            <h4>R-006 <span class="badge badge-pending">帰着待ち</span></h4>
             <div class="dc-row"><span>顧客</span><span>田中太郎 (JP)</span></div>
             <div class="dc-row"><span>コース</span><span>フリー 2h</span></div>
             <div class="dc-row"><span>車両</span><span>普通車 × 1台</span></div>
@@ -471,12 +516,14 @@
           <h3>運行指示書 / Tour Reservation Form</h3>
           <table class="pdf-table">
             <tr><td class="pdf-row-label">受付番号</td><td colspan="3"><strong>R-001</strong></td></tr>
+            <tr><td class="pdf-row-label">W番号</td><td colspan="3"><strong style="font-size:16px;">W-001</strong>（1台目/全3台 W-001〜003）</td></tr>
             <tr><td class="pdf-row-label">ご案内コース</td><td colspan="3">富士宮コース（4時間）/ Mt. Fuji & Fujinomiya Course (4h)</td></tr>
             <tr><td class="pdf-row-label">ドロップオフ</td><td colspan="3">清水港</td></tr>
             <tr><td class="pdf-row-label">出発時刻</td><td>08:20</td><td class="pdf-row-label">帰着予定</td><td>12:20</td></tr>
             <tr style="background:#fef9e7;"><td class="pdf-row-label" style="font-weight:700;">帰着時間（手書き）</td><td style="height:24px;">___:___</td><td class="pdf-row-label">ドライバー記入</td><td></td></tr>
             <tr><td class="pdf-row-label">タクシー会社</td><td>みなとタクシー</td><td class="pdf-row-label">ドライバー</td><td>鈴木</td></tr>
             <tr><td class="pdf-row-label">車両番号</td><td>258</td><td class="pdf-row-label">車両タイプ</td><td>普通車</td></tr>
+            <tr><td class="pdf-row-label">営業担当</td><td colspan="3">YY / 横山</td></tr>
           </table>
           <table class="pdf-table">
             <tr><td class="pdf-row-label">Name</td><td>John Smith</td></tr>
@@ -514,12 +561,14 @@
           <h3>運行指示書 / Tour Reservation Form</h3>
           <table class="pdf-table">
             <tr><td class="pdf-row-label">受付番号</td><td colspan="3"><strong>R-001</strong></td></tr>
+            <tr><td class="pdf-row-label">W番号</td><td colspan="3"><strong style="font-size:16px;">W-002</strong>（2台目/全3台 W-001〜003）</td></tr>
             <tr><td class="pdf-row-label">ご案内コース</td><td colspan="3">富士宮コース（4時間）/ Mt. Fuji & Fujinomiya Course (4h)</td></tr>
             <tr><td class="pdf-row-label">ドロップオフ</td><td colspan="3">清水港</td></tr>
             <tr><td class="pdf-row-label">出発時刻</td><td>08:20</td><td class="pdf-row-label">帰着予定</td><td>12:20</td></tr>
             <tr style="background:#fef9e7;"><td class="pdf-row-label" style="font-weight:700;">帰着時間（手書き）</td><td style="height:24px;">___:___</td><td class="pdf-row-label">ドライバー記入</td><td></td></tr>
             <tr><td class="pdf-row-label">タクシー会社</td><td>うど交通</td><td class="pdf-row-label">ドライバー</td><td>増田</td></tr>
             <tr><td class="pdf-row-label">車両番号</td><td>174</td><td class="pdf-row-label">車両タイプ</td><td>普通車</td></tr>
+            <tr><td class="pdf-row-label">営業担当</td><td colspan="3">YY / 横山</td></tr>
           </table>
           <table class="pdf-table">
             <tr><td class="pdf-row-label">Name</td><td>John Smith</td></tr>
@@ -548,12 +597,14 @@
           <h3>運行指示書 / Tour Reservation Form</h3>
           <table class="pdf-table">
             <tr><td class="pdf-row-label">受付番号</td><td colspan="3"><strong>R-001</strong></td></tr>
+            <tr><td class="pdf-row-label">W番号</td><td colspan="3"><strong style="font-size:16px;">W-003</strong>（3台目/全3台 W-001〜003）</td></tr>
             <tr><td class="pdf-row-label">ご案内コース</td><td colspan="3">富士宮コース（4時間）/ Mt. Fuji & Fujinomiya Course (4h)</td></tr>
             <tr><td class="pdf-row-label">ドロップオフ</td><td colspan="3">清水港</td></tr>
             <tr><td class="pdf-row-label">出発時刻</td><td>08:20</td><td class="pdf-row-label">帰着予定</td><td>12:20</td></tr>
             <tr style="background:#fef9e7;"><td class="pdf-row-label" style="font-weight:700;">帰着時間（手書き）</td><td style="height:24px;">___:___</td><td class="pdf-row-label">ドライバー記入</td><td></td></tr>
             <tr><td class="pdf-row-label">タクシー会社</td><td>みなとタクシー</td><td class="pdf-row-label">ドライバー</td><td>池田</td></tr>
             <tr><td class="pdf-row-label">車両番号</td><td>412</td><td class="pdf-row-label">車両タイプ</td><td>大型車</td></tr>
+            <tr><td class="pdf-row-label">営業担当</td><td colspan="3">YY / 横山</td></tr>
           </table>
           <table class="pdf-table">
             <tr><td class="pdf-row-label">Name</td><td>John Smith</td></tr>
@@ -656,7 +707,7 @@
           <button class="btn-sm" style="color:var(--danger);">未入力チェック</button>
         </div>
 
-        <div class="stats-grid">
+        <div class="stats-grid stats-grid-5">
           <div class="stat-card highlight">
             <div class="sc-label">取扱高</div>
             <div class="sc-value">36件</div>
@@ -668,6 +719,11 @@
             <div class="sc-sub">¥685,200</div>
           </div>
           <div class="stat-card good">
+            <div class="sc-label">粗利</div>
+            <div class="sc-value">¥207,200</div>
+            <div class="sc-sub">粗利率 23.2%</div>
+          </div>
+          <div class="stat-card good">
             <div class="sc-label">運行完了</div>
             <div class="sc-value">29件</div>
             <div class="sc-sub">¥742,400</div>
@@ -676,6 +732,25 @@
             <div class="sc-label">未完了</div>
             <div class="sc-value">5件</div>
             <div class="sc-sub">¥150,000</div>
+          </div>
+        </div>
+
+        <!-- 待ち時間指標 -->
+        <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom:24px;">
+          <div class="stat-card accent">
+            <div class="sc-label">最大待ち時間</div>
+            <div class="sc-value">38<small style="font-size:14px;">分</small></div>
+            <div class="sc-sub">R-012 / ノルウェージャン・サン</div>
+          </div>
+          <div class="stat-card warn">
+            <div class="sc-label">最大待ち時間帯</div>
+            <div class="sc-value">09:00〜10:00</div>
+            <div class="sc-sub">寄港直後ピーク 平均 26分</div>
+          </div>
+          <div class="stat-card good">
+            <div class="sc-label">平均待ち時間</div>
+            <div class="sc-value">12<small style="font-size:14px;">分</small></div>
+            <div class="sc-sub">本日36件の平均</div>
           </div>
         </div>
 
@@ -723,6 +798,481 @@
         </div>
       </div>
 
+      <!-- ===== 売上集計 ===== -->
+      <div class="screen" id="sales-report">
+        <div class="filter-bar">
+          <select>
+            <option selected>2025年度（2025/04〜2026/03）</option>
+            <option>2024年度（2024/04〜2025/03）</option>
+            <option>2023年度（2023/04〜2024/03）</option>
+          </select>
+          <select>
+            <option>全船</option>
+            <option>ダイヤモンド・プリンセス</option>
+            <option>ノルウェージャン・スピリット</option>
+            <option>飛鳥III</option>
+          </select>
+          <button class="btn-sm primary">📥 CSV出力</button>
+          <button class="btn-sm">📊 グラフ印刷</button>
+        </div>
+
+        <!-- Annual summary KPI cards -->
+        <div class="stats-grid stats-grid-5">
+          <div class="stat-card highlight">
+            <div class="sc-label">年間取扱高</div>
+            <div class="sc-value">¥10.8M</div>
+            <div class="sc-sub">416件</div>
+          </div>
+          <div class="stat-card highlight">
+            <div class="sc-label">年間仕入</div>
+            <div class="sc-value">¥8.3M</div>
+            <div class="sc-sub">原価率 76.9%</div>
+          </div>
+          <div class="stat-card good">
+            <div class="sc-label">年間粗利</div>
+            <div class="sc-value">¥2.5M</div>
+            <div class="sc-sub">粗利率 23.1%</div>
+          </div>
+          <div class="stat-card accent">
+            <div class="sc-label">月平均取扱高</div>
+            <div class="sc-value">¥902K</div>
+            <div class="sc-sub">月平均 34.7件</div>
+          </div>
+          <div class="stat-card warn">
+            <div class="sc-label">ピーク月</div>
+            <div class="sc-value">10月</div>
+            <div class="sc-sub">¥1,678,000 / 64件</div>
+          </div>
+        </div>
+
+        <!-- Monthly bar chart -->
+        <div class="report-grid" style="grid-template-columns: 1fr;">
+          <div class="report-card">
+            <h4>📊 月別取扱高推移（2025年度）</h4>
+            <div class="bar-chart">
+              <div class="bar-row"><div class="bar-label">2025/04</div><div class="bar-bg"><div class="bar-fill" style="width:74%; background:var(--primary-light);">¥1,245K</div></div><div class="bar-value">48件</div></div>
+              <div class="bar-row"><div class="bar-label">2025/05</div><div class="bar-bg"><div class="bar-fill" style="width:91%; background:#48c9b0;">¥1,532K</div></div><div class="bar-value">58件</div></div>
+              <div class="bar-row"><div class="bar-label">2025/06</div><div class="bar-bg"><div class="bar-fill" style="width:52%; background:var(--primary-light);">¥876K</div></div><div class="bar-value">34件</div></div>
+              <div class="bar-row"><div class="bar-label">2025/07</div><div class="bar-bg"><div class="bar-fill" style="width:39%; background:var(--primary-light);">¥654K</div></div><div class="bar-value">25件</div></div>
+              <div class="bar-row"><div class="bar-label">2025/08</div><div class="bar-bg"><div class="bar-fill" style="width:25%; background:#95a5a6;">¥423K</div></div><div class="bar-value">16件</div></div>
+              <div class="bar-row"><div class="bar-label">2025/09</div><div class="bar-bg"><div class="bar-fill" style="width:59%; background:var(--primary-light);">¥987K</div></div><div class="bar-value">38件</div></div>
+              <div class="bar-row"><div class="bar-label">2025/10</div><div class="bar-bg"><div class="bar-fill" style="width:100%; background:var(--accent);">¥1,678K 🏆</div></div><div class="bar-value">64件</div></div>
+              <div class="bar-row"><div class="bar-label">2025/11</div><div class="bar-bg"><div class="bar-fill" style="width:85%; background:#48c9b0;">¥1,423K</div></div><div class="bar-value">55件</div></div>
+              <div class="bar-row"><div class="bar-label">2025/12</div><div class="bar-bg"><div class="bar-fill" style="width:32%; background:var(--primary-light);">¥534K</div></div><div class="bar-value">20件</div></div>
+              <div class="bar-row"><div class="bar-label">2026/01</div><div class="bar-bg"><div class="bar-fill" style="width:19%; background:#95a5a6;">¥312K</div></div><div class="bar-value">12件</div></div>
+              <div class="bar-row"><div class="bar-label">2026/02</div><div class="bar-bg"><div class="bar-fill" style="width:16%; background:#95a5a6;">¥267K</div></div><div class="bar-value">10件</div></div>
+              <div class="bar-row"><div class="bar-label">2026/03</div><div class="bar-bg"><div class="bar-fill" style="width:53%; background:var(--primary-light);">¥892K</div></div><div class="bar-value">36件</div></div>
+            </div>
+            <div style="margin-top:10px; font-size:11px; color:var(--text-light); text-align:right;">
+              🏆 ピーク月 ／ 🟢 上位月（5月・11月） ／ 🔵 通常月 ／ ⚪ 閑散期
+            </div>
+          </div>
+        </div>
+
+        <!-- Monthly detail table -->
+        <div class="table-card">
+          <div class="table-header">
+            <h3>月別売上明細</h3>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>月</th>
+                <th style="text-align:right;">取扱高</th>
+                <th style="text-align:right;">仕入</th>
+                <th style="text-align:right;">粗利</th>
+                <th style="text-align:right;">粗利率</th>
+                <th style="text-align:center;">件数</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>2025/04</strong></td><td style="text-align:right;">¥1,245,000</td><td style="text-align:right;">¥958,000</td><td style="text-align:right;">¥287,000</td><td style="text-align:right;">23.1%</td><td style="text-align:center;">48件</td></tr>
+              <tr style="background:#fff9e6;"><td><strong>2025/05</strong> 🥉</td><td style="text-align:right;">¥1,532,000</td><td style="text-align:right;">¥1,178,000</td><td style="text-align:right;">¥354,000</td><td style="text-align:right;">23.1%</td><td style="text-align:center;">58件</td></tr>
+              <tr><td><strong>2025/06</strong></td><td style="text-align:right;">¥876,000</td><td style="text-align:right;">¥674,000</td><td style="text-align:right;">¥202,000</td><td style="text-align:right;">23.1%</td><td style="text-align:center;">34件</td></tr>
+              <tr><td><strong>2025/07</strong></td><td style="text-align:right;">¥654,000</td><td style="text-align:right;">¥503,000</td><td style="text-align:right;">¥151,000</td><td style="text-align:right;">23.1%</td><td style="text-align:center;">25件</td></tr>
+              <tr><td><strong>2025/08</strong></td><td style="text-align:right;">¥423,000</td><td style="text-align:right;">¥325,000</td><td style="text-align:right;">¥98,000</td><td style="text-align:right;">23.2%</td><td style="text-align:center;">16件</td></tr>
+              <tr><td><strong>2025/09</strong></td><td style="text-align:right;">¥987,000</td><td style="text-align:right;">¥759,000</td><td style="text-align:right;">¥228,000</td><td style="text-align:right;">23.1%</td><td style="text-align:center;">38件</td></tr>
+              <tr style="background:#fef5e7;"><td><strong>2025/10</strong> 🥇</td><td style="text-align:right;">¥1,678,000</td><td style="text-align:right;">¥1,291,000</td><td style="text-align:right;">¥387,000</td><td style="text-align:right;">23.1%</td><td style="text-align:center;">64件</td></tr>
+              <tr style="background:#fff9e6;"><td><strong>2025/11</strong> 🥈</td><td style="text-align:right;">¥1,423,000</td><td style="text-align:right;">¥1,095,000</td><td style="text-align:right;">¥328,000</td><td style="text-align:right;">23.1%</td><td style="text-align:center;">55件</td></tr>
+              <tr><td><strong>2025/12</strong></td><td style="text-align:right;">¥534,000</td><td style="text-align:right;">¥411,000</td><td style="text-align:right;">¥123,000</td><td style="text-align:right;">23.0%</td><td style="text-align:center;">20件</td></tr>
+              <tr><td><strong>2026/01</strong></td><td style="text-align:right;">¥312,000</td><td style="text-align:right;">¥240,000</td><td style="text-align:right;">¥72,000</td><td style="text-align:right;">23.1%</td><td style="text-align:center;">12件</td></tr>
+              <tr><td><strong>2026/02</strong></td><td style="text-align:right;">¥267,000</td><td style="text-align:right;">¥205,000</td><td style="text-align:right;">¥62,000</td><td style="text-align:right;">23.2%</td><td style="text-align:center;">10件</td></tr>
+              <tr><td><strong>2026/03</strong></td><td style="text-align:right;">¥892,400</td><td style="text-align:right;">¥685,200</td><td style="text-align:right;">¥207,200</td><td style="text-align:right;">23.2%</td><td style="text-align:center;">36件</td></tr>
+              <tr style="background:#eaf2f8; font-weight:700; border-top:2px solid var(--primary);">
+                <td>年度合計</td>
+                <td style="text-align:right;">¥10,823,400</td>
+                <td style="text-align:right;">¥8,324,200</td>
+                <td style="text-align:right; color:var(--success);">¥2,499,200</td>
+                <td style="text-align:right;">23.1%</td>
+                <td style="text-align:center;">416件</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="padding:10px 16px; font-size:11px; color:var(--text-light); border-top:1px solid var(--border);">
+            🥇 ピーク月（10月）／ 🥈🥉 上位月（11月・5月）は背景ハイライト。粗利 = 取扱高 − 仕入。
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Master: Course ===== -->
+      <div class="screen" id="master-course">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div>
+            <div style="font-size:12px; color:var(--text-light);">デフォルトは普通車料金を表示。受注入力時に「大型」を選ぶと大型料金に切り替わります。</div>
+          </div>
+          <button class="btn-sm primary">＋ コース追加</button>
+        </div>
+        <div class="table-card">
+          <div class="table-header"><h3>コースマスタ</h3></div>
+          <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>コースNo</th>
+                <th>コース名</th>
+                <th>コース時間</th>
+                <th>旅行代金（普通車）</th>
+                <th>旅行代金（大型車）</th>
+                <th>行程1</th>
+                <th>行程2</th>
+                <th>行程3</th>
+                <th>行程4</th>
+                <th>行程5</th>
+                <th>行程6</th>
+                <th>行程7</th>
+                <th>ドライバーへの指示</th>
+                <th>原価1</th>
+                <th>原価2</th>
+                <th>原価3</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>C-001</td>
+                <td><strong>富士宮コース</strong></td>
+                <td>4h</td>
+                <td>¥35,140</td>
+                <td>¥46,700</td>
+                <td>清水港（出発）</td>
+                <td>富士山本宮浅間大社</td>
+                <td>白糸の滝</td>
+                <td>世界遺産センター</td>
+                <td>清水港（帰着）</td>
+                <td>—</td>
+                <td>—</td>
+                <td>写真撮影お手伝い、施設入場料は乗務員負担</td>
+                <td>¥26,800</td>
+                <td>—</td>
+                <td>—</td>
+                <td><button class="btn-sm">編集</button></td>
+              </tr>
+              <tr>
+                <td>C-002</td>
+                <td><strong>三保・日本平コース</strong></td>
+                <td>3h</td>
+                <td>¥20,100</td>
+                <td>¥28,300</td>
+                <td>清水港（出発）</td>
+                <td>三保松原</td>
+                <td>日本平</td>
+                <td>清水港（帰着）</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>三保松原の砂浜は歩きにくいので注意</td>
+                <td>¥15,300</td>
+                <td>—</td>
+                <td>—</td>
+                <td><button class="btn-sm">編集</button></td>
+              </tr>
+              <tr>
+                <td>C-003</td>
+                <td><strong>龍華寺コース</strong></td>
+                <td>3h</td>
+                <td>¥20,100</td>
+                <td>¥28,300</td>
+                <td>清水港（出発）</td>
+                <td>龍華寺</td>
+                <td>清水港（帰着）</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>拝観料は乗務員負担</td>
+                <td>¥15,300</td>
+                <td>—</td>
+                <td>—</td>
+                <td><button class="btn-sm">編集</button></td>
+              </tr>
+              <tr>
+                <td>C-004</td>
+                <td><strong>三保+富士宮コース</strong></td>
+                <td>6h</td>
+                <td>¥48,700</td>
+                <td>¥64,200</td>
+                <td>清水港（出発）</td>
+                <td>三保松原</td>
+                <td>日本平</td>
+                <td>富士山本宮浅間大社</td>
+                <td>白糸の滝</td>
+                <td>世界遺産センター</td>
+                <td>清水港（帰着）</td>
+                <td>長時間コース。休憩を適宜取ってください</td>
+                <td>¥37,100</td>
+                <td>—</td>
+                <td>—</td>
+                <td><button class="btn-sm">編集</button></td>
+              </tr>
+              <tr>
+                <td>C-005</td>
+                <td><strong>河口湖コース</strong></td>
+                <td>6h</td>
+                <td>¥54,300</td>
+                <td>¥71,500</td>
+                <td>清水港（出発）</td>
+                <td>河口湖</td>
+                <td>山中湖</td>
+                <td>忍野八海</td>
+                <td>清水港（帰着）</td>
+                <td>—</td>
+                <td>—</td>
+                <td>高速道路使用。渋滞時は代替ルートを案内</td>
+                <td>¥41,400</td>
+                <td>高速¥3,200</td>
+                <td>—</td>
+                <td><button class="btn-sm">編集</button></td>
+              </tr>
+              <tr>
+                <td>C-006</td>
+                <td><strong>フリープラン</strong></td>
+                <td>1〜8h</td>
+                <td>¥7,700/h〜</td>
+                <td>¥10,200/h〜</td>
+                <td>清水港（出発）</td>
+                <td>お客様ご希望</td>
+                <td>清水港（帰着）</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>お客様のご要望に柔軟に対応</td>
+                <td>時間×原価率</td>
+                <td>—</td>
+                <td>—</td>
+                <td><button class="btn-sm">編集</button></td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Master: Vehicle ===== -->
+      <div class="screen" id="master-vehicle">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <button class="btn-sm primary">＋ 車両追加</button>
+        </div>
+        <div class="table-card">
+          <div class="table-header"><h3>車両マスタ</h3></div>
+          <table>
+            <thead>
+              <tr>
+                <th>企業コード</th>
+                <th>タクシー会社名</th>
+                <th>無線番号（3桁）</th>
+                <th>乗客定員</th>
+                <th>ナンバー</th>
+                <th>タブレット番号</th>
+                <th>ステータス</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>V-001</td><td>静鉄タクシー</td><td>258</td><td>4名</td><td>静岡 500 あ 12-34</td><td>TAB-001</td><td><span class="badge badge-completed">稼働中</span></td><td><button class="btn-sm">編集</button></td></tr>
+              <tr><td>V-002</td><td>うど交通</td><td>174</td><td>4名</td><td>静岡 500 い 56-78</td><td>TAB-002</td><td><span class="badge badge-completed">稼働中</span></td><td><button class="btn-sm">編集</button></td></tr>
+              <tr><td>V-003</td><td>みなとタクシー</td><td>412</td><td>6名</td><td>静岡 500 う 90-12</td><td>TAB-003</td><td><span class="badge badge-completed">稼働中</span></td><td><button class="btn-sm">編集</button></td></tr>
+              <tr><td>V-004</td><td>駿河交通</td><td>089</td><td>4名</td><td>静岡 500 え 34-56</td><td>TAB-004</td><td><span class="badge badge-completed">稼働中</span></td><td><button class="btn-sm">編集</button></td></tr>
+              <tr><td>V-005</td><td>日の丸交通</td><td>301</td><td>6名</td><td>静岡 500 お 78-90</td><td>TAB-005</td><td><span class="badge badge-pending">休車中</span></td><td><button class="btn-sm">編集</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===== Master: Driver ===== -->
+      <div class="screen" id="master-driver">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <button class="btn-sm primary">＋ 乗務員追加</button>
+        </div>
+        <div class="table-card">
+          <div class="table-header"><h3>乗務員マスタ</h3></div>
+          <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>企業コード</th>
+                <th>タクシー会社名</th>
+                <th>乗務員コード</th>
+                <th>乗務員名</th>
+                <th>携帯番号</th>
+                <th>Email</th>
+                <th>資格</th>
+                <th>顔写真</th>
+                <th>ライン登録</th>
+                <th>評価</th>
+                <th>特記事項</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>V-001</td><td>静鉄タクシー</td><td>D-001</td><td>鈴木</td>
+                <td>080-1234-0001</td><td>suzuki@shizutetsu-taxi.co.jp</td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option selected>英語</option><option>アプリ</option><option>一般</option></select></td>
+                <td><button class="btn-sm" style="font-size:10px;">📷 参照</button><br><span style="font-size:10px; color:var(--success);">suzuki.jpg</span></td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option selected>有</option><option>無</option></select></td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td>
+                <td style="font-size:11px;">英語堪能、写真撮影得意</td>
+                <td><button class="btn-sm">編集</button></td>
+              </tr>
+              <tr>
+                <td>V-002</td><td>うど交通</td><td>D-002</td><td>増田</td>
+                <td>080-1234-0002</td><td>masuda@udo-taxi.co.jp</td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option>英語</option><option>アプリ</option><option selected>一般</option></select></td>
+                <td><button class="btn-sm" style="font-size:10px;">📷 参照</button><br><span style="font-size:10px; color:var(--success);">masuda.jpg</span></td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option selected>有</option><option>無</option></select></td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option></select></td>
+                <td style="font-size:11px;"></td>
+                <td><button class="btn-sm">編集</button></td>
+              </tr>
+              <tr>
+                <td>V-003</td><td>みなとタクシー</td><td>D-003</td><td>池田</td>
+                <td>080-1234-0003</td><td>ikeda@minato-taxi.co.jp</td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option selected>英語</option><option>アプリ</option><option>一般</option></select></td>
+                <td><button class="btn-sm" style="font-size:10px;">📷 参照</button><br><span style="font-size:10px; color:var(--success);">ikeda.jpg</span></td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option selected>有</option><option>無</option></select></td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td>
+                <td style="font-size:11px;">大型車対応可</td>
+                <td><button class="btn-sm">編集</button></td>
+              </tr>
+              <tr>
+                <td>V-004</td><td>駿河交通</td><td>D-004</td><td>小沼</td>
+                <td>080-1234-0004</td><td>konuma@suruga-taxi.co.jp</td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option>英語</option><option selected>アプリ</option><option>一般</option></select></td>
+                <td><button class="btn-sm" style="font-size:10px;">📷 参照</button><br><span style="font-size:10px; color:var(--text-light);">未登録</span></td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option selected>有</option><option>無</option></select></td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></td>
+                <td style="font-size:11px;"></td>
+                <td><button class="btn-sm">編集</button></td>
+              </tr>
+              <tr>
+                <td>V-005</td><td>日の丸交通</td><td>D-005</td><td>大多和</td>
+                <td>080-1234-0005</td><td>otawa@hinomaru-taxi.co.jp</td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option selected>英語</option><option>アプリ</option><option>一般</option></select></td>
+                <td><button class="btn-sm" style="font-size:10px;">📷 参照</button><br><span style="font-size:10px; color:var(--success);">otawa.jpg</span></td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option>有</option><option selected>無</option></select></td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option></select></td>
+                <td style="font-size:11px;"></td>
+                <td><button class="btn-sm">編集</button></td>
+              </tr>
+              <tr>
+                <td>V-006</td><td>パンダタクシー</td><td>D-006</td><td>澤西</td>
+                <td>080-1234-0006</td><td>sawanishi@panda-taxi.co.jp</td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option>英語</option><option>アプリ</option><option selected>一般</option></select></td>
+                <td><button class="btn-sm" style="font-size:10px;">📷 参照</button><br><span style="font-size:10px; color:var(--text-light);">未登録</span></td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option>有</option><option selected>無</option></select></td>
+                <td><select style="padding:4px; font-size:11px; border-radius:4px; border:1px solid #ddd;"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></td>
+                <td style="font-size:11px;"></td>
+                <td><button class="btn-sm">編集</button></td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Master: Staff ===== -->
+      <div class="screen" id="master-staff">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div style="font-size:12px; color:var(--text-light);">営業担当・決済担当・配車担当として受注に紐づけるスタッフを管理します。</div>
+          <button class="btn-sm primary">＋ スタッフ追加</button>
+        </div>
+        <div class="table-card">
+          <div class="table-header"><h3>スタッフマスタ（営業担当・決済担当・配車担当）</h3></div>
+          <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>コード</th>
+                <th>スタッフ氏名</th>
+                <th>携帯番号</th>
+                <th>Email</th>
+                <th>評価:営業<br><span style="font-size:9px; font-weight:400;">4/5</span></th>
+                <th>実績:営業<br><span style="font-size:9px; font-weight:400;">件数</span></th>
+                <th>評価:決済<br><span style="font-size:9px; font-weight:400;">4/5</span></th>
+                <th>評価:配車<br><span style="font-size:9px; font-weight:400;">4/5</span></th>
+                <th>登録日</th>
+                <th>在籍</th>
+                <th>出勤回数</th>
+                <th>ステータス</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>YY</strong></td><td>横山</td><td>080-1111-0001</td><td>yokoyama@taas.co.jp</td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td>
+                <td style="text-align:center;">142件</td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option></select></td>
+                <td>2024/04/01</td><td>2年0ヶ月</td><td>89回</td>
+                <td><span class="badge badge-completed">有効</span></td><td><button class="btn-sm">編集</button></td>
+              </tr>
+              <tr>
+                <td><strong>HE</strong></td><td>平野</td><td>080-1111-0002</td><td>hirano@taas.co.jp</td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option></select></td>
+                <td style="text-align:center;">98件</td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option></select></td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></td>
+                <td>2024/06/15</td><td>1年10ヶ月</td><td>72回</td>
+                <td><span class="badge badge-completed">有効</span></td><td><button class="btn-sm">編集</button></td>
+              </tr>
+              <tr>
+                <td><strong>SO</strong></td><td>曽根</td><td>080-1111-0003</td><td>sone@taas.co.jp</td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></td>
+                <td style="text-align:center;">56件</td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option></select></td>
+                <td>2025/01/10</td><td>1年3ヶ月</td><td>45回</td>
+                <td><span class="badge badge-completed">有効</span></td><td><button class="btn-sm">編集</button></td>
+              </tr>
+              <tr>
+                <td><strong>TK</strong></td><td>高橋</td><td>080-1111-0004</td><td>takahashi@taas.co.jp</td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></td>
+                <td style="text-align:center;">34件</td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option selected>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></td>
+                <td>2025/08/01</td><td>0年8ヶ月</td><td>28回</td>
+                <td><span class="badge badge-completed">有効</span></td><td><button class="btn-sm">編集</button></td>
+              </tr>
+              <tr>
+                <td><strong>MR</strong></td><td>森田</td><td>080-1111-0005</td><td>morita@taas.co.jp</td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></td>
+                <td style="text-align:center;">12件</td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></td>
+                <td><select style="padding:3px; font-size:11px; border-radius:4px; border:1px solid #ddd; width:50px;"><option selected>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></td>
+                <td>2025/11/20</td><td>0年5ヶ月</td><td>10回</td>
+                <td><span class="badge badge-pending">休止</span></td><td><button class="btn-sm">編集</button></td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+          <div style="padding:10px 16px; font-size:11px; color:var(--text-light); border-top:1px solid var(--border);">
+            ※ 実績件数は運行データから自動集計されます。営業一覧の受注案件件数から常に最新の累計を表示します。
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -733,7 +1283,7 @@ function showScreen(id) {
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
   event.currentTarget.classList.add('active');
-  const titles = { dashboard:'ダッシュボード', orders:'受注一覧', dispatch:'配車管理', pdf:'運行指示書', oneway:'ワンウェイ記録', report:'運行実績管理' };
+  const titles = { dashboard:'ダッシュボード', orders:'受注一覧', dispatch:'配車管理', pdf:'運行指示書', oneway:'ワンウェイ記録', report:'運行実績管理', 'sales-report':'売上集計', 'master-course':'コースマスタ', 'master-vehicle':'車両マスタ', 'master-driver':'乗務員マスタ', 'master-staff':'スタッフマスタ' };
   document.getElementById('pageTitle').textContent = titles[id] || id;
 }
 </script>

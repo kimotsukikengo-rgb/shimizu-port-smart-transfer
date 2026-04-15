@@ -253,6 +253,7 @@
       <div class="sb-item"><span class="sb-icon">🏛️</span> 行政レポート</div>
 
       <div class="sb-section">マスタ</div>
+      <div class="sb-item" onclick="showScreen('master-ship')"><span class="sb-icon">🚢</span> クルーズ船マスタ</div>
       <div class="sb-item"><span class="sb-icon">🗺️</span> コースマスタ</div>
       <div class="sb-item"><span class="sb-icon">🚗</span> タクシー会社</div>
       <div class="sb-item"><span class="sb-icon">👤</span> 乗務員マスタ</div>
@@ -663,6 +664,68 @@
               <label>備考</label>
               <input type="text" placeholder="特記事項があれば...">
             </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3>④ クルーズ船公式ツアー</h3>
+          <p style="font-size:13px; color:var(--text-light); margin-bottom:16px;">公式ツアーマスタから行先を選択し、配車予定台数と人数を入力してください。</p>
+          <table style="width:100%; border-collapse:collapse; font-size:13px; margin-bottom:12px;">
+            <thead>
+              <tr style="background:#f8f9fa;">
+                <th style="padding:8px 12px; text-align:left; border-bottom:1px solid #dce1e6;">No.</th>
+                <th style="padding:8px 12px; text-align:left; border-bottom:1px solid #dce1e6;">公式ツアー名</th>
+                <th style="padding:8px 12px; text-align:center; border-bottom:1px solid #dce1e6;">配車予定台数</th>
+                <th style="padding:8px 12px; text-align:center; border-bottom:1px solid #dce1e6;">人数</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5;">1.</td>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5;">公式ツアー 富士宮</td>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5; text-align:center;"><input type="number" value="10" style="width:60px; padding:6px; border:1px solid #dce1e6; border-radius:4px; text-align:center; font-size:14px; font-weight:600;"> 台</td>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5; text-align:center;"><input type="number" value="450" style="width:70px; padding:6px; border:1px solid #dce1e6; border-radius:4px; text-align:center; font-size:14px; font-weight:600;"> 人</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5;">2.</td>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5;">公式ツアー 三保</td>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5; text-align:center;"><input type="number" value="5" style="width:60px; padding:6px; border:1px solid #dce1e6; border-radius:4px; text-align:center; font-size:14px; font-weight:600;"> 台</td>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5; text-align:center;"><input type="number" value="225" style="width:70px; padding:6px; border:1px solid #dce1e6; border-radius:4px; text-align:center; font-size:14px; font-weight:600;"> 人</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5;">3.</td>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5;">公式ツアー 龍華寺</td>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5; text-align:center;"><input type="number" placeholder="0" style="width:60px; padding:6px; border:1px solid #dce1e6; border-radius:4px; text-align:center; font-size:14px; font-weight:600;"> 台</td>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5; text-align:center;"><input type="number" placeholder="0" style="width:70px; padding:6px; border:1px solid #dce1e6; border-radius:4px; text-align:center; font-size:14px; font-weight:600;"> 人</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5;">4.</td>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5;">公式ツアー 河口湖</td>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5; text-align:center;"><input type="number" placeholder="0" style="width:60px; padding:6px; border:1px solid #dce1e6; border-radius:4px; text-align:center; font-size:14px; font-weight:600;"> 台</td>
+                <td style="padding:8px 12px; border-bottom:1px solid #f0f2f5; text-align:center;"><input type="number" placeholder="0" style="width:70px; padding:6px; border:1px solid #dce1e6; border-radius:4px; text-align:center; font-size:14px; font-weight:600;"> 人</td>
+              </tr>
+              <tr style="background:#eaf2f8;">
+                <td colspan="2" style="padding:8px 12px; font-weight:700; text-align:right;">合計</td>
+                <td style="padding:8px 12px; text-align:center; font-weight:700; font-size:16px;">15 台</td>
+                <td style="padding:8px 12px; text-align:center; font-weight:700; font-size:16px;">675 人</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="font-size:12px; color:var(--text-light);">※ 公式ツアーマスタで登録されたツアーが自動的にリスト表示されます。<br>※ 人数は乗車定員ベースの概算です。実際の乗車人数は当日確定します。</div>
+        </div>
+
+        <div class="form-card">
+          <h3>⑤ シャトルバス運行の有無</h3>
+          <p style="font-size:13px; color:var(--text-light); margin-bottom:16px;">シャトルバスが運行される場合は「有」を選択してください。当日の乗降エリアやタイミングに影響します。</p>
+          <div style="display:inline-flex;">
+            <button type="button" onclick="toggleShuttle(this, true)"
+              style="padding:12px 40px; font-size:15px; font-weight:700;
+                     border:2px solid var(--primary-light); border-radius:8px 0 0 8px;
+                     cursor:pointer; background:var(--primary-light); color:#fff;">有</button>
+            <button type="button" onclick="toggleShuttle(this, false)"
+              style="padding:12px 40px; font-size:15px; font-weight:700;
+                     border:2px solid var(--primary-light); border-left:none; border-radius:0 8px 8px 0;
+                     cursor:pointer; background:#fff; color:var(--primary-light);">無</button>
           </div>
         </div>
 
@@ -1362,6 +1425,51 @@
         </div>
       </div>
 
+      <!-- ===== Master: Cruise Ship ===== -->
+      <div class="screen" id="master-ship">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div style="font-size:12px; color:var(--text-light);">寄港登録時のクルーズ船名ドロップダウンは、このマスタから自動生成されます。</div>
+          <button class="btn btn-primary" style="padding:8px 16px; font-size:13px;">＋ 船を追加</button>
+        </div>
+        <div class="table-card">
+          <div style="padding:14px 16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="font-size:15px; margin:0;">クルーズ船マスタ</h3>
+            <span style="font-size:12px; color:var(--text-light);">登録 9 隻</span>
+          </div>
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:13px;">
+              <thead style="background:#f8f9fa;">
+                <tr>
+                  <th style="padding:10px 12px; text-align:left; font-weight:600; color:var(--text-light); font-size:11px; text-transform:uppercase; border-bottom:1px solid var(--border);">船名</th>
+                  <th style="padding:10px 12px; text-align:left; font-weight:600; color:var(--text-light); font-size:11px; text-transform:uppercase; border-bottom:1px solid var(--border);">種別</th>
+                  <th style="padding:10px 12px; text-align:left; font-weight:600; color:var(--text-light); font-size:11px; text-transform:uppercase; border-bottom:1px solid var(--border);">クラス</th>
+                  <th style="padding:10px 12px; text-align:right; font-weight:600; color:var(--text-light); font-size:11px; text-transform:uppercase; border-bottom:1px solid var(--border);">全長(m)</th>
+                  <th style="padding:10px 12px; text-align:right; font-weight:600; color:var(--text-light); font-size:11px; text-transform:uppercase; border-bottom:1px solid var(--border);">トン数(GT)</th>
+                  <th style="padding:10px 12px; text-align:right; font-weight:600; color:var(--text-light); font-size:11px; text-transform:uppercase; border-bottom:1px solid var(--border);">乗客定員</th>
+                  <th style="padding:10px 12px; text-align:right; font-weight:600; color:var(--text-light); font-size:11px; text-transform:uppercase; border-bottom:1px solid var(--border);">乗組員</th>
+                  <th style="padding:10px 12px; text-align:left; font-weight:600; color:var(--text-light); font-size:11px; text-transform:uppercase; border-bottom:1px solid var(--border);">備考</th>
+                  <th style="padding:10px 12px; text-align:left; font-weight:600; color:var(--text-light); font-size:11px; text-transform:uppercase; border-bottom:1px solid var(--border);">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:10px 12px;"><strong>セレブリティ・ミレニアム</strong></td><td style="padding:10px 12px;">客船</td><td style="padding:10px 12px;"><span class="badge badge-upcoming">プレミアム</span></td><td style="padding:10px 12px; text-align:right;">294</td><td style="padding:10px 12px; text-align:right;">90,940</td><td style="padding:10px 12px; text-align:right;">2,158</td><td style="padding:10px 12px; text-align:right;">999</td><td style="padding:10px 12px; font-size:12px; color:var(--text-light);">Celebrity Cruises</td><td style="padding:10px 12px;"><button class="btn btn-sm" style="padding:4px 10px; font-size:12px; border:1px solid var(--border); background:var(--card); border-radius:6px; cursor:pointer;">編集</button></td></tr>
+                <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:10px 12px;"><strong>ダイヤモンド・プリンセス</strong></td><td style="padding:10px 12px;">客船</td><td style="padding:10px 12px;"><span class="badge badge-upcoming">プレミアム</span></td><td style="padding:10px 12px; text-align:right;">290</td><td style="padding:10px 12px; text-align:right;">115,875</td><td style="padding:10px 12px; text-align:right;">2,706</td><td style="padding:10px 12px; text-align:right;">1,100</td><td style="padding:10px 12px; font-size:12px; color:var(--text-light);">Princess Cruises / 日本発着</td><td style="padding:10px 12px;"><button class="btn btn-sm" style="padding:4px 10px; font-size:12px; border:1px solid var(--border); background:var(--card); border-radius:6px; cursor:pointer;">編集</button></td></tr>
+                <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:10px 12px;"><strong>ノルウェージャン・スピリット</strong></td><td style="padding:10px 12px;">客船</td><td style="padding:10px 12px;"><span class="badge badge-upcoming">プレミアム</span></td><td style="padding:10px 12px; text-align:right;">268</td><td style="padding:10px 12px; text-align:right;">75,338</td><td style="padding:10px 12px; text-align:right;">2,018</td><td style="padding:10px 12px; text-align:right;">912</td><td style="padding:10px 12px; font-size:12px; color:var(--text-light);">Norwegian Cruise Line</td><td style="padding:10px 12px;"><button class="btn btn-sm" style="padding:4px 10px; font-size:12px; border:1px solid var(--border); background:var(--card); border-radius:6px; cursor:pointer;">編集</button></td></tr>
+                <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:10px 12px;"><strong>ノルウェージャン・サン</strong></td><td style="padding:10px 12px;">客船</td><td style="padding:10px 12px;"><span class="badge badge-upcoming">プレミアム</span></td><td style="padding:10px 12px; text-align:right;">258</td><td style="padding:10px 12px; text-align:right;">78,309</td><td style="padding:10px 12px; text-align:right;">1,936</td><td style="padding:10px 12px; text-align:right;">906</td><td style="padding:10px 12px; font-size:12px; color:var(--text-light);">Norwegian Cruise Line</td><td style="padding:10px 12px;"><button class="btn btn-sm" style="padding:4px 10px; font-size:12px; border:1px solid var(--border); background:var(--card); border-radius:6px; cursor:pointer;">編集</button></td></tr>
+                <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:10px 12px;"><strong>クイーン・エリザベス</strong></td><td style="padding:10px 12px;">客船</td><td style="padding:10px 12px;"><span class="badge badge-active">ラグジュアリー</span></td><td style="padding:10px 12px; text-align:right;">294</td><td style="padding:10px 12px; text-align:right;">90,901</td><td style="padding:10px 12px; text-align:right;">2,081</td><td style="padding:10px 12px; text-align:right;">980</td><td style="padding:10px 12px; font-size:12px; color:var(--text-light);">Cunard Line</td><td style="padding:10px 12px;"><button class="btn btn-sm" style="padding:4px 10px; font-size:12px; border:1px solid var(--border); background:var(--card); border-radius:6px; cursor:pointer;">編集</button></td></tr>
+                <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:10px 12px;"><strong>飛鳥III</strong></td><td style="padding:10px 12px;">客船</td><td style="padding:10px 12px;"><span class="badge badge-active">ラグジュアリー</span></td><td style="padding:10px 12px; text-align:right;">229</td><td style="padding:10px 12px; text-align:right;">51,950</td><td style="padding:10px 12px; text-align:right;">740</td><td style="padding:10px 12px; text-align:right;">470</td><td style="padding:10px 12px; font-size:12px; color:var(--text-light);">郵船クルーズ / 国内</td><td style="padding:10px 12px;"><button class="btn btn-sm" style="padding:4px 10px; font-size:12px; border:1px solid var(--border); background:var(--card); border-radius:6px; cursor:pointer;">編集</button></td></tr>
+                <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:10px 12px;"><strong>ノールダム</strong></td><td style="padding:10px 12px;">客船</td><td style="padding:10px 12px;"><span class="badge badge-upcoming">プレミアム</span></td><td style="padding:10px 12px; text-align:right;">285</td><td style="padding:10px 12px; text-align:right;">82,318</td><td style="padding:10px 12px; text-align:right;">1,964</td><td style="padding:10px 12px; text-align:right;">800</td><td style="padding:10px 12px; font-size:12px; color:var(--text-light);">Holland America Line</td><td style="padding:10px 12px;"><button class="btn btn-sm" style="padding:4px 10px; font-size:12px; border:1px solid var(--border); background:var(--card); border-radius:6px; cursor:pointer;">編集</button></td></tr>
+                <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:10px 12px;"><strong>ウェステルダム</strong></td><td style="padding:10px 12px;">客船</td><td style="padding:10px 12px;"><span class="badge badge-upcoming">プレミアム</span></td><td style="padding:10px 12px; text-align:right;">285</td><td style="padding:10px 12px; text-align:right;">82,348</td><td style="padding:10px 12px; text-align:right;">1,964</td><td style="padding:10px 12px; text-align:right;">800</td><td style="padding:10px 12px; font-size:12px; color:var(--text-light);">Holland America Line</td><td style="padding:10px 12px;"><button class="btn btn-sm" style="padding:4px 10px; font-size:12px; border:1px solid var(--border); background:var(--card); border-radius:6px; cursor:pointer;">編集</button></td></tr>
+                <tr><td style="padding:10px 12px;"><strong>コスタ・セレーナ</strong></td><td style="padding:10px 12px;">客船</td><td style="padding:10px 12px;"><span class="badge badge-draft">カジュアル</span></td><td style="padding:10px 12px; text-align:right;">290</td><td style="padding:10px 12px; text-align:right;">114,147</td><td style="padding:10px 12px; text-align:right;">3,780</td><td style="padding:10px 12px; text-align:right;">1,100</td><td style="padding:10px 12px; font-size:12px; color:var(--text-light);">Costa Cruises / アジア配船</td><td style="padding:10px 12px;"><button class="btn btn-sm" style="padding:4px 10px; font-size:12px; border:1px solid var(--border); background:var(--card); border-radius:6px; cursor:pointer;">編集</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="padding:10px 16px; font-size:11px; color:var(--text-light); border-top:1px solid var(--border);">
+            ※ クラス：<span class="badge badge-active" style="margin:0 4px;">ラグジュアリー</span> 高級 ／ <span class="badge badge-upcoming" style="margin:0 4px;">プレミアム</span> 中高級 ／ <span class="badge badge-draft" style="margin:0 4px;">カジュアル</span> 一般
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1379,9 +1487,20 @@ function showScreen(id) {
     'ship-ranking': 'クルーズ船ランキング',
     'tour-ranking': '人気ツアー分析',
     'taxi-ranking': 'タクシー会社分析',
-    'weather-analysis': '天気×売上分析'
+    'weather-analysis': '天気×売上分析',
+    'master-ship': 'クルーズ船マスタ'
   };
   document.getElementById('pageTitle').textContent = titles[id] || id;
+}
+function toggleShuttle(btn, isYes) {
+  var parent = btn.parentElement;
+  var btns = parent.querySelectorAll('button');
+  btns.forEach(function(b) {
+    b.style.background = '#fff';
+    b.style.color = 'var(--primary-light)';
+  });
+  btn.style.background = 'var(--primary-light)';
+  btn.style.color = '#fff';
 }
 
 function switchTourView(viewId) {

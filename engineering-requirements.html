@@ -77,7 +77,8 @@
 
 <h1>清水港スマート交通手配システム<br>エンジニア向け要件伝達書</h1>
 <p class="subtitle">Shimizu Port Smart Transfer System — Engineering Requirements Document<br>
-Version 1.0 | 2026年3月31日 | 株式会社静岡TaaSトラベル</p>
+Version 2.0 | 2026年4月16日 | 株式会社静岡TaaSトラベル</p>
+<p style="font-size:12px; color:#7f8c8d; margin-bottom:32px;">v2.0更新: 4/1・4/9打合せ決定事項反映、モックアップ画面更新に基づく全面改訂</p>
 
 <div class="toc">
   <h3>目次</h3>
@@ -120,15 +121,25 @@ Version 1.0 | 2026年3月31日 | 株式会社静岡TaaSトラベル</p>
     <span class="flow-arrow">→</span>
     <span class="flow-step">事前予約受付（URL A）</span>
   </div>
-  <p style="margin-top:12px;"><strong>当日（対面販売）</strong></p>
+  <p style="margin-top:12px;"><strong>当日（対面販売）— 受注〜決済</strong></p>
   <div class="flow-box">
     <span class="flow-step">営業がURL Bで受注入力</span>
     <span class="flow-arrow">→</span>
-    <span class="flow-step">決済デスクでmPOS/Web決済</span>
+    <span class="flow-step">受付番号 自動発行</span>
     <span class="flow-arrow">→</span>
+    <span class="flow-step">決済デスクで受付番号確認</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">内容確認（修正可）</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">mPOS/全旅/現金/Web決済</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">W番号入力（車両ごと）</span>
+  </div>
+  <p style="margin-top:12px;"><strong>当日（対面販売）— 配車〜出発</strong></p>
+  <div class="flow-box">
     <span class="flow-step">配車担当が車両・乗務員引当</span>
     <span class="flow-arrow">→</span>
-    <span class="flow-step">運行指示書PDF生成</span>
+    <span class="flow-step">運行指示書PDF生成（車両ごと）</span>
     <span class="flow-arrow">→</span>
     <span class="flow-step">乗務員にLINE/メール送信</span>
   </div>
@@ -149,8 +160,8 @@ Version 1.0 | 2026年3月31日 | 株式会社静岡TaaSトラベル</p>
   <thead><tr><th>ID</th><th>名称</th><th>ユーザー</th><th>デバイス</th><th>認証</th><th>画面数</th></tr></thead>
   <tbody>
     <tr><td><strong>URL A</strong></td><td>顧客向け予約サイト</td><td>クルーズ船乗客（外国人）</td><td>スマートフォン</td><td>不要</td><td>7画面</td></tr>
-    <tr><td><strong>URL B</strong></td><td>スタッフ対面販売端末</td><td>営業 / 決済 / 配車 / 乗務員</td><td>タブレット / スマホ</td><td>スタッフコード認証</td><td>12画面</td></tr>
-    <tr><td><strong>Admin</strong></td><td>管理画面</td><td>マネージャー</td><td>PC（デスクトップ）</td><td>ログイン認証</td><td>5画面</td></tr>
+    <tr><td><strong>URL B</strong></td><td>スタッフ対面販売端末</td><td>営業 / 決済 / 配車 / 受注修正 / 乗務員</td><td>タブレット / スマホ</td><td>スタッフコード認証</td><td>14画面</td></tr>
+    <tr><td><strong>Admin</strong></td><td>管理画面</td><td>マネージャー</td><td>PC（デスクトップ）</td><td>ログイン認証</td><td>11画面</td></tr>
     <tr><td><strong>分析</strong></td><td>寄港管理 / 業務分析</td><td>マネージャー / 経営層</td><td>PC（デスクトップ）</td><td>ログイン認証</td><td>7画面</td></tr>
   </tbody>
 </table>
@@ -235,9 +246,10 @@ Version 1.0 | 2026年3月31日 | 株式会社静岡TaaSトラベル</p>
   <table>
     <tr><th>番号</th><th>名称</th><th>発行タイミング</th><th>形式</th><th>用途</th></tr>
     <tr><td><strong>受付番号</strong></td><td>Reception Number</td><td>受注入力時に自動採番</td><td><code>R-YYYYMMDD-NNN</code></td><td>システム内の一意識別子。全工程で使用</td></tr>
-    <tr><td><strong>W番号</strong></td><td>Waiting Number</td><td>決済完了時に物理カードから読取り</td><td><code>W-NNN</code></td><td>顧客が乗車待ち時に使う物理カードの番号。寄港日ごとにリセット</td></tr>
+    <tr><td><strong>W番号</strong></td><td>Waiting Number</td><td>決済完了時に物理カードから読取り。<strong>1台=1W番号</strong>（3台口なら3枚使用）</td><td><code>W-NNN</code></td><td>顧客が乗車待ち時に使う物理カードの番号。寄港日ごとにリセット。<strong>車両単位で発行</strong>（配車テーブルに紐づく）</td></tr>
   </table>
-  <p><strong>注意:</strong> W番号は寄港情報登録で事前に枠（ワンウェイ用 / チャーター用）を設定。物理カードに印刷済みの連番を使用。</p>
+  <p><strong>注意:</strong> W番号は寄港情報登録で事前に枠を設定（チャーター・ワンウェイ共通連番）。物理カードに印刷済みの連番を使用。</p>
+  <p><strong>重要（4/1打合せ決定）:</strong> W番号は<strong>車両単位</strong>で発行されます。例: 3台口の受注はW-005, W-006, W-007の3つのW番号を使用し、配車（dispatches）テーブルに紐づきます。受注（orders）テーブルではなく配車テーブルで管理します。</p>
 </div>
 
 <h3>主要エンティティ</h3>
@@ -256,18 +268,18 @@ Version 1.0 | 2026年3月31日 | 株式会社静岡TaaSトラベル</p>
     </tr>
     <tr>
       <td>受注<br><code>orders</code></td>
-      <td>id, reception_number, port_call_id, w_number, course_id, vehicle_type, vehicle_count, passenger_count, customer_name, customer_email, customer_phone, nationality, preferred_language, special_requests, order_route(instant/advance/qr), sales_amount, procurement_amount, payment_status, payment_method, payment_txn_id, staff_code, status(pending/paid/dispatched/in_progress/completed), created_at</td>
-      <td>中心テーブル。1受注=1グループ（複数台の場合もある）。売上(sales)と仕入(procurement)を分離管理。</td>
+      <td>id, reception_number, port_call_id, course_id, vehicle_count, passenger_count, customer_name, customer_name_kana, customer_email, customer_phone, customer_whatsapp, nationality, preferred_language, special_notes(特記事項), option_items(JSON: [{name, amount}]×3), drop_off_point(清水港/フィッシュマーケット/ショッピングモール), order_route(instant/advance/qr), sales_amount, procurement_amount, payment_method(mPOS/全旅/現金/Web), payment_txn_id, sales_staff_code(営業担当), payment_staff_code(決済担当), dispatch_staff_code(配車担当), status(受注完了/決済待ち/決済完了/配車待ち/帰着待ち/運行完了/キャンセル), cancel_reason, created_at</td>
+      <td>中心テーブル。1受注=1グループ（複数台の場合もある）。売上(sales)と仕入(procurement)を分離管理。<br><strong>W番号はordersではなくdispatchesに紐づく（車両単位）。</strong><br>ステータス表示は「帰着待ち」「運行完了」の2値に統一（4/1打合せ）。キャンセル時は売上0円計上。</td>
     </tr>
     <tr>
       <td>配車<br><code>dispatches</code></td>
-      <td>id, order_id, vehicle_number(1,2...), taxi_company_id, driver_id, car_number, vehicle_type, driver_email, departure_time, return_time, instruction_pdf_url, line_sent, whatsapp_sent, status(assigned/in_progress/completed)</td>
-      <td>1受注に対してN台の配車（vehicle_count分）。車両単位でPDF生成。</td>
+      <td>id, order_id, vehicle_number(1,2...), <strong>w_number(W番号・車両単位)</strong>, taxi_company_id, driver_id, radio_number(無線番号3桁), vehicle_type(普通車/大型車), passenger_count(台別乗車人数), driver_email, departure_time, return_time, instruction_pdf_url, line_sent, whatsapp_sent, status(配車待ち/帰着待ち/運行完了)</td>
+      <td>1受注に対してN台の配車（vehicle_count分）。<strong>車両1台につき1つのW番号</strong>（例: 3台口=W-005, W-006, W-007）。車両ごとに運行指示書PDFを個別生成。</td>
     </tr>
     <tr>
       <td>運行完了報告<br><code>driver_reports</code></td>
-      <td>id, dispatch_id, actual_destination, return_time, notes, submitted_at</td>
-      <td>乗務員がメールリンクから入力。ログイン不要。</td>
+      <td>id, dispatch_id, actual_destination, return_time, extension_time(なし/30分/1時間/1時間30分/2時間), extension_fee, payment_amount(決済料金), card_fee(カード手数料1.3%), procurement_taxi(タクシー仕入), procurement_facility(観光施設), procurement_highway(高速料金), procurement_parking(駐車料金), procurement_guide(ガイド料), customer_satisfaction(1-5), memo, submitted_at</td>
+      <td>乗務員がメールリンクから入力。ログイン不要。「延長・返金」セクション、「決済料金・手数料」セクション、「原価」セクション（5項目）、「顧客満足度・メモ」セクションで構成。</td>
     </tr>
     <tr>
       <td>コースマスタ<br><code>courses</code></td>
@@ -275,19 +287,29 @@ Version 1.0 | 2026年3月31日 | 株式会社静岡TaaSトラベル</p>
       <td>コース内容・料金・行程をマスタ管理。多言語対応。</td>
     </tr>
     <tr>
+      <td>公式ツアーマスタ<br><code>official_tours</code></td>
+      <td>id, name, destination(行き先), vehicle_count(台数), passenger_count(人数), is_active</td>
+      <td>クルーズ船公式ツアー情報。寄港情報登録の「④ クルーズ船公式ツアー」セクションで参照。マスタから自動リスト表示。</td>
+    </tr>
+    <tr>
       <td>タクシー会社マスタ<br><code>taxi_companies</code></td>
       <td>id, name, contact_phone, contact_email, is_active</td>
       <td>手配先。法人タクシー + 個人タクシーあり。約20社。</td>
     </tr>
     <tr>
+      <td>車両マスタ<br><code>vehicles</code></td>
+      <td>id, company_code(企業コード), taxi_company_id, radio_number(無線番号3桁), passenger_capacity(乗客定員), plate_number(ナンバー), tablet_number(タブレット番号), status(稼働中/休車中), is_active</td>
+      <td>タクシー会社に紐づく車両情報。無線番号3桁で配車時に特定。4/9打合せ: 英語対応カラムは車両マスタから削除（乗務員マスタの「資格」で管理）。</td>
+    </tr>
+    <tr>
       <td>乗務員マスタ<br><code>drivers</code></td>
-      <td>id, name, taxi_company_id, email, phone, is_active</td>
-      <td>タクシー会社に紐づく。メールで運行指示書を受信。</td>
+      <td>id, company_code(企業コード), taxi_company_id, driver_code(乗務員コード), name, phone, email, qualification(資格: 英語/アプリ/一般), photo_url(顔写真JPEG), line_registered(LINE登録: 有/無), rating(評価1-5), special_notes(特記事項), is_active</td>
+      <td>タクシー会社に紐づく。メールで運行指示書を受信。資格・LINE登録・評価はプルダウン選択。顔写真はJPEG参照ボタンで登録。</td>
     </tr>
     <tr>
       <td>スタッフ<br><code>staff</code></td>
-      <td>id, code(2文字), name, role(sales/payment/dispatch/admin), password_hash</td>
-      <td>2文字コードでログイン（例: YY, HE, SO）</td>
+      <td>id, code(2文字), name, phone(携帯番号), email, role(sales/payment/dispatch/admin), rating_sales(評価:営業1-5), rating_payment(評価:決済1-5), rating_dispatch(評価:配車1-5), performance_count(実績件数・自動集計), registration_date(登録日), employment_status(在籍), attendance_count(出勤回数), password_hash, is_active</td>
+      <td>2文字コードでログイン（例: YY, HE, SO）。営業・決済・配車の3職種別に1-5段階評価。実績件数はordersテーブルから自動集計。</td>
     </tr>
   </tbody>
 </table>
@@ -296,13 +318,32 @@ Version 1.0 | 2026年3月31日 | 株式会社静岡TaaSトラベル</p>
 <div class="card">
 <pre style="font-size:11px; line-height:1.5; overflow-x:auto;">
 ships ──1:N── port_calls ──1:N── orders ──1:N── dispatches ──1:1── driver_reports
-                                   │                │
-                                   │                ├── taxi_companies
-                                   │                └── drivers
-                                   │
-                                   ├── courses
-                                   └── staff
+                  │                │                │
+                  │                │                ├── taxi_companies ──1:N── vehicles
+                  │                │                │                  └─1:N── drivers
+                  │                │                └── w_number（車両単位）
+                  │                │
+                  │                ├── courses
+                  │                └── staff（営業/決済/配車担当）
+                  │
+                  └── official_tours（公式ツアーマスタ）
 </pre>
+</div>
+
+<h3>ステータス遷移（4/1打合せ決定事項）</h3>
+<div class="card danger">
+  <h3>ステータス統一方針</h3>
+  <p>画面表示上のステータスは<strong>「帰着待ち」と「運行完了」</strong>の2値に統一する。内部的には以下のステータスチェーンで管理。</p>
+  <div class="flow-box">
+    <span class="flow-step">受注完了</span><span class="flow-arrow">→</span>
+    <span class="flow-step">決済待ち</span><span class="flow-arrow">→</span>
+    <span class="flow-step">決済完了</span><span class="flow-arrow">→</span>
+    <span class="flow-step">配車待ち</span><span class="flow-arrow">→</span>
+    <span class="flow-step">帰着待ち</span><span class="flow-arrow">→</span>
+    <span class="flow-step">運行完了</span>
+  </div>
+  <p>管理画面・URL Bともに表示は「帰着待ち」「運行完了」のみ。フィルタリング用に内部ステータスを保持。</p>
+  <p><strong>キャンセル:</strong> 任意のステータスからキャンセル可。キャンセル理由（プルダウン＋自由記入）を記録。売上0円計上。キャンセル済みW番号は一覧上で取消線表示。</p>
 </div>
 
 <!-- ============================================================ -->
@@ -348,7 +389,7 @@ ships ──1:N── port_calls ──1:N── orders ──1:N── dispatch
     <tr><td>Email</td><td>email</td><td>○</td><td>確認メール送信先</td></tr>
     <tr><td>WhatsApp / Phone</td><td>tel</td><td>○</td><td>国際番号（+XX形式）。当日緊急連絡用</td></tr>
     <tr><td>Passengers</td><td>select</td><td>○</td><td>1〜4（普通車）/ 1〜6（大型車）</td></tr>
-    <tr><td>Preferred Language</td><td>select</td><td>○</td><td>English / Japanese / No preference</td></tr>
+    <tr><td>Preferred Language<br>（言語についてのアンケート）</td><td>select</td><td>○</td><td>English-speaking Driver preferred / No preference<br><span class="badge badge-warn">4/9決定</span> タイトル: 「ドライバーの言語についてアンケート」<br>注記（赤字）: 「必ずしも英語対応ドライバーがいるとは限りません。翻訳アプリで会話は可能です。」</td></tr>
     <tr><td>Nationality</td><td>select</td><td>○</td><td>10カ国 + Other。分析・レポート用</td></tr>
     <tr><td>Cruise Ship</td><td>select</td><td>○</td><td>寄港情報マスタから動的取得</td></tr>
     <tr><td>Special Requests</td><td>textarea</td><td>-</td><td>車椅子、チャイルドシート等</td></tr>
@@ -359,13 +400,14 @@ ships ──1:N── port_calls ──1:N── orders ──1:N── dispatch
 <h2 id="url-b">5. URL B: スタッフ専用 対面販売端末</h2>
 <!-- ============================================================ -->
 
-<h3>画面遷移フロー（12画面、4ロール）</h3>
+<h3>画面遷移フロー（14画面、5ロール）</h3>
 <div class="screen-flow">
   <h4>ロール別フロー</h4>
-  <p><strong>営業:</strong> ログイン → 役割選択 → 受注入力 → 決済 → 完了</p>
-  <p><strong>決済:</strong> ログイン → 役割選択 → 受付番号検索 → mPOS/Web決済 → W番号入力 → 完了</p>
-  <p><strong>配車:</strong> ログイン → 役割選択 → 受付番号検索 → 乗務員・車両引当 → 指示書PDF → LINE/WhatsApp送信 → 完了</p>
-  <p><strong>乗務員:</strong> メールリンクから直接アクセス（ログイン不要） → 運行完了報告 → 送信</p>
+  <p><strong>受注入力（営業）:</strong> ログイン → 役割選択 → 受注入力（コース・車両車種ごと人数・顧客情報・ドロップオフ・特記事項・オプション項目・営業担当名） → 受注確認 → 受付番号発行</p>
+  <p><strong>決済:</strong> ログイン → 役割選択 → 受付番号検索（or 決済待ちリスト） → 内容確認（修正可） → 決済方法選択（mPOS/全旅/現金/Web） → W番号入力（車両ごと） → 決済担当名選択 → 決済完了</p>
+  <p><strong>配車入力:</strong> ログイン → 役割選択 → 受付番号検索（or 配車待ちリスト） → 車両ごとに配車情報入力（タクシー会社・乗務員・無線番号3桁・車種・メール） → 出発時刻入力 → 運行指示書プレビュー → 印刷/メール/LINE送信 → 配車完了</p>
+  <p><strong>受注修正:</strong> ログイン → 役割選択 → 受付番号検索（or 修正可能案件リスト） → 受注内容修正 → 再登録</p>
+  <p><strong>乗務員:</strong> メールリンクから直接アクセス（ログイン不要） → 運行完了報告（行き先・帰着時刻・延長/返金・決済料金/手数料・原価5項目・顧客満足度・メモ） → 送信</p>
 </div>
 
 <h4>実装上の重要ポイント</h4>
@@ -379,6 +421,18 @@ ships ──1:N── port_calls ──1:N── orders ──1:N── dispatch
     <tr><td>タッチ操作最適化</td><td>屋外で手袋着用の場合あり。ボタンサイズは最低44px × 44px。<br>数値入力は+/-ステッパーを使用。</td><td class="priority-mid">重要</td></tr>
     <tr><td>配車の複数台対応</td><td>1受注で複数台の車両を手配する場合がある。<br>車両ごとに異なるタクシー会社・乗務員を割り当て可能。<br>車両ごとに個別の運行指示書PDFを生成。</td><td class="priority-high">必須</td></tr>
     <tr><td>乗務員報告リンク</td><td>認証不要のワンタイムURL。配車確定時にメール送信。<br>有効期限: 当日中。セキュリティ上、受注詳細の閲覧のみ許可。</td><td class="priority-mid">重要</td></tr>
+    <tr><td>特記事項（Request）</td><td>受注入力画面に自由テキストフィールド。ドライバーへの指示。<br>運行指示書PDF、配車画面、受注確認画面すべてに表示。<br>固定フォーマットの特記事項と受注入力の特記事項の<strong>2種類が並んで表示</strong>される。</td><td class="priority-high">必須</td></tr>
+    <tr><td>オプション項目（3行）</td><td>受注入力画面に最大3行の自由入力（項目名＋金額）。<br>例: 英語ガイド料¥5,000、久能山東照宮 入場料¥6,500。<br>オプション小計を自動計算し、車両料金に加算して合計金額を表示。</td><td class="priority-high">必須</td></tr>
+    <tr><td>ドロップオフ選択</td><td>3つの固定場所から選択: 清水港 / フィッシュマーケット / ショッピングモール。<br>運行指示書PDFにも反映。</td><td class="priority-high">必須</td></tr>
+    <tr><td>言語トグル（EN/JP）</td><td>受注入力画面全体の表示言語を切替。英語/日本語の2言語。<br>外国人顧客に画面を見せながら入力するため。</td><td class="priority-mid">重要</td></tr>
+    <tr><td>決済方法の複数対応</td><td>mPOS（カード）、全旅（旅行券）、現金、Webの4種類。<br>決済デスク画面でトグルボタンで選択。<br><strong>決済番号の入力は不要</strong>（4/1打合せ決定）。</td><td class="priority-high">必須</td></tr>
+    <tr><td>W番号の車両単位入力</td><td>決済画面でW番号を車両ごとに入力。<br>3台口の場合はW番号入力欄が3つ表示される。<br>物理カードの番号と1対1で紐づけ。</td><td class="priority-high">必須</td></tr>
+    <tr><td>受注修正ロール</td><td>決済前の受注内容を修正する専用ロール（5つ目のロール）。<br>受付番号検索 → 既存データ読み込み → 編集 → 再登録。</td><td class="priority-mid">重要</td></tr>
+    <tr><td>担当者名記録（営業/決済/配車）</td><td>各工程でスタッフマスタからプルダウン選択。<br>受注・決済・配車それぞれの担当者を記録。管理画面の一覧表に3カラムで表示。</td><td class="priority-high">必須</td></tr>
+    <tr><td>キャンセル機能</td><td>決済待ちリスト・配車待ちリストからキャンセル可能。<br>キャンセル理由（プルダウン＋自由記入）を記録。売上0円計上。</td><td class="priority-mid">重要</td></tr>
+    <tr><td>乗務員報告: 延長・返金</td><td>延長時間（なし/30分/1時間/1時間30分/2時間）と延長料金を入力。<br>旧ラベル「決済料金」→「延長・返金」に変更（4/9打合せ）。</td><td class="priority-mid">重要</td></tr>
+    <tr><td>乗務員報告: 原価入力</td><td>タクシー仕入、観光施設、高速料金、駐車料金、ガイド料の5項目。<br>決済料金・カード手数料（1.3%自動計算）と合わせて損益計算を表示。</td><td class="priority-mid">重要</td></tr>
+    <tr><td>乗務員報告: 顧客満足度</td><td>1-5の5段階評価＋メモ欄。<br>旧ラベル「備考」→「顧客満足度・メモ」に変更（4/9打合せ）。</td><td class="priority-mid">重要</td></tr>
   </tbody>
 </table>
 
@@ -400,15 +454,21 @@ ships ──1:N── port_calls ──1:N── orders ──1:N── dispatch
 <h2 id="admin">6. 管理画面（Admin Dashboard）</h2>
 <!-- ============================================================ -->
 
-<h3>画面一覧（5画面）</h3>
+<h3>画面一覧（11画面）</h3>
 <table>
   <thead><tr><th>画面</th><th>機能</th><th>主要データ</th></tr></thead>
   <tbody>
-    <tr><td>ダッシュボード</td><td>当日の受注状況をリアルタイム表示</td><td>取扱高、仕入額、未完了件数、受注一覧テーブル</td></tr>
-    <tr><td>受注一覧</td><td>全受注の検索・フィルタ・CSV出力</td><td>受付No, W番号, 顧客名, 国籍, コース, 車種, 台数, 人数, 売上, 仕入, 決済, ルート, ステータス, 担当</td></tr>
-    <tr><td>配車管理</td><td>配車待ち/運行中/完了の管理</td><td>カード形式で配車情報を入力・確認</td></tr>
-    <tr><td>運行指示書</td><td>PDFプレビュー・印刷・メール送信</td><td>運行指示書の全項目</td></tr>
-    <tr><td>運行実績管理</td><td>コース別/国籍別/タクシー会社別/ルート別の集計</td><td>横棒グラフ + 数値</td></tr>
+    <tr><td>ダッシュボード</td><td>当日の受注状況をリアルタイム表示</td><td>5カード: 取扱高(件数+金額)、仕入(件数+金額)、粗利(金額+粗利率%)、帰着待ち(件数)、運行完了(件数+金額)。<br>受注一覧テーブル（<strong>行クリックで運行指示書表示</strong>）</td></tr>
+    <tr><td>受注一覧</td><td>全受注の検索・フィルタ・CSV出力</td><td>W番号, ステータス, 出発, 帰着, 顧客名, WhatsApp, 携帯, コース, タクシー会社, 乗務員, 営業担当, 決済担当, 配車担当, キャンセルボタン</td></tr>
+    <tr><td>配車管理</td><td>帰着待ち/運行完了の管理</td><td>カード形式で配車情報を入力・確認。帰着待ち/運行完了のカウント表示</td></tr>
+    <tr><td>運行指示書PDF</td><td>PDFプレビュー・印刷・メール送信</td><td>車両ごとに個別PDF。受付番号・W番号・コース・顧客名・乗車人数・行程・特記事項（顧客リクエスト＋固定注意事項の2種類）</td></tr>
+    <tr><td>ワンウェイ記録</td><td>ワンウェイ運行の記録・管理</td><td>W番号, 行き先, 輸送人員, 記録時刻。チャーターとは別管理。顧客情報不要。<br><strong>URL Bではなく管理画面で管理</strong>（4/1打合せ決定）</td></tr>
+    <tr><td>運行実績管理</td><td>コース別/国籍別/タクシー会社別/ルート別の集計</td><td>横棒グラフ + 数値。待ち時間指標（最大/平均/ピーク帯）</td></tr>
+    <tr><td>売上集計</td><td>年度別・月別の売上・粗利集計</td><td>月別取扱高推移グラフ、月別売上明細テーブル（取扱高/仕入/粗利/粗利率/件数）</td></tr>
+    <tr><td>コースマスタ</td><td>ツアーコースのCRUD</td><td>コースNo, コース名, 時間, 旅行代金（普通車/大型車）, 行程1-7, ドライバーへの指示, 原価1-3</td></tr>
+    <tr><td>車両マスタ</td><td>タクシー車両のCRUD</td><td>企業コード, タクシー会社名, 無線番号(3桁), 乗客定員, ナンバー, タブレット番号, ステータス</td></tr>
+    <tr><td>乗務員マスタ</td><td>ドライバー情報のCRUD</td><td>企業コード, タクシー会社名, 乗務員コード, 乗務員名, 携帯番号, Email, 資格(英語/アプリ/一般), 顔写真(JPEG), LINE登録(有/無), 評価(1-5), 特記事項</td></tr>
+    <tr><td>スタッフマスタ</td><td>営業/決済/配車スタッフのCRUD</td><td>コード, 氏名, 携帯番号, Email, 評価:営業(1-5), 実績:営業(件数・自動集計), 評価:決済(1-5), 評価:配車(1-5), 登録日, 在籍, 出勤回数</td></tr>
   </tbody>
 </table>
 
@@ -420,6 +480,12 @@ ships ──1:N── port_calls ──1:N── orders ──1:N── dispatch
     <tr><td><strong>ヘッダーの寄港コンテキスト</strong></td><td>画面上部に常に「本日の日付 / クルーズ船名 / 入出港時刻 / ログインユーザー」を表示。<br>寄港情報マスタから自動取得。</td></tr>
     <tr><td><strong>未入力チェック機能</strong></td><td>仕入額未入力、配車未完了、運行完了報告未提出などを一括検出。<br>当日の業務終了前に漏れを確認するための機能。</td></tr>
     <tr><td><strong>CSV出力</strong></td><td>受注一覧、運行実績のCSV出力。Excelでの二次加工を想定。<br>文字コード: UTF-8 with BOM（Excel対応）。</td></tr>
+    <tr><td><strong>粗利率カード</strong></td><td>ダッシュボード上部に粗利率(%)を表示するカードを追加。<br>粗利 = 取扱高 − 仕入、粗利率 = 粗利 ÷ 取扱高 × 100。</td></tr>
+    <tr><td><strong>受注行クリック → 運行指示書</strong></td><td>ダッシュボードの受注一覧テーブルで行をクリックすると<strong>運行指示書PDFプレビューに遷移</strong>（4/9打合せ決定）。<br>詳細画面ではなく直接PDF表示。</td></tr>
+    <tr><td><strong>ワンウェイ管理</strong></td><td>管理画面（Admin）でワンウェイ記録を管理。URL B（スタッフ端末）ではなくAdmin側の機能（4/1打合せ決定）。<br>入力フィールド: W番号、行き先、輸送人員の3項目のみ。チャーターとW番号は共通連番。</td></tr>
+    <tr><td><strong>車両マスタ管理</strong></td><td>車両の登録・編集・ステータス管理。4/9打合せ: <strong>英語対応カラムは車両マスタから削除</strong>（乗務員マスタの「資格」で管理）。<br>ナンバープレート、タブレット番号を追加。</td></tr>
+    <tr><td><strong>スタッフマスタ: 3職種別評価</strong></td><td>同一スタッフに対し営業・決済・配車の3職種別に1-5段階評価。<br>例: 営業=5、決済=3、配車=1 のように異なる評価が可能。</td></tr>
+    <tr><td><strong>スタッフマスタ: 実績自動集計</strong></td><td>営業実績件数はordersテーブルのsales_staff_codeから自動集計。手入力不要。<br>常に最新の累計を表示。</td></tr>
   </tbody>
 </table>
 
@@ -447,6 +513,18 @@ ships ──1:N── port_calls ──1:N── orders ──1:N── dispatch
                                         └── チャーター → ...
 </pre>
 </div>
+
+<h3>寄港情報登録フォーム（5セクション構成）</h3>
+<table>
+  <thead><tr><th>セクション</th><th>入力項目</th><th>備考</th></tr></thead>
+  <tbody>
+    <tr><td><strong>① 基本情報</strong></td><td>寄港日, 曜日(自動算出), クルーズ船名(マスタ選択), 乗客定員, 入港時刻, 出港時刻, 滞在時間(自動算出), デスク出店(有/無/未定)</td><td>曜日・滞在時間は入力値から自動算出</td></tr>
+    <tr><td><strong>② W番号設定</strong></td><td>W番号範囲（開始〜終了）, 予想手配台数</td><td>チャーター・ワンウェイ共通連番。区分分けは不要（4/1打合せ決定）</td></tr>
+    <tr><td><strong>③ 当日情報</strong></td><td>天候(7選択肢: 快晴/晴れ/曇り/小雨/雨/強風/荒天), 富士山の見え方(5選択肢: くっきり/やや見える/雲で半分/見えない/未確認), 備考</td><td>事前登録時は空欄可。寄港当日に入力</td></tr>
+    <tr><td><strong>④ クルーズ船公式ツアー</strong></td><td>公式ツアーマスタから行先を自動リスト表示。各行: 配車予定台数, 人数を入力</td><td>official_toursマスタから動的に取得。合計台数・合計人数を自動計算</td></tr>
+    <tr><td><strong>⑤ シャトルバス</strong></td><td>運行の有無（有/無トグル）</td><td>当日の乗降エリアやタイミングに影響</td></tr>
+  </tbody>
+</table>
 
 <h3>業務分析で必要な集計軸</h3>
 <table>
@@ -476,7 +554,7 @@ ships ──1:N── port_calls ──1:N── orders ──1:N── dispatch
     <tr>
       <td><span class="badge badge-api">mPOS</span></td>
       <td>対面決済（URL B 当日即売）</td>
-      <td>mPOS端末の<strong>トランザクションIDを手動入力</strong>する運用。<br>API連携は現時点では不要（将来検討）。</td>
+      <td>対面決済は4種類に対応: <strong>mPOS（カード）、全旅（旅行券）、現金、Web</strong>。<br>mPOS端末の決済番号入力は不要（4/1打合せ決定）。決済はmPOS端末側（システム外）で実施し、システムには決済方法とW番号のみ記録。</td>
       <td class="priority-mid">重要</td>
     </tr>
     <tr>
@@ -640,7 +718,7 @@ ships ──1:N── port_calls ──1:N── orders ──1:N── dispatch
           <li>DB設計・マスタデータ投入</li>
           <li>認証基盤（スタッフログイン）</li>
           <li>寄港情報登録（Admin）</li>
-          <li>コース/タクシー会社/乗務員マスタ管理</li>
+          <li>コース/タクシー会社/車両/乗務員/スタッフ/公式ツアーマスタ管理</li>
         </ul>
       </td>
       <td class="priority-high">最優先</td>
@@ -650,11 +728,14 @@ ships ──1:N── port_calls ──1:N── orders ──1:N── dispatch
       <td><strong>Phase 2<br>当日業務</strong></td>
       <td>
         <ul>
-          <li>URL B: 受注入力（営業）</li>
-          <li>URL B: 決済処理</li>
-          <li>URL B: 配車入力</li>
-          <li>Admin: ダッシュボード / 受注一覧</li>
-          <li>PDF: 運行指示書生成</li>
+          <li>URL B: 受注入力（営業）— 特記事項・オプション・ドロップオフ含む</li>
+          <li>URL B: 決済処理（4種決済方法対応、W番号車両単位入力）</li>
+          <li>URL B: 配車入力（車両ごとの配車情報）</li>
+          <li>URL B: 受注修正ロール</li>
+          <li>Admin: ダッシュボード（粗利率カード含む）/ 受注一覧</li>
+          <li>Admin: ワンウェイ記録管理</li>
+          <li>Admin: 売上集計</li>
+          <li>PDF: 運行指示書生成（車両ごと、特記事項2種類表示）</li>
         </ul>
       </td>
       <td class="priority-high">最優先</td>
@@ -747,10 +828,11 @@ ships ──1:N── port_calls ──1:N── orders ──1:N── dispatch
     <li><strong>GitHub:</strong> <a href="https://github.com/kimotsukikengo-rgb/shimizu-port-smart-transfer" target="_blank">https://github.com/kimotsukikengo-rgb/shimizu-port-smart-transfer</a></li>
   </ul>
   <p>各モックアップHTMLファイルのボタン・リンクは実際に画面遷移が動作します。</p>
+  <p><strong>注意:</strong> モックアップは2026年4月時点の最新版を参照してください。v1.0時点（2026年3月）から大幅に更新されています。特にURL B（14画面・5ロール）とAdmin（11画面）は画面数・フィールドが増加しています。</p>
 </div>
 
 <div style="text-align:center; margin-top:40px; padding:20px; color:#7f8c8d; font-size:12px; border-top:1px solid #dce1e6;">
-  &copy; 2026 株式会社静岡TaaSトラベル — エンジニア向け要件伝達書 v1.0
+  &copy; 2026 株式会社静岡TaaSトラベル — エンジニア向け要件伝達書 v2.0
 </div>
 
 </div>

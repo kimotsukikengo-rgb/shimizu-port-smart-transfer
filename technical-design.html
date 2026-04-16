@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>技術設計書 — 清水港スマート交通手配システム</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f8f9fa; color: #2c3e50; line-height: 1.7; }
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
+  h1 { font-size: 28px; color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 12px; margin-bottom: 8px; }
+  .subtitle { font-size: 14px; color: #7f8c8d; margin-bottom: 32px; }
+  h2 { font-size: 22px; color: #1a5276; margin: 40px 0 16px; padding: 8px 0; border-bottom: 2px solid #dce1e6; }
+  h3 { font-size: 17px; color: #2c3e50; margin: 24px 0 10px; }
+  h4 { font-size: 15px; color: #e67e22; margin: 18px 0 8px; }
+  p { margin-bottom: 10px; font-size: 14px; }
+  ul, ol { margin: 8px 0 16px 20px; font-size: 14px; }
+  li { margin-bottom: 4px; }
+  li li { margin-bottom: 2px; }
+
+  .card { background: #fff; border: 1px solid #dce1e6; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+  .card.highlight { border-left: 4px solid #2980b9; }
+  .card.warn { border-left: 4px solid #e67e22; }
+  .card.danger { border-left: 4px solid #e74c3c; }
+  .card.success { border-left: 4px solid #27ae60; }
+  .card h3 { margin-top: 0; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 13px; }
+  th, td { padding: 8px 10px; border: 1px solid #dce1e6; text-align: left; }
+  th { background: #f0f2f5; font-weight: 600; font-size: 12px; color: #7f8c8d; }
+  td { vertical-align: top; }
+  tr:hover { background: #f8f9fb; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; margin-right: 4px; }
+  .badge-pk { background: #fdedec; color: #e74c3c; }
+  .badge-fk { background: #eaf2f8; color: #2980b9; }
+  .badge-idx { background: #e8f8f0; color: #27ae60; }
+  .badge-nn { background: #f4ecf7; color: #8e44ad; }
+  .badge-get { background: #e8f8f0; color: #27ae60; }
+  .badge-post { background: #eaf2f8; color: #2980b9; }
+  .badge-put { background: #fef9e7; color: #d68910; }
+  .badge-del { background: #fdedec; color: #e74c3c; }
+
+  code { background: #f0f2f5; padding: 1px 4px; border-radius: 3px; font-size: 12px; font-family: 'Menlo', monospace; }
+  pre { background: #1a252f; color: #ecf0f1; border-radius: 10px; padding: 16px; margin: 12px 0; font-size: 12px; line-height: 1.5; overflow-x: auto; }
+
+  .toc { background: #fff; border: 1px solid #dce1e6; border-radius: 10px; padding: 20px; margin-bottom: 24px; }
+  .toc h3 { margin-top: 0; color: #1a5276; }
+  .toc ol { margin: 8px 0 0 20px; }
+  .toc li { margin-bottom: 4px; }
+  .toc a { color: #2980b9; text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  .col-type { font-family: 'Menlo', monospace; font-size: 11px; color: #8e44ad; white-space: nowrap; }
+  .col-name { font-weight: 600; font-family: 'Menlo', monospace; font-size: 12px; }
+
+  .flow-box { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; margin: 12px 0; }
+  .flow-step { background: #eaf2f8; border: 1px solid #aed6f1; border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; color: #1a5276; }
+  .flow-arrow { color: #bdc3c7; font-size: 16px; }
+
+  .endpoint-row td:first-child { white-space: nowrap; }
+
+  @media print {
+    body { background: #fff; }
+    .container { max-width: 100%; }
+    h2 { page-break-before: always; }
+    h2:first-of-type { page-break-before: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>清水港スマート交通手配システム<br>技術設計書</h1>
+<p class="subtitle">Shimizu Port Smart Transfer System — Technical Design Document<br>
+Version 1.0 | 2026年4月16日 | 株式会社静岡TaaSトラベル</p>
+<p style="font-size:12px; color:#7f8c8d; margin-bottom:32px;">本書はエンジニア向け要件伝達書 v2.0 に基づく技術設計です。技術スタックはエンジニア判断で選定してください。</p>
+
+<div class="toc">
+  <h3>目次</h3>
+  <ol>
+    <li><a href="#db">データベース設計</a></li>
+    <li><a href="#numbering">採番ロジック</a></li>
+    <li><a href="#status">ステータス遷移設計</a></li>
+    <li><a href="#api">API設計</a></li>
+    <li><a href="#screens">画面コンポーネント設計</a></li>
+    <li><a href="#auth">認証・認可設計</a></li>
+    <li><a href="#integrations">外部連携設計</a></li>
+    <li><a href="#infra">インフラ構成</a></li>
+    <li><a href="#error">エラーハンドリング方針</a></li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="db">1. データベース設計</h2>
+<!-- ============================================================ -->
+
+<div class="card highlight">
+  <h3>設計方針</h3>
+  <ul>
+    <li>RDB（PostgreSQL推奨）を前提としたリレーショナル設計</li>
+    <li>全テーブルに <code>id</code>（BIGSERIAL PK）、<code>created_at</code>、<code>updated_at</code> を共通付与</li>
+    <li>外部キー制約でデータ整合性を保証</li>
+    <li>論理削除（<code>is_active</code> / <code>deleted_at</code>）を基本方針とする（旅行業法上の帳票保管義務5年間）</li>
+    <li>JSON型は <code>option_items</code>、<code>destinations</code> 等の可変長配列データにのみ使用</li>
+  </ul>
+</div>
+
+<!-- ships -->
+<h3>1.1 ships（クルーズ船マスタ）</h3>
+<table>
+  <thead><tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr></thead>
+  <tbody>
+    <tr><td class="col-name">id</td><td class="col-type">BIGSERIAL</td><td><span class="badge badge-pk">PK</span></td><td>主キー</td></tr>
+    <tr><td class="col-name">name</td><td class="col-type">VARCHAR(100)</td><td><span class="badge badge-nn">NOT NULL</span></td><td>船名（日本語）</td></tr>
+    <tr><td class="col-name">name_en</td><td class="col-type">VARCHAR(100)</td><td></td><td>船名（英語）</td></tr>
+    <tr><td class="col-name">passenger_capacity</td><td class="col-type">INTEGER</td><td></td><td>乗客定員</td></tr>
+    <tr><td class="col-name">operator</td><td class="col-type">VARCHAR(100)</td><td></td><td>運航会社</td></tr>
+    <tr><td class="col-name">notes</td><td class="col-type">TEXT</td><td></td><td>備考</td></tr>
+    <tr><td class="col-name">is_active</td><td class="col-type">BOOLEAN</td><td>DEFAULT true</td><td>有効フラグ</td></tr>
+    <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+    <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+  </tbody>
+</table>
+
+<!-- port_calls -->
+<h3>1.2 port_calls（寄港情報）</h3>
+<table>
+  <thead><tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr></thead>
+  <tbody>
+    <tr><td class="col-name">id</td><td class="col-type">BIGSERIAL</td><td><span class="badge badge-pk">PK</span></td><td></td></tr>
+    <tr><td class="col-name">date</td><td class="col-type">DATE</td><td><span class="badge badge-nn">NOT NULL</span> <span class="badge badge-idx">UNIQUE(date, ship_id)</span></td><td>寄港日</td></tr>
+    <tr><td class="col-name">day_of_week</td><td class="col-type">VARCHAR(3)</td><td></td><td>曜日（自動算出で保存）</td></tr>
+    <tr><td class="col-name">ship_id</td><td class="col-type">BIGINT</td><td><span class="badge badge-fk">FK→ships</span> <span class="badge badge-nn">NOT NULL</span></td><td>クルーズ船</td></tr>
+    <tr><td class="col-name">arrival_time</td><td class="col-type">TIME</td><td></td><td>入港時刻</td></tr>
+    <tr><td class="col-name">departure_time</td><td class="col-type">TIME</td><td></td><td>出港時刻</td></tr>
+    <tr><td class="col-name">passenger_capacity</td><td class="col-type">INTEGER</td><td></td><td>乗客定員</td></tr>
+    <tr><td class="col-name">weather</td><td class="col-type">VARCHAR(20)</td><td></td><td>天候（快晴/晴れ/曇り/小雨/雨/強風/荒天）</td></tr>
+    <tr><td class="col-name">fuji_visibility</td><td class="col-type">VARCHAR(20)</td><td></td><td>富士山（くっきり/やや見える/雲で半分/見えない/未確認）</td></tr>
+    <tr><td class="col-name">desk_deployed</td><td class="col-type">VARCHAR(10)</td><td></td><td>デスク出店（有/無/未定）</td></tr>
+    <tr><td class="col-name">w_number_start</td><td class="col-type">INTEGER</td><td></td><td>W番号開始（チャーター・ワンウェイ共通）</td></tr>
+    <tr><td class="col-name">w_number_end</td><td class="col-type">INTEGER</td><td></td><td>W番号終了</td></tr>
+    <tr><td class="col-name">estimated_vehicles</td><td class="col-type">INTEGER</td><td></td><td>予想手配台数</td></tr>
+    <tr><td class="col-name">shuttle_bus</td><td class="col-type">BOOLEAN</td><td>DEFAULT false</td><td>シャトルバス有無</td></tr>
+    <tr><td class="col-name">status</td><td class="col-type">VARCHAR(20)</td><td>DEFAULT 'draft'</td><td>draft/registered/active/completed</td></tr>
+    <tr><td class="col-name">notes</td><td class="col-type">TEXT</td><td></td><td>備考</td></tr>
+    <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+    <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+  </tbody>
+</table>
+<p><strong>インデックス:</strong> <code>idx_port_calls_date</code> (date), <code>idx_port_calls_status</code> (status)</p>
+
+<!-- courses -->
+<h3>1.3 courses（コースマスタ）</h3>
+<table>
+  <thead><tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr></thead>
+  <tbody>
+    <tr><td class="col-name">id</td><td class="col-type">BIGSERIAL</td><td><span class="badge badge-pk">PK</span></td><td></td></tr>
+    <tr><td class="col-name">course_number</td><td class="col-type">INTEGER</td><td><span class="badge badge-nn">NOT NULL</span> UNIQUE</td><td>コースNo</td></tr>
+    <tr><td class="col-name">name</td><td class="col-type">VARCHAR(100)</td><td><span class="badge badge-nn">NOT NULL</span></td><td>コース名（日本語）</td></tr>
+    <tr><td class="col-name">name_en</td><td class="col-type">VARCHAR(100)</td><td></td><td>コース名（英語）</td></tr>
+    <tr><td class="col-name">duration_hours</td><td class="col-type">DECIMAL(3,1)</td><td><span class="badge badge-nn">NOT NULL</span></td><td>所要時間</td></tr>
+    <tr><td class="col-name">price_standard</td><td class="col-type">INTEGER</td><td><span class="badge badge-nn">NOT NULL</span></td><td>旅行代金（普通車・税込）</td></tr>
+    <tr><td class="col-name">price_large</td><td class="col-type">INTEGER</td><td><span class="badge badge-nn">NOT NULL</span></td><td>旅行代金（大型車・税込）</td></tr>
+    <tr><td class="col-name">max_passengers_standard</td><td class="col-type">INTEGER</td><td>DEFAULT 4</td><td>普通車定員</td></tr>
+    <tr><td class="col-name">max_passengers_large</td><td class="col-type">INTEGER</td><td>DEFAULT 6</td><td>大型車定員</td></tr>
+    <tr><td class="col-name">destinations</td><td class="col-type">JSONB</td><td></td><td>行程 [{order, name, name_en, duration_min}]</td></tr>
+    <tr><td class="col-name">driver_instructions</td><td class="col-type">TEXT</td><td></td><td>ドライバーへの固定指示</td></tr>
+    <tr><td class="col-name">procurement_items</td><td class="col-type">JSONB</td><td></td><td>原価項目 [{name, amount}] 最大3件</td></tr>
+    <tr><td class="col-name">sort_order</td><td class="col-type">INTEGER</td><td>DEFAULT 0</td><td>表示順</td></tr>
+    <tr><td class="col-name">is_active</td><td class="col-type">BOOLEAN</td><td>DEFAULT true</td><td></td></tr>
+    <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+    <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+  </tbody>
+</table>
+
+<!-- official_tours -->
+<h3>1.4 official_tours（公式ツアーマスタ）</h3>
+<table>
+  <thead><tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr></thead>
+  <tbody>
+    <tr><td class="col-name">id</td><td class="col-type">BIGSERIAL</td><td><span class="badge badge-pk">PK</span></td><td></td></tr>
+    <tr><td class="col-name">name</td><td class="col-type">VARCHAR(100)</td><td><span class="badge badge-nn">NOT NULL</span></td><td>ツアー名</td></tr>
+    <tr><td class="col-name">destination</td><td class="col-type">VARCHAR(200)</td><td></td><td>行き先</td></tr>
+    <tr><td class="col-name">vehicle_count</td><td class="col-type">INTEGER</td><td></td><td>配車台数</td></tr>
+    <tr><td class="col-name">passenger_count</td><td class="col-type">INTEGER</td><td></td><td>人数</td></tr>
+    <tr><td class="col-name">is_active</td><td class="col-type">BOOLEAN</td><td>DEFAULT true</td><td></td></tr>
+    <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+    <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+  </tbody>
+</table>
+
+<!-- port_call_tours (中間テーブル) -->
+<h3>1.5 port_call_tours（寄港×公式ツアー）</h3>
+<table>
+  <thead><tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr></thead>
+  <tbody>
+    <tr><td class="col-name">id</td><td class="col-type">BIGSERIAL</td><td><span class="badge badge-pk">PK</span></td><td></td></tr>
+    <tr><td class="col-name">port_call_id</td><td class="col-type">BIGINT</td><td><span class="badge badge-fk">FK→port_calls</span></td><td></td></tr>
+    <tr><td class="col-name">official_tour_id</td><td class="col-type">BIGINT</td><td><span class="badge badge-fk">FK→official_tours</span></td><td></td></tr>
+    <tr><td class="col-name">planned_vehicles</td><td class="col-type">INTEGER</td><td></td><td>配車予定台数</td></tr>
+    <tr><td class="col-name">planned_passengers</td><td class="col-type">INTEGER</td><td></td><td>予定人数</td></tr>
+  </tbody>
+</table>
+
+<!-- taxi_companies -->
+<h3>1.6 taxi_companies（タクシー会社マスタ）</h3>
+<table>
+  <thead><tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr></thead>
+  <tbody>
+    <tr><td class="col-name">id</td><td class="col-type">BIGSERIAL</td><td><span class="badge badge-pk">PK</span></td><td></td></tr>
+    <tr><td class="col-name">company_code</td><td class="col-type">VARCHAR(10)</td><td>UNIQUE</td><td>企業コード</td></tr>
+    <tr><td class="col-name">name</td><td class="col-type">VARCHAR(100)</td><td><span class="badge badge-nn">NOT NULL</span></td><td>会社名</td></tr>
+    <tr><td class="col-name">contact_phone</td><td class="col-type">VARCHAR(20)</td><td></td><td></td></tr>
+    <tr><td class="col-name">contact_email</td><td class="col-type">VARCHAR(100)</td><td></td><td></td></tr>
+    <tr><td class="col-name">is_active</td><td class="col-type">BOOLEAN</td><td>DEFAULT true</td><td></td></tr>
+    <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+    <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+  </tbody>
+</table>
+
+<!-- vehicles -->
+<h3>1.7 vehicles（車両マスタ）</h3>
+<table>
+  <thead><tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr></thead>
+  <tbody>
+    <tr><td class="col-name">id</td><td class="col-type">BIGSERIAL</td><td><span class="badge badge-pk">PK</span></td><td></td></tr>
+    <tr><td class="col-name">taxi_company_id</td><td class="col-type">BIGINT</td><td><span class="badge badge-fk">FK→taxi_companies</span> <span class="badge badge-nn">NOT NULL</span></td><td></td></tr>
+    <tr><td class="col-name">radio_number</td><td class="col-type">VARCHAR(10)</td><td><span class="badge badge-nn">NOT NULL</span></td><td>無線番号（3桁）</td></tr>
+    <tr><td class="col-name">passenger_capacity</td><td class="col-type">INTEGER</td><td></td><td>乗客定員</td></tr>
+    <tr><td class="col-name">plate_number</td><td class="col-type">VARCHAR(20)</td><td></td><td>ナンバープレート</td></tr>
+    <tr><td class="col-name">tablet_number</td><td class="col-type">VARCHAR(20)</td><td></td><td>タブレット番号</td></tr>
+    <tr><td class="col-name">status</td><td class="col-type">VARCHAR(10)</td><td>DEFAULT '稼働中'</td><td>稼働中 / 休車中</td></tr>
+    <tr><td class="col-name">is_active</td><td class="col-type">BOOLEAN</td><td>DEFAULT true</td><td></td></tr>
+    <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+    <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+  </tbody>
+</table>
+<p><strong>インデックス:</strong> <code>idx_vehicles_company</code> (taxi_company_id), <code>idx_vehicles_radio</code> (taxi_company_id, radio_number)</p>
+
+<!-- drivers -->
+<h3>1.8 drivers（乗務員マスタ）</h3>
+<table>
+  <thead><tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr></thead>
+  <tbody>
+    <tr><td class="col-name">id</td><td class="col-type">BIGSERIAL</td><td><span class="badge badge-pk">PK</span></td><td></td></tr>
+    <tr><td class="col-name">taxi_company_id</td><td class="col-type">BIGINT</td><td><span class="badge badge-fk">FK→taxi_companies</span> <span class="badge badge-nn">NOT NULL</span></td><td></td></tr>
+    <tr><td class="col-name">driver_code</td><td class="col-type">VARCHAR(10)</td><td></td><td>乗務員コード</td></tr>
+    <tr><td class="col-name">name</td><td class="col-type">VARCHAR(50)</td><td><span class="badge badge-nn">NOT NULL</span></td><td>乗務員名</td></tr>
+    <tr><td class="col-name">phone</td><td class="col-type">VARCHAR(20)</td><td></td><td>携帯番号</td></tr>
+    <tr><td class="col-name">email</td><td class="col-type">VARCHAR(100)</td><td></td><td>メールアドレス</td></tr>
+    <tr><td class="col-name">qualification</td><td class="col-type">VARCHAR(20)</td><td></td><td>資格（英語 / アプリ / 一般）</td></tr>
+    <tr><td class="col-name">photo_url</td><td class="col-type">VARCHAR(500)</td><td></td><td>顔写真URL（JPEG）</td></tr>
+    <tr><td class="col-name">line_registered</td><td class="col-type">BOOLEAN</td><td>DEFAULT false</td><td>LINE登録（有/無）</td></tr>
+    <tr><td class="col-name">rating</td><td class="col-type">SMALLINT</td><td>CHECK(1-5)</td><td>評価（1-5）</td></tr>
+    <tr><td class="col-name">special_notes</td><td class="col-type">TEXT</td><td></td><td>特記事項</td></tr>
+    <tr><td class="col-name">is_active</td><td class="col-type">BOOLEAN</td><td>DEFAULT true</td><td></td></tr>
+    <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+    <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+  </tbody>
+</table>
+
+<!-- staff -->
+<h3>1.9 staff（スタッフ）</h3>
+<table>
+  <thead><tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr></thead>
+  <tbody>
+    <tr><td class="col-name">id</td><td class="col-type">BIGSERIAL</td><td><span class="badge badge-pk">PK</span></td><td></td></tr>
+    <tr><td class="col-name">code</td><td class="col-type">VARCHAR(4)</td><td><span class="badge badge-nn">NOT NULL</span> UNIQUE</td><td>2文字コード（YY, HE, SO等）</td></tr>
+    <tr><td class="col-name">name</td><td class="col-type">VARCHAR(50)</td><td><span class="badge badge-nn">NOT NULL</span></td><td>スタッフ氏名</td></tr>
+    <tr><td class="col-name">phone</td><td class="col-type">VARCHAR(20)</td><td></td><td>携帯番号</td></tr>
+    <tr><td class="col-name">email</td><td class="col-type">VARCHAR(100)</td><td></td><td></td></tr>
+    <tr><td class="col-name">role</td><td class="col-type">VARCHAR(20)</td><td><span class="badge badge-nn">NOT NULL</span></td><td>sales / payment / dispatch / admin</td></tr>
+    <tr><td class="col-name">rating_sales</td><td class="col-type">SMALLINT</td><td>CHECK(1-5)</td><td>評価:営業</td></tr>
+    <tr><td class="col-name">rating_payment</td><td class="col-type">SMALLINT</td><td>CHECK(1-5)</td><td>評価:決済</td></tr>
+    <tr><td class="col-name">rating_dispatch</td><td class="col-type">SMALLINT</td><td>CHECK(1-5)</td><td>評価:配車</td></tr>
+    <tr><td class="col-name">registration_date</td><td class="col-type">DATE</td><td></td><td>登録日</td></tr>
+    <tr><td class="col-name">employment_status</td><td class="col-type">VARCHAR(10)</td><td>DEFAULT '在籍'</td><td>在籍 / 退職</td></tr>
+    <tr><td class="col-name">attendance_count</td><td class="col-type">INTEGER</td><td>DEFAULT 0</td><td>出勤回数</td></tr>
+    <tr><td class="col-name">password_hash</td><td class="col-type">VARCHAR(255)</td><td><span class="badge badge-nn">NOT NULL</span></td><td>bcryptハッシュ</td></tr>
+    <tr><td class="col-name">is_active</td><td class="col-type">BOOLEAN</td><td>DEFAULT true</td><td></td></tr>
+    <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+    <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+  </tbody>
+</table>
+<p><strong>注記:</strong> <code>performance_count</code>（実績件数）はカラムとして保持せず、<code>SELECT COUNT(*) FROM orders WHERE sales_staff_code = ?</code> で動的に算出する。</p>
+
+<!-- orders -->
+<h3>1.10 orders（受注）</h3>
+<table>
+  <thead><tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr></thead>
+  <tbody>
+    <tr><td class="col-name">id</td><td class="col-type">BIGSERIAL</td><td><span class="badge badge-pk">PK</span></td><td></td></tr>
+    <tr><td class="col-name">reception_number</td><td class="col-type">VARCHAR(20)</td><td><span class="badge badge-nn">NOT NULL</span> UNIQUE</td><td>受付番号 R-YYYYMMDD-NNN</td></tr>
+    <tr><td class="col-name">port_call_id</td><td class="col-type">BIGINT</td><td><span class="badge badge-fk">FK→port_calls</span> <span class="badge badge-nn">NOT NULL</span></td><td></td></tr>
+    <tr><td class="col-name">course_id</td><td class="col-type">BIGINT</td><td><span class="badge badge-fk">FK→courses</span></td><td></td></tr>
+    <tr><td class="col-name">vehicle_count</td><td class="col-type">INTEGER</td><td><span class="badge badge-nn">NOT NULL</span> DEFAULT 1</td><td>車両台数</td></tr>
+    <tr><td class="col-name">passenger_count</td><td class="col-type">INTEGER</td><td><span class="badge badge-nn">NOT NULL</span></td><td>合計乗車人数</td></tr>
+    <tr><td class="col-name">customer_name</td><td class="col-type">VARCHAR(100)</td><td><span class="badge badge-nn">NOT NULL</span></td><td>顧客名（アルファベット）</td></tr>
+    <tr><td class="col-name">customer_name_kana</td><td class="col-type">VARCHAR(100)</td><td></td><td>名前（カタカナ発音）</td></tr>
+    <tr><td class="col-name">customer_email</td><td class="col-type">VARCHAR(100)</td><td></td><td></td></tr>
+    <tr><td class="col-name">customer_phone</td><td class="col-type">VARCHAR(30)</td><td></td><td>携帯番号</td></tr>
+    <tr><td class="col-name">customer_whatsapp</td><td class="col-type">VARCHAR(30)</td><td></td><td>WhatsApp番号</td></tr>
+    <tr><td class="col-name">nationality</td><td class="col-type">VARCHAR(30)</td><td></td><td>国籍</td></tr>
+    <tr><td class="col-name">preferred_language</td><td class="col-type">VARCHAR(20)</td><td></td><td>English / No preference</td></tr>
+    <tr><td class="col-name">special_notes</td><td class="col-type">TEXT</td><td></td><td>特記事項（ドライバーへのリクエスト）</td></tr>
+    <tr><td class="col-name">option_items</td><td class="col-type">JSONB</td><td></td><td>[{name, amount}] 最大3件</td></tr>
+    <tr><td class="col-name">drop_off_point</td><td class="col-type">VARCHAR(50)</td><td></td><td>清水港 / フィッシュマーケット / ショッピングモール</td></tr>
+    <tr><td class="col-name">order_route</td><td class="col-type">VARCHAR(10)</td><td><span class="badge badge-nn">NOT NULL</span></td><td>instant / advance / qr</td></tr>
+    <tr><td class="col-name">sales_amount</td><td class="col-type">INTEGER</td><td>DEFAULT 0</td><td>売上金額（税込）</td></tr>
+    <tr><td class="col-name">procurement_amount</td><td class="col-type">INTEGER</td><td>DEFAULT 0</td><td>仕入金額</td></tr>
+    <tr><td class="col-name">payment_method</td><td class="col-type">VARCHAR(10)</td><td></td><td>mPOS / 全旅 / 現金 / Web</td></tr>
+    <tr><td class="col-name">payment_txn_id</td><td class="col-type">VARCHAR(100)</td><td></td><td>Stripe等の外部トランザクションID</td></tr>
+    <tr><td class="col-name">sales_staff_code</td><td class="col-type">VARCHAR(4)</td><td></td><td>営業担当スタッフコード</td></tr>
+    <tr><td class="col-name">payment_staff_code</td><td class="col-type">VARCHAR(4)</td><td></td><td>決済担当スタッフコード</td></tr>
+    <tr><td class="col-name">dispatch_staff_code</td><td class="col-type">VARCHAR(4)</td><td></td><td>配車担当スタッフコード</td></tr>
+    <tr><td class="col-name">status</td><td class="col-type">VARCHAR(20)</td><td><span class="badge badge-nn">NOT NULL</span> DEFAULT '受注完了'</td><td>受注完了/決済待ち/決済完了/配車待ち/帰着待ち/運行完了/キャンセル</td></tr>
+    <tr><td class="col-name">cancel_reason</td><td class="col-type">TEXT</td><td></td><td>キャンセル理由</td></tr>
+    <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+    <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+  </tbody>
+</table>
+<p><strong>インデックス:</strong></p>
+<ul>
+  <li><code>idx_orders_port_call</code> (port_call_id) — 寄港日ごとの受注一覧取得</li>
+  <li><code>idx_orders_status</code> (status) — ステータスフィルタ</li>
+  <li><code>idx_orders_reception</code> (reception_number) — 受付番号検索</li>
+  <li><code>idx_orders_sales_staff</code> (sales_staff_code) — 実績集計</li>
+</ul>
+
+<!-- dispatches -->
+<h3>1.11 dispatches（配車）</h3>
+<table>
+  <thead><tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr></thead>
+  <tbody>
+    <tr><td class="col-name">id</td><td class="col-type">BIGSERIAL</td><td><span class="badge badge-pk">PK</span></td><td></td></tr>
+    <tr><td class="col-name">order_id</td><td class="col-type">BIGINT</td><td><span class="badge badge-fk">FK→orders</span> <span class="badge badge-nn">NOT NULL</span></td><td></td></tr>
+    <tr><td class="col-name">vehicle_number</td><td class="col-type">SMALLINT</td><td><span class="badge badge-nn">NOT NULL</span></td><td>車両番号（1, 2, 3...）</td></tr>
+    <tr><td class="col-name">w_number</td><td class="col-type">VARCHAR(10)</td><td></td><td>W番号（W-001等。車両単位）</td></tr>
+    <tr><td class="col-name">taxi_company_id</td><td class="col-type">BIGINT</td><td><span class="badge badge-fk">FK→taxi_companies</span></td><td></td></tr>
+    <tr><td class="col-name">driver_id</td><td class="col-type">BIGINT</td><td><span class="badge badge-fk">FK→drivers</span></td><td></td></tr>
+    <tr><td class="col-name">radio_number</td><td class="col-type">VARCHAR(10)</td><td></td><td>無線番号（入力時コピー）</td></tr>
+    <tr><td class="col-name">vehicle_type</td><td class="col-type">VARCHAR(10)</td><td><span class="badge badge-nn">NOT NULL</span></td><td>普通車 / 大型車</td></tr>
+    <tr><td class="col-name">passenger_count</td><td class="col-type">INTEGER</td><td><span class="badge badge-nn">NOT NULL</span></td><td>この車両の乗車人数</td></tr>
+    <tr><td class="col-name">driver_email</td><td class="col-type">VARCHAR(100)</td><td></td><td>指示書送信先</td></tr>
+    <tr><td class="col-name">departure_time</td><td class="col-type">TIME</td><td></td><td>出発時刻</td></tr>
+    <tr><td class="col-name">return_time</td><td class="col-type">TIME</td><td></td><td>帰着時刻</td></tr>
+    <tr><td class="col-name">instruction_pdf_url</td><td class="col-type">VARCHAR(500)</td><td></td><td>指示書PDF URL</td></tr>
+    <tr><td class="col-name">line_sent</td><td class="col-type">BOOLEAN</td><td>DEFAULT false</td><td>LINE送信済み</td></tr>
+    <tr><td class="col-name">whatsapp_sent</td><td class="col-type">BOOLEAN</td><td>DEFAULT false</td><td>WhatsApp送信済み</td></tr>
+    <tr><td class="col-name">email_sent</td><td class="col-type">BOOLEAN</td><td>DEFAULT false</td><td>メール送信済み</td></tr>
+    <tr><td class="col-name">status</td><td class="col-type">VARCHAR(20)</td><td>DEFAULT '配車待ち'</td><td>配車待ち / 帰着待ち / 運行完了</td></tr>
+    <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+    <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+  </tbody>
+</table>
+<p><strong>インデックス:</strong> <code>idx_dispatches_order</code> (order_id), <code>idx_dispatches_w_number</code> (w_number), <code>UNIQUE(order_id, vehicle_number)</code></p>
+
+<!-- driver_reports -->
+<h3>1.12 driver_reports（運行完了報告）</h3>
+<table>
+  <thead><tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr></thead>
+  <tbody>
+    <tr><td class="col-name">id</td><td class="col-type">BIGSERIAL</td><td><span class="badge badge-pk">PK</span></td><td></td></tr>
+    <tr><td class="col-name">dispatch_id</td><td class="col-type">BIGINT</td><td><span class="badge badge-fk">FK→dispatches</span> UNIQUE</td><td>1対1</td></tr>
+    <tr><td class="col-name">actual_destination</td><td class="col-type">VARCHAR(200)</td><td></td><td>実際の行き先</td></tr>
+    <tr><td class="col-name">return_time</td><td class="col-type">TIME</td><td></td><td>帰着時刻</td></tr>
+    <tr><td class="col-name">extension_time</td><td class="col-type">VARCHAR(20)</td><td></td><td>なし/30分/1時間/1時間30分/2時間</td></tr>
+    <tr><td class="col-name">extension_fee</td><td class="col-type">INTEGER</td><td>DEFAULT 0</td><td>延長料金</td></tr>
+    <tr><td class="col-name">payment_amount</td><td class="col-type">INTEGER</td><td>DEFAULT 0</td><td>決済料金</td></tr>
+    <tr><td class="col-name">card_fee</td><td class="col-type">INTEGER</td><td>DEFAULT 0</td><td>カード手数料（1.3%自動計算）</td></tr>
+    <tr><td class="col-name">procurement_taxi</td><td class="col-type">INTEGER</td><td>DEFAULT 0</td><td>タクシー仕入</td></tr>
+    <tr><td class="col-name">procurement_facility</td><td class="col-type">INTEGER</td><td>DEFAULT 0</td><td>観光施設</td></tr>
+    <tr><td class="col-name">procurement_highway</td><td class="col-type">INTEGER</td><td>DEFAULT 0</td><td>高速料金</td></tr>
+    <tr><td class="col-name">procurement_parking</td><td class="col-type">INTEGER</td><td>DEFAULT 0</td><td>駐車料金</td></tr>
+    <tr><td class="col-name">procurement_guide</td><td class="col-type">INTEGER</td><td>DEFAULT 0</td><td>ガイド料</td></tr>
+    <tr><td class="col-name">customer_satisfaction</td><td class="col-type">SMALLINT</td><td>CHECK(1-5)</td><td>顧客満足度</td></tr>
+    <tr><td class="col-name">memo</td><td class="col-type">TEXT</td><td></td><td>メモ</td></tr>
+    <tr><td class="col-name">report_token</td><td class="col-type">VARCHAR(100)</td><td>UNIQUE</td><td>ワンタイムアクセス用トークン</td></tr>
+    <tr><td class="col-name">token_expires_at</td><td class="col-type">TIMESTAMPTZ</td><td></td><td>トークン有効期限（当日中）</td></tr>
+    <tr><td class="col-name">submitted_at</td><td class="col-type">TIMESTAMPTZ</td><td></td><td>提出日時（NULLなら未提出）</td></tr>
+    <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+    <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+  </tbody>
+</table>
+
+<!-- oneway_records -->
+<h3>1.13 oneway_records（ワンウェイ記録）</h3>
+<table>
+  <thead><tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr></thead>
+  <tbody>
+    <tr><td class="col-name">id</td><td class="col-type">BIGSERIAL</td><td><span class="badge badge-pk">PK</span></td><td></td></tr>
+    <tr><td class="col-name">port_call_id</td><td class="col-type">BIGINT</td><td><span class="badge badge-fk">FK→port_calls</span> <span class="badge badge-nn">NOT NULL</span></td><td></td></tr>
+    <tr><td class="col-name">w_number</td><td class="col-type">VARCHAR(10)</td><td></td><td>W番号（チャーターと共通連番）</td></tr>
+    <tr><td class="col-name">destination</td><td class="col-type">VARCHAR(200)</td><td></td><td>行き先</td></tr>
+    <tr><td class="col-name">passenger_count</td><td class="col-type">INTEGER</td><td></td><td>輸送人員</td></tr>
+    <tr><td class="col-name">recorded_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td>記録時刻</td></tr>
+    <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMPTZ</td><td>DEFAULT NOW()</td><td></td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="numbering">2. 採番ロジック</h2>
+<!-- ============================================================ -->
+
+<div class="card danger">
+  <h3>受付番号（Reception Number）</h3>
+  <p>形式: <code>R-YYYYMMDD-NNN</code>（例: R-20260326-001）</p>
+  <ul>
+    <li>寄港日の日付 + その日の連番（001から開始）</li>
+    <li>事前予約（URL A）と当日即売（URL B）で<strong>同一連番体系</strong>を使用</li>
+    <li>同時操作による重複を防ぐため、DB側でシーケンスまたは <code>SELECT FOR UPDATE</code> で排他制御</li>
+  </ul>
+<pre>
+-- 推奨実装: DBシーケンス + アプリ側フォーマット
+-- 日付ごとにカウンタをリセットする方式
+
+-- 方法A: ordersテーブルのサブクエリで算出
+SELECT CONCAT('R-', TO_CHAR(CURRENT_DATE, 'YYYYMMDD'), '-',
+  LPAD((COUNT(*) + 1)::TEXT, 3, '0'))
+FROM orders WHERE port_call_id = :port_call_id
+FOR UPDATE;
+
+-- 方法B: 専用カウンタテーブル
+CREATE TABLE reception_counters (
+  port_call_id BIGINT PRIMARY KEY REFERENCES port_calls(id),
+  last_number  INTEGER DEFAULT 0
+);
+-- UPDATE ... SET last_number = last_number + 1 RETURNING last_number
+</pre>
+</div>
+
+<div class="card warn">
+  <h3>W番号（Waiting Number）</h3>
+  <p>形式: <code>W-NNN</code>（例: W-005）。寄港日ごとにリセット。物理カードの番号と1:1対応。</p>
+  <ul>
+    <li>寄港情報登録時に範囲（W-001〜W-060等）を事前設定</li>
+    <li>チャーターとワンウェイで<strong>共通連番</strong>（区分なし）</li>
+    <li><strong>車両単位</strong>で割り当て: 3台口 → W-005, W-006, W-007</li>
+    <li>スタッフが物理カード番号をシステムに手入力（バリデーション: 範囲内であること、未使用であること）</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="status">3. ステータス遷移設計</h2>
+<!-- ============================================================ -->
+
+<h3>3.1 受注ステータス（orders.status）</h3>
+<div class="flow-box">
+  <span class="flow-step">受注完了</span><span class="flow-arrow">→</span>
+  <span class="flow-step">決済待ち</span><span class="flow-arrow">→</span>
+  <span class="flow-step">決済完了</span><span class="flow-arrow">→</span>
+  <span class="flow-step">配車待ち</span><span class="flow-arrow">→</span>
+  <span class="flow-step">帰着待ち</span><span class="flow-arrow">→</span>
+  <span class="flow-step">運行完了</span>
+</div>
+
+<table>
+  <thead><tr><th>遷移</th><th>トリガー</th><th>バリデーション</th><th>副作用</th></tr></thead>
+  <tbody>
+    <tr><td>受注完了 → 決済待ち</td><td>受注登録完了（自動）</td><td>reception_number が発行済み</td><td>受付番号発行</td></tr>
+    <tr><td>決済待ち → 決済完了</td><td>決済デスクで完了操作</td><td>payment_method が入力済み、全車両にW番号割当済み</td><td>dispatches レコード生成（vehicle_count分）</td></tr>
+    <tr><td>決済完了 → 配車待ち</td><td>自動（決済完了と同時）</td><td></td><td></td></tr>
+    <tr><td>配車待ち → 帰着待ち</td><td>配車担当が配車完了操作</td><td>全dispatchesに driver_id, taxi_company_id 入力済み</td><td>指示書PDF生成、メール/LINE送信</td></tr>
+    <tr><td>帰着待ち → 運行完了</td><td>乗務員が完了報告送信</td><td>全dispatchesの driver_report が submitted</td><td>dispatch.status → 運行完了</td></tr>
+    <tr><td>任意 → キャンセル</td><td>キャンセル操作</td><td>cancel_reason が入力済み</td><td>sales_amount を 0 に更新。W番号は解放（再利用不可、取消線表示）</td></tr>
+  </tbody>
+</table>
+
+<div class="card highlight">
+  <h3>画面表示ルール</h3>
+  <p>管理画面・URL Bのステータスフィルタは<strong>「帰着待ち」「運行完了」</strong>の2値のみ表示。内部ステータスはAPIレスポンスで返すが、UIには簡略化して表示する。</p>
+  <table>
+    <tr><th>内部ステータス</th><th>画面表示</th></tr>
+    <tr><td>受注完了, 決済待ち, 決済完了, 配車待ち, 帰着待ち</td><td><strong>帰着待ち</strong></td></tr>
+    <tr><td>運行完了</td><td><strong>運行完了</strong></td></tr>
+    <tr><td>キャンセル</td><td><strong>キャンセル</strong>（取消線）</td></tr>
+  </table>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="api">4. API設計</h2>
+<!-- ============================================================ -->
+
+<div class="card highlight">
+  <h3>共通仕様</h3>
+  <ul>
+    <li>RESTful JSON API。レスポンスは <code>{ data, error, meta }</code> 形式</li>
+    <li>認証: URL A は不要。URL B / Admin は Bearer Token（JWT）</li>
+    <li>ページネーション: <code>?page=1&per_page=50</code>（デフォルト50件）</li>
+    <li>エラー: HTTP status + <code>{ error: { code, message, details } }</code></li>
+    <li>日時: ISO 8601 形式（YYYY-MM-DDTHH:mm:ssZ）</li>
+  </ul>
+</div>
+
+<h3>4.1 認証 API</h3>
+<table class="endpoint-row">
+  <thead><tr><th>メソッド</th><th>エンドポイント</th><th>説明</th><th>認証</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/auth/login</code></td><td>スタッフログイン（code + password → JWT）</td><td>不要</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/auth/logout</code></td><td>ログアウト（トークン無効化）</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/auth/me</code></td><td>ログインユーザー情報取得</td><td>必須</td></tr>
+  </tbody>
+</table>
+
+<h3>4.2 寄港情報 API</h3>
+<table class="endpoint-row">
+  <thead><tr><th>メソッド</th><th>エンドポイント</th><th>説明</th><th>認証</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/port-calls</code></td><td>寄港情報一覧（?month=2026-04）</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/port-calls/today</code></td><td>本日の寄港情報（URL Bヘッダー用）</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/port-calls/:id</code></td><td>寄港情報詳細</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/port-calls</code></td><td>寄港情報登録（5セクション一括）</td><td>admin</td></tr>
+    <tr><td><span class="badge badge-put">PUT</span></td><td><code>/api/port-calls/:id</code></td><td>寄港情報更新</td><td>admin</td></tr>
+    <tr><td><span class="badge badge-put">PUT</span></td><td><code>/api/port-calls/:id/day-info</code></td><td>当日情報のみ更新（天候・富士山）</td><td>admin</td></tr>
+  </tbody>
+</table>
+
+<h3>4.3 受注 API</h3>
+<table class="endpoint-row">
+  <thead><tr><th>メソッド</th><th>エンドポイント</th><th>説明</th><th>認証</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/orders</code></td><td>受注一覧（?port_call_id=&status=&course_id=&q=）</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/orders/:id</code></td><td>受注詳細（dispatches含む）</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/orders/by-reception/:number</code></td><td>受付番号で検索</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/orders</code></td><td>受注登録（受付番号自動発行）</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-put">PUT</span></td><td><code>/api/orders/:id</code></td><td>受注修正（決済前のみ）</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/orders/:id/cancel</code></td><td>キャンセル（cancel_reason必須）</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/orders/export/csv</code></td><td>CSV出力（UTF-8 BOM付き）</td><td>admin</td></tr>
+  </tbody>
+</table>
+
+<h3>4.4 決済 API</h3>
+<table class="endpoint-row">
+  <thead><tr><th>メソッド</th><th>エンドポイント</th><th>説明</th><th>認証</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/orders/:id/payment</code></td><td>決済完了（payment_method + W番号配列 + payment_staff_code）</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/payments/stripe/create-intent</code></td><td>Stripe Payment Intent作成（URL A用）</td><td>不要</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/payments/stripe/webhook</code></td><td>Stripe Webhook受信</td><td>Stripe署名</td></tr>
+  </tbody>
+</table>
+
+<div class="card warn">
+  <h3>決済完了リクエスト例</h3>
+<pre>
+POST /api/orders/42/payment
+{
+  "payment_method": "mPOS",
+  "payment_staff_code": "YY",
+  "w_numbers": ["W-005", "W-006", "W-007"]  // 車両台数分
+}
+// → dispatches 3レコードにW番号を割り当て
+// → order.status を「決済完了」→「配車待ち」に遷移
+</pre>
+</div>
+
+<h3>4.5 配車 API</h3>
+<table class="endpoint-row">
+  <thead><tr><th>メソッド</th><th>エンドポイント</th><th>説明</th><th>認証</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/dispatches</code></td><td>配車一覧（?status=配車待ち&port_call_id=）</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-put">PUT</span></td><td><code>/api/dispatches/:id</code></td><td>配車情報更新（会社・乗務員・出発時刻）</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/orders/:id/dispatch-complete</code></td><td>配車完了（全車両の配車情報確定）</td><td>必須</td></tr>
+  </tbody>
+</table>
+
+<h3>4.6 運行指示書 API</h3>
+<table class="endpoint-row">
+  <thead><tr><th>メソッド</th><th>エンドポイント</th><th>説明</th><th>認証</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/dispatches/:id/instruction-pdf</code></td><td>指示書PDFダウンロード</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/dispatches/:id/generate-pdf</code></td><td>指示書PDF生成（再生成）</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/dispatches/:id/send-email</code></td><td>乗務員にメール送信</td><td>必須</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/dispatches/:id/send-line</code></td><td>LINE送信</td><td>必須</td></tr>
+  </tbody>
+</table>
+
+<h3>4.7 乗務員報告 API</h3>
+<table class="endpoint-row">
+  <thead><tr><th>メソッド</th><th>エンドポイント</th><th>説明</th><th>認証</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/driver-reports/:token</code></td><td>報告フォーム表示（ワンタイムトークン認証）</td><td>トークン</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/driver-reports/:token</code></td><td>運行完了報告送信</td><td>トークン</td></tr>
+  </tbody>
+</table>
+
+<h3>4.8 ワンウェイ API</h3>
+<table class="endpoint-row">
+  <thead><tr><th>メソッド</th><th>エンドポイント</th><th>説明</th><th>認証</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/oneway-records</code></td><td>ワンウェイ一覧（?port_call_id=）</td><td>admin</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/oneway-records</code></td><td>ワンウェイ記録追加（W番号, 行き先, 人数）</td><td>admin</td></tr>
+    <tr><td><span class="badge badge-del">DELETE</span></td><td><code>/api/oneway-records/:id</code></td><td>ワンウェイ記録削除</td><td>admin</td></tr>
+  </tbody>
+</table>
+
+<h3>4.9 マスタ API（共通パターン）</h3>
+<table class="endpoint-row">
+  <thead><tr><th>リソース</th><th>GET一覧</th><th>GET詳細</th><th>POST</th><th>PUT</th><th>DELETE</th></tr></thead>
+  <tbody>
+    <tr><td>ships</td><td>/api/ships</td><td>/api/ships/:id</td><td>/api/ships</td><td>/api/ships/:id</td><td>論理削除</td></tr>
+    <tr><td>courses</td><td>/api/courses</td><td>/api/courses/:id</td><td>/api/courses</td><td>/api/courses/:id</td><td>論理削除</td></tr>
+    <tr><td>official_tours</td><td>/api/official-tours</td><td>/api/official-tours/:id</td><td>/api/official-tours</td><td>/api/official-tours/:id</td><td>論理削除</td></tr>
+    <tr><td>taxi_companies</td><td>/api/taxi-companies</td><td>/api/taxi-companies/:id</td><td>/api/taxi-companies</td><td>/api/taxi-companies/:id</td><td>論理削除</td></tr>
+    <tr><td>vehicles</td><td>/api/vehicles</td><td>/api/vehicles/:id</td><td>/api/vehicles</td><td>/api/vehicles/:id</td><td>論理削除</td></tr>
+    <tr><td>drivers</td><td>/api/drivers</td><td>/api/drivers/:id</td><td>/api/drivers</td><td>/api/drivers/:id</td><td>論理削除</td></tr>
+    <tr><td>staff</td><td>/api/staff</td><td>/api/staff/:id</td><td>/api/staff</td><td>/api/staff/:id</td><td>論理削除</td></tr>
+  </tbody>
+</table>
+<p>全マスタAPIはadmin認証必須。GETのみURL Bのスタッフ認証で許可（プルダウン取得用）。</p>
+
+<h3>4.10 ダッシュボード・集計 API</h3>
+<table class="endpoint-row">
+  <thead><tr><th>メソッド</th><th>エンドポイント</th><th>説明</th><th>認証</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/dashboard/today</code></td><td>本日のサマリー（5カード: 取扱高/仕入/粗利/粗利率/帰着待ち/運行完了）</td><td>admin</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/dashboard/incomplete-check</code></td><td>未入力チェック（仕入未入力、配車未完了、報告未提出）</td><td>admin</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/analytics/ship-ranking</code></td><td>クルーズ船ランキング（?year=&compare=）</td><td>admin</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/analytics/tour-ranking</code></td><td>人気ツアー分析</td><td>admin</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/analytics/taxi-ranking</code></td><td>タクシー会社分析</td><td>admin</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/analytics/weather-sales</code></td><td>天気×売上分析</td><td>admin</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/analytics/sales-report</code></td><td>売上集計（月別取扱高/仕入/粗利推移）</td><td>admin</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="screens">5. 画面コンポーネント設計</h2>
+<!-- ============================================================ -->
+
+<div class="card highlight">
+  <h3>設計方針</h3>
+  <ul>
+    <li>4つのフロントエンドを共通コンポーネントライブラリで構築</li>
+    <li>URL A: モバイルファースト（max-width: 480px）、SPA構成</li>
+    <li>URL B: タブレット最適化（max-width: 600px）、タッチ操作前提（ボタン最低44px）</li>
+    <li>Admin / 分析: デスクトップ（サイドバー220px + メインコンテンツ）</li>
+  </ul>
+</div>
+
+<h3>5.1 共通コンポーネント</h3>
+<table>
+  <thead><tr><th>コンポーネント</th><th>用途</th><th>使用画面</th></tr></thead>
+  <tbody>
+    <tr><td><code>StaffHeader</code></td><td>ヘッダー（ロール名、スタッフ名、日付、船名）</td><td>URL B 全画面</td></tr>
+    <tr><td><code>AdminSidebar</code></td><td>サイドバーナビゲーション（220px固定）</td><td>Admin / 分析</td></tr>
+    <tr><td><code>StatCard</code></td><td>統計カード（ラベル、値、サブテキスト、色分け）</td><td>ダッシュボード</td></tr>
+    <tr><td><code>CourseQuickGrid</code></td><td>コース選択グリッド（2列）</td><td>URL B 受注入力</td></tr>
+    <tr><td><code>VehicleEntryCard</code></td><td>車両入力カード（車種選択 + 人数 +/- ）</td><td>URL B 受注入力</td></tr>
+    <tr><td><code>OptionItemRow</code></td><td>オプション項目行（名前 + 金額）</td><td>URL B 受注入力</td></tr>
+    <tr><td><code>NumInput</code></td><td>数値入力（+/- ボタン付き）</td><td>URL B</td></tr>
+    <tr><td><code>ReceiptDisplay</code></td><td>受付番号/W番号の表示ボックス</td><td>URL B 確認画面</td></tr>
+    <tr><td><code>SummaryCard</code></td><td>注文サマリー（車両内訳 + オプション + 合計）</td><td>URL B</td></tr>
+    <tr><td><code>StatusBadge</code></td><td>ステータスバッジ（帰着待ち/運行完了/キャンセル）</td><td>全画面</td></tr>
+    <tr><td><code>FilterBar</code></td><td>検索・フィルタバー</td><td>Admin</td></tr>
+    <tr><td><code>DataTable</code></td><td>汎用データテーブル（ソート、ホバー、行クリック）</td><td>Admin</td></tr>
+    <tr><td><code>CancelModal</code></td><td>キャンセル理由入力モーダル</td><td>URL B / Admin</td></tr>
+  </tbody>
+</table>
+
+<h3>5.2 URL B 画面一覧（14画面）</h3>
+<table>
+  <thead><tr><th>#</th><th>画面ID</th><th>画面名</th><th>主要コンポーネント</th><th>API呼出</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>staff-login</td><td>ログイン</td><td>ログインフォーム</td><td>POST /auth/login</td></tr>
+    <tr><td>2</td><td>role-select</td><td>役割選択</td><td>5枚のロールカード</td><td>GET /port-calls/today</td></tr>
+    <tr><td>3</td><td>staff-order</td><td>受注入力</td><td>CourseQuickGrid, VehicleEntryCard×N, 顧客フォーム, OptionItemRow×3, DropoffToggle, SummaryCard</td><td>GET /courses, POST /orders</td></tr>
+    <tr><td>4</td><td>staff-order-confirm</td><td>受注確認</td><td>ReceiptDisplay, SummaryCard, 特記事項表示</td><td>—</td></tr>
+    <tr><td>5</td><td>staff-payment-desk</td><td>決済デスク</td><td>受付番号検索, 決済待ちリスト, 内容確認, 決済方法トグル, W番号入力×N</td><td>GET /orders?status=決済待ち, POST /orders/:id/payment</td></tr>
+    <tr><td>6</td><td>staff-payment</td><td>決済確認</td><td>W番号表示, 金額確認</td><td>—</td></tr>
+    <tr><td>7</td><td>staff-complete</td><td>決済完了</td><td>アクショングリッド（印刷/LINE/メール）</td><td>POST /dispatches/:id/send-*</td></tr>
+    <tr><td>8</td><td>order-edit-search</td><td>受注修正検索</td><td>受付番号検索, 結果テーブル</td><td>GET /orders/by-reception/:number</td></tr>
+    <tr><td>9</td><td>dispatch-search</td><td>配車検索</td><td>受付番号検索, 配車待ちリスト</td><td>GET /dispatches?status=配車待ち</td></tr>
+    <tr><td>10</td><td>dispatch-input</td><td>配車入力</td><td>車両ごとの配車フォーム（会社・乗務員・車両番号）</td><td>PUT /dispatches/:id, POST /orders/:id/dispatch-complete</td></tr>
+    <tr><td>11</td><td>dispatch-confirm</td><td>配車確認</td><td>指示書プレビュー, 送信ボタン群</td><td>POST /dispatches/:id/generate-pdf</td></tr>
+    <tr><td>12</td><td>dispatch-done</td><td>配車完了</td><td>完了メッセージ</td><td>—</td></tr>
+    <tr><td>13</td><td>driver-report</td><td>運行完了報告</td><td>行き先選択, 帰着時刻, 延長/返金, 原価入力, 満足度</td><td>GET/POST /driver-reports/:token</td></tr>
+    <tr><td>14</td><td>driver-report-done</td><td>報告完了</td><td>完了メッセージ</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<h3>5.3 Admin 画面一覧（11画面）</h3>
+<table>
+  <thead><tr><th>#</th><th>画面ID</th><th>画面名</th><th>主要コンポーネント</th><th>API呼出</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>dashboard</td><td>ダッシュボード</td><td>StatCard×5, FilterBar, DataTable（行クリック→指示書）</td><td>GET /dashboard/today, GET /orders</td></tr>
+    <tr><td>2</td><td>orders</td><td>受注一覧</td><td>FilterBar, DataTable, CSV出力ボタン, 未入力チェック</td><td>GET /orders, GET /orders/export/csv</td></tr>
+    <tr><td>3</td><td>dispatch</td><td>配車管理</td><td>配車カード, ステータスカウンター</td><td>GET /dispatches</td></tr>
+    <tr><td>4</td><td>pdf</td><td>運行指示書</td><td>PDFプレビュー, 印刷/メール/LINEボタン</td><td>GET /dispatches/:id/instruction-pdf</td></tr>
+    <tr><td>5</td><td>oneway</td><td>ワンウェイ記録</td><td>入力フォーム（3項目）, 記録テーブル</td><td>GET/POST/DELETE /oneway-records</td></tr>
+    <tr><td>6</td><td>report</td><td>運行実績管理</td><td>横棒グラフ, 集計テーブル</td><td>GET /analytics/*</td></tr>
+    <tr><td>7</td><td>sales-report</td><td>売上集計</td><td>月別推移グラフ, 売上明細テーブル</td><td>GET /analytics/sales-report</td></tr>
+    <tr><td>8</td><td>master-course</td><td>コースマスタ</td><td>CRUDテーブル, 編集モーダル</td><td>CRUD /courses</td></tr>
+    <tr><td>9</td><td>master-vehicle</td><td>車両マスタ</td><td>CRUDテーブル, 編集モーダル</td><td>CRUD /vehicles</td></tr>
+    <tr><td>10</td><td>master-driver</td><td>乗務員マスタ</td><td>CRUDテーブル, 写真アップロード, 編集モーダル</td><td>CRUD /drivers</td></tr>
+    <tr><td>11</td><td>master-staff</td><td>スタッフマスタ</td><td>CRUDテーブル, 3職種評価, 実績自動表示</td><td>CRUD /staff</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="auth">6. 認証・認可設計</h2>
+<!-- ============================================================ -->
+
+<table>
+  <thead><tr><th>対象</th><th>認証方式</th><th>トークン有効期限</th><th>アクセス範囲</th></tr></thead>
+  <tbody>
+    <tr><td><strong>URL A</strong>（顧客予約）</td><td>認証不要（公開）</td><td>—</td><td>コース閲覧、予約フォーム、Stripe決済のみ</td></tr>
+    <tr><td><strong>URL B</strong>（スタッフ）</td><td>スタッフコード + パスワード → JWT</td><td>12時間</td><td>ログイン後、選択したロールの画面のみ。マスタGETは全ロール許可</td></tr>
+    <tr><td><strong>Admin</strong>（管理画面）</td><td>ID + パスワード → JWT</td><td>12時間</td><td>全API。CSV出力・マスタCRUDはadminロール限定</td></tr>
+    <tr><td><strong>乗務員報告</strong></td><td>ワンタイムトークン（URL埋込み）</td><td>当日23:59まで</td><td>自分の dispatch_id に対する報告フォームのみ</td></tr>
+  </tbody>
+</table>
+
+<div class="card warn">
+  <h3>ワンタイムトークン設計</h3>
+  <p>配車確定時に <code>driver_reports</code> レコードを生成し、<code>report_token</code>（UUIDv4）を発行。</p>
+  <p>乗務員へのメールに <code>https://{domain}/driver-report/{token}</code> を記載。</p>
+  <p>トークンは <code>token_expires_at</code>（当日23:59）を超えると無効。提出済み（<code>submitted_at IS NOT NULL</code>）も無効。</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="integrations">7. 外部連携設計</h2>
+<!-- ============================================================ -->
+
+<h3>7.1 Stripe（URL A 事前予約決済）</h3>
+<table>
+  <tr><th>項目</th><th>内容</th></tr>
+  <tr><td>API</td><td>Payment Intents API + Stripe.js (Elements)</td></tr>
+  <tr><td>通貨</td><td>JPY（日本円・整数）</td></tr>
+  <tr><td>フロー</td><td>① サーバーで PaymentIntent 作成 → ② クライアントで confirmPayment → ③ Webhook (payment_intent.succeeded) で受注ステータス更新</td></tr>
+  <tr><td>カード情報</td><td>サーバー側で一切保持しない（Stripeトークン化）。PCI DSS SAQ A-EP準拠</td></tr>
+  <tr><td>海外カード</td><td>3Dセキュア対応必須。Stripe Radarで不正検出</td></tr>
+  <tr><td>テスト</td><td>Stripeテスト環境でテストカード番号を使用</td></tr>
+</table>
+
+<h3>7.2 PDF生成（運行指示書）</h3>
+<table>
+  <tr><th>項目</th><th>内容</th></tr>
+  <tr><td>レイアウト</td><td>A4縦。1車両=1PDF。日英バイリンガル</td></tr>
+  <tr><td>内容</td><td>受付番号、W番号、コース名、顧客名、乗車人数、行程（目的地リスト）、出発時刻、特記事項（受注リクエスト + 固定注意事項の2段構成）、ドロップオフ</td></tr>
+  <tr><td>生成方法</td><td>サーバーサイドでHTMLテンプレート → PDF変換。Puppeteer / wkhtmltopdf / React-PDF等</td></tr>
+  <tr><td>保管</td><td>オブジェクトストレージ（S3/GCS等）にアップロードし、URLを dispatches.instruction_pdf_url に保存</td></tr>
+</table>
+
+<h3>7.3 メール送信</h3>
+<table>
+  <tr><th>項目</th><th>内容</th></tr>
+  <tr><td>サービス</td><td>SendGrid / Amazon SES / Resend 等</td></tr>
+  <tr><td>送信契機</td><td>① 予約確認メール（URL A決済完了時）② 運行指示書メール（配車完了時・乗務員宛）③ 乗務員報告リンク（配車確定時）</td></tr>
+  <tr><td>添付</td><td>運行指示書PDF</td></tr>
+  <tr><td>テンプレート</td><td>多言語対応（英語/日本語）。HTMLメール + テキストフォールバック</td></tr>
+</table>
+
+<h3>7.4 LINE Messaging API</h3>
+<table>
+  <tr><th>項目</th><th>内容</th></tr>
+  <tr><td>用途</td><td>乗務員グループへの配車通知</td></tr>
+  <tr><td>実装</td><td>LINE Official Account + Messaging API。テキスト + PDF URL</td></tr>
+  <tr><td>送信タイミング</td><td>配車完了時に一括送信</td></tr>
+</table>
+
+<h3>7.5 WhatsApp Business API</h3>
+<table>
+  <tr><th>項目</th><th>内容</th></tr>
+  <tr><td>用途</td><td>外国人顧客への配車完了通知</td></tr>
+  <tr><td>実装</td><td>WhatsApp Business Cloud API。テンプレートメッセージ（事前承認要）</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="infra">8. インフラ構成</h2>
+<!-- ============================================================ -->
+
+<div class="card">
+<pre>
+┌───────────────────────────────────────────────────────────────┐
+│                        CDN / Reverse Proxy                     │
+│                     (CloudFront / Vercel Edge)                  │
+└──────────┬───────────────────────────────────────┬─────────────┘
+           │                                       │
+    ┌──────┴──────┐                         ┌──────┴──────┐
+    │ フロントエンド │                         │  API サーバー │
+    │  (SSR/SPA)  │   ←── REST API ──→     │  (Node等)    │
+    │  4アプリ     │                         │  認証/認可    │
+    └─────────────┘                         └──┬──┬──┬──┬──┘
+                                         ┌─────┤  │  │  ├─────┐
+                                         │     │  │  │  │     │
+                                   ┌─────┴┐ ┌──┴──┴┐ ┌┴────┐ ┌┴─────────┐
+                                   │ PgSQL│ │ PDF  │ │Store│ │ 外部API   │
+                                   │  DB  │ │Engine│ │(S3) │ │Stripe    │
+                                   └──────┘ └──────┘ └─────┘ │LINE      │
+                                                              │WhatsApp  │
+                                                              │Email     │
+                                                              └──────────┘
+</pre>
+</div>
+
+<table>
+  <thead><tr><th>レイヤー</th><th>推奨構成</th><th>備考</th></tr></thead>
+  <tbody>
+    <tr><td>ホスティング</td><td>Vercel / AWS / GCP</td><td>SSLは必須（決済あり）</td></tr>
+    <tr><td>データベース</td><td>PostgreSQL（マネージドDB推奨）</td><td>日次バックアップ30日保持</td></tr>
+    <tr><td>ファイルストレージ</td><td>S3 / GCS / Cloudflare R2</td><td>PDF保管。5年間保持（旅行業法）</td></tr>
+    <tr><td>メール</td><td>SendGrid / SES</td><td>PDF添付対応</td></tr>
+    <tr><td>リアルタイム</td><td>WebSocket or SSE（検討）</td><td>配車状況のリアルタイム反映用</td></tr>
+    <tr><td>CI/CD</td><td>GitHub Actions → Vercel/AWS</td><td>ステージング + 本番の2環境</td></tr>
+    <tr><td>監視</td><td>Sentry（エラー）+ UptimeRobot（死活）</td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="card warn">
+  <h3>環境構成</h3>
+  <table>
+    <tr><th>環境</th><th>用途</th><th>DB</th></tr>
+    <tr><td>development</td><td>ローカル開発</td><td>ローカルPgSQL or Docker</td></tr>
+    <tr><td>staging</td><td>テスト・クライアント確認</td><td>マネージドDB（テスト用）</td></tr>
+    <tr><td>production</td><td>本番</td><td>マネージドDB（バックアップ有）</td></tr>
+  </table>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="error">9. エラーハンドリング方針</h2>
+<!-- ============================================================ -->
+
+<table>
+  <thead><tr><th>シナリオ</th><th>対応方針</th></tr></thead>
+  <tbody>
+    <tr><td>受付番号の競合</td><td>DB排他制御（FOR UPDATE）でリトライ。最大3回。アプリ側で楽観ロック検知</td></tr>
+    <tr><td>W番号の重複入力</td><td>UNIQUE制約で弾く。UIで「このW番号は使用済みです」メッセージ</td></tr>
+    <tr><td>Stripe決済失敗</td><td>Stripe.jsでクライアント側エラー表示。サーバー側はWebhookで最終確認</td></tr>
+    <tr><td>PDF生成失敗</td><td>再生成ボタンを提供。バックグラウンドジョブで非同期再試行</td></tr>
+    <tr><td>メール/LINE送信失敗</td><td>送信ステータス（sent/failed）を記録。管理画面から再送信可能</td></tr>
+    <tr><td>オフライン時（URL B）</td><td>PWA検討。最低限、受注入力画面のオフラインキャッシュを実装（オンライン復帰時に同期）</td></tr>
+    <tr><td>同時操作の競合</td><td>楽観ロック（updated_at比較）。競合時はUI通知で最新データに再取得を促す</td></tr>
+  </tbody>
+</table>
+
+<div style="text-align:center; margin-top:40px; padding:20px; color:#7f8c8d; font-size:12px; border-top:1px solid #dce1e6;">
+  &copy; 2026 株式会社静岡TaaSトラベル — 技術設計書 v1.0
+</div>
+
+</div>
+</body>
+</html>

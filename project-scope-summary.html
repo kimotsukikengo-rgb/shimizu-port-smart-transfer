@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>プロジェクトスコープサマリー — 清水港スマート交通手配システム</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f8f9fa; color: #2c3e50; line-height: 1.7; }
+  .container { max-width: 980px; margin: 0 auto; padding: 32px 24px; }
+  h1 { font-size: 28px; color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 12px; margin-bottom: 8px; }
+  .subtitle { font-size: 14px; color: #7f8c8d; margin-bottom: 32px; }
+  h2 { font-size: 22px; color: #1a5276; margin: 40px 0 16px; padding: 8px 0; border-bottom: 2px solid #dce1e6; }
+  h3 { font-size: 17px; color: #2c3e50; margin: 24px 0 10px; }
+  h4 { font-size: 15px; color: #e67e22; margin: 18px 0 8px; }
+  p { margin-bottom: 10px; font-size: 14px; }
+  ul, ol { margin: 8px 0 16px 20px; font-size: 14px; }
+  li { margin-bottom: 4px; }
+
+  .card { background: #fff; border: 1px solid #dce1e6; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+  .card.highlight { border-left: 4px solid #2980b9; }
+  .card.warn { border-left: 4px solid #e67e22; }
+  .card.danger { border-left: 4px solid #e74c3c; }
+  .card.success { border-left: 4px solid #27ae60; }
+  .card h3 { margin-top: 0; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 13px; }
+  th, td { padding: 10px 12px; border: 1px solid #dce1e6; text-align: left; }
+  th { background: #f0f2f5; font-weight: 600; font-size: 12px; color: #7f8c8d; }
+  td { vertical-align: top; }
+  tr:hover { background: #f8f9fb; }
+
+  .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0 24px; }
+  .metric { background: #fff; border: 1px solid #dce1e6; border-radius: 10px; padding: 16px; text-align: center; border-top: 4px solid #1a5276; }
+  .metric .num { font-size: 32px; font-weight: 700; color: #1a5276; line-height: 1.2; }
+  .metric .label { font-size: 12px; color: #7f8c8d; margin-top: 4px; }
+  .metric.accent { border-top-color: #e67e22; }
+  .metric.accent .num { color: #e67e22; }
+  .metric.success { border-top-color: #27ae60; }
+  .metric.success .num { color: #27ae60; }
+
+  .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .scope-card { background: #fff; border: 1px solid #dce1e6; border-radius: 10px; padding: 18px; }
+  .scope-card h4 { margin: 0 0 10px; color: #1a5276; font-size: 15px; padding-bottom: 6px; border-bottom: 2px solid #eaf2f8; }
+  .scope-card ul { margin: 0 0 0 18px; }
+  .scope-card li { font-size: 13px; }
+
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; margin-right: 4px; }
+  .badge-must { background: #fdedec; color: #e74c3c; }
+  .badge-imp { background: #fef9e7; color: #d68910; }
+  .badge-now { background: #e8f8f0; color: #27ae60; }
+  .badge-new { background: #f4ecf7; color: #8e44ad; }
+
+  .phase { background: #1a252f; color: #fff; border-radius: 10px; padding: 18px; margin: 12px 0; }
+  .phase h4 { color: #5dade2; margin: 0 0 8px; }
+  .phase ul { margin-left: 18px; }
+  .phase li { font-size: 13px; }
+
+  code { background: #f0f2f5; padding: 1px 4px; border-radius: 3px; font-size: 12px; font-family: 'Menlo', monospace; }
+
+  .footer { text-align:center; margin-top:40px; padding:20px; color:#7f8c8d; font-size:12px; border-top:1px solid #dce1e6; }
+
+  .doc-links { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0 24px; }
+  .doc-link { background: #fff; border: 1px solid #dce1e6; border-radius: 10px; padding: 16px; text-decoration: none; color: #2c3e50; transition: all 0.2s; display: block; }
+  .doc-link:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-2px); }
+  .doc-link .dl-label { font-size: 11px; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; }
+  .doc-link .dl-title { font-size: 15px; font-weight: 700; margin: 4px 0; color: #1a5276; }
+  .doc-link .dl-desc { font-size: 12px; color: #7f8c8d; }
+
+  @media (max-width: 768px) {
+    .metric-grid, .scope-grid, .doc-links { grid-template-columns: 1fr; }
+  }
+  @media print {
+    body { background: #fff; }
+    .container { max-width: 100%; }
+    h2 { page-break-before: always; }
+    h2:first-of-type { page-break-before: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>清水港スマート交通手配システム<br>プロジェクトスコープサマリー</h1>
+<p class="subtitle">Shimizu Port Smart Transfer System — Project Scope Summary<br>
+2026年4月16日 | 株式会社静岡TaaSトラベル様 御中 | 株式会社アイドマ・ホールディングス</p>
+
+<div class="card highlight">
+  <h3>本資料の目的</h3>
+  <p>本資料は、これまでに合意・反映済みの要件・モックアップ・技術設計に基づき、本プロジェクトの<strong>提供範囲（スコープ）</strong>を一覧化したものです。</p>
+  <p>3つの成果物（モックアップ、エンジニア向け要件伝達書 v2.0、技術設計書 v1.0）の内容を集約し、開発スコープの全体像をご確認いただけます。</p>
+</div>
+
+<h3>関連ドキュメント</h3>
+<div class="doc-links">
+  <a class="doc-link" href="index.html">
+    <div class="dl-label">MOCKUP</div>
+    <div class="dl-title">画面モックアップ</div>
+    <div class="dl-desc">URL A / URL B / Admin / 寄港管理・分析の全画面</div>
+  </a>
+  <a class="doc-link" href="engineering-requirements.html">
+    <div class="dl-label">REQUIREMENTS v2.0</div>
+    <div class="dl-title">エンジニア向け要件伝達書</div>
+    <div class="dl-desc">機能要件・非機能要件・法令対応・開発フェーズ</div>
+  </a>
+  <a class="doc-link" href="technical-design.html">
+    <div class="dl-label">TECHNICAL DESIGN v1.0</div>
+    <div class="dl-title">技術設計書</div>
+    <div class="dl-desc">DB・API・画面コンポーネント・認証・インフラ</div>
+  </a>
+</div>
+
+<!-- ============================================================ -->
+<h2>1. プロジェクト全体規模（数値サマリー）</h2>
+<!-- ============================================================ -->
+
+<div class="metric-grid">
+  <div class="metric">
+    <div class="num">39</div>
+    <div class="label">総画面数</div>
+  </div>
+  <div class="metric accent">
+    <div class="num">5</div>
+    <div class="label">ロール対応</div>
+  </div>
+  <div class="metric">
+    <div class="num">13</div>
+    <div class="label">DBテーブル</div>
+  </div>
+  <div class="metric accent">
+    <div class="num">40+</div>
+    <div class="label">API エンドポイント</div>
+  </div>
+  <div class="metric success">
+    <div class="num">5</div>
+    <div class="label">対応言語</div>
+  </div>
+  <div class="metric success">
+    <div class="num">7</div>
+    <div class="label">外部連携</div>
+  </div>
+  <div class="metric">
+    <div class="num">4</div>
+    <div class="label">フロントエンド</div>
+  </div>
+  <div class="metric">
+    <div class="num">5</div>
+    <div class="label">開発フェーズ</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>2. システム全体像</h2>
+<!-- ============================================================ -->
+
+<div class="card">
+  <p>清水港に寄港するクルーズ船の乗客（主に外国人観光客）向けに、タクシーチャーター観光ツアーの<strong>予約・販売・配車・運行管理・実績集計</strong>を一気通貫で行うWebシステム。</p>
+  <p><strong>現状の課題:</strong> 紙ベースの受注管理、手書きの運行指示書、Excelでの集計 → これらを統合的なWebシステムで効率化。</p>
+</div>
+
+<h3>4つのフロントエンドアプリケーション</h3>
+<table>
+  <thead><tr><th>ID</th><th>名称</th><th>ユーザー</th><th>デバイス</th><th>画面数</th></tr></thead>
+  <tbody>
+    <tr><td><strong>URL A</strong></td><td>顧客向け予約サイト</td><td>クルーズ船乗客（外国人観光客）</td><td>スマートフォン</td><td>7画面</td></tr>
+    <tr><td><strong>URL B</strong></td><td>スタッフ対面販売端末</td><td>営業 / 決済 / 配車 / 受注修正 / 乗務員</td><td>タブレット / スマホ</td><td>14画面</td></tr>
+    <tr><td><strong>Admin</strong></td><td>管理画面</td><td>マネージャー</td><td>PC（デスクトップ）</td><td>11画面</td></tr>
+    <tr><td><strong>分析</strong></td><td>寄港管理 / 業務分析</td><td>マネージャー / 経営層</td><td>PC（デスクトップ）</td><td>7画面</td></tr>
+    <tr><td colspan="4" style="text-align:right; font-weight:700; background:#f0f2f5;">合計</td><td style="font-weight:700; background:#f0f2f5;">39画面</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2>3. 機能スコープ</h2>
+<!-- ============================================================ -->
+
+<div class="scope-grid">
+  <div class="scope-card">
+    <h4>📱 URL A: 顧客予約サイト（7画面）</h4>
+    <ul>
+      <li>5言語対応（英・日・中・韓・西）</li>
+      <li>コース一覧・詳細・行程表示</li>
+      <li>予約フォーム（顧客情報・人数・船名）</li>
+      <li>旅行条件書（旅行業法対応）</li>
+      <li>Stripeクレジットカード決済（海外カード対応）</li>
+      <li>予約確認メール（PDF添付）</li>
+      <li>モバイルファースト設計</li>
+    </ul>
+  </div>
+
+  <div class="scope-card">
+    <h4>🏪 URL B: スタッフ端末（14画面・5ロール）</h4>
+    <ul>
+      <li><strong>営業</strong>: 受注入力（特記事項・オプション3行・ドロップオフ）</li>
+      <li><strong>決済</strong>: 4種決済（mPOS/全旅/現金/Web）・W番号入力</li>
+      <li><strong>配車</strong>: 車両ごと配車・指示書PDF・LINE/WhatsApp送信</li>
+      <li><strong>受注修正</strong>: 決済前の内容変更</li>
+      <li><strong>乗務員</strong>: ワンタイムURL・延長/返金・原価5項目・顧客満足度</li>
+      <li>役割選択UI、タッチ操作最適化</li>
+    </ul>
+  </div>
+
+  <div class="scope-card">
+    <h4>📊 Admin: 管理画面（11画面）</h4>
+    <ul>
+      <li>ダッシュボード（取扱高/仕入/粗利/粗利率/帰着待ち/運行完了）</li>
+      <li>受注一覧（13カラム・CSV出力・未入力チェック）</li>
+      <li>配車管理</li>
+      <li>運行指示書PDF（プレビュー・印刷・送信）</li>
+      <li>ワンウェイ記録</li>
+      <li>運行実績管理・売上集計</li>
+      <li>マスタ管理4種（コース・車両・乗務員・スタッフ）</li>
+    </ul>
+  </div>
+
+  <div class="scope-card">
+    <h4>📈 分析: 寄港管理・業務分析（7画面）</h4>
+    <ul>
+      <li>寄港情報登録（5セクション: 基本情報・W番号・当日情報・公式ツアー・シャトルバス）</li>
+      <li>業務分析ダッシュボード</li>
+      <li>クルーズ船ランキング（前年比）</li>
+      <li>人気ツアー分析</li>
+      <li>タクシー会社ランキング</li>
+      <li>天気×売上分析</li>
+      <li>クルーズ船マスタ</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>4. データベース設計（13テーブル）</h2>
+<!-- ============================================================ -->
+
+<table>
+  <thead><tr><th>カテゴリ</th><th>テーブル</th><th>主な役割</th></tr></thead>
+  <tbody>
+    <tr><td rowspan="3"><strong>業務トランザクション</strong></td><td><code>orders</code></td><td>受注（受付番号、顧客情報、特記事項、オプション、決済情報、3担当者コード、7段階ステータス）</td></tr>
+    <tr><td><code>dispatches</code></td><td>配車（W番号は車両単位、無線番号、運行指示書URL、送信ステータス）</td></tr>
+    <tr><td><code>driver_reports</code></td><td>運行完了報告（延長/返金、決済料金、原価5項目、顧客満足度、メモ）</td></tr>
+    <tr><td><strong>寄港管理</strong></td><td><code>port_calls</code><br><code>port_call_tours</code><br><code>oneway_records</code></td><td>寄港情報、公式ツアー紐付け、ワンウェイ運行記録</td></tr>
+    <tr><td rowspan="6"><strong>マスタ</strong></td><td><code>ships</code></td><td>クルーズ船マスタ</td></tr>
+    <tr><td><code>courses</code></td><td>コースマスタ（行程・料金・原価）</td></tr>
+    <tr><td><code>official_tours</code></td><td>公式ツアーマスタ（行き先・台数）</td></tr>
+    <tr><td><code>taxi_companies</code></td><td>タクシー会社マスタ（約20社）</td></tr>
+    <tr><td><code>vehicles</code></td><td>車両マスタ（無線番号3桁・ナンバー・タブレット番号）</td></tr>
+    <tr><td><code>drivers</code></td><td>乗務員マスタ（資格・顔写真・LINE登録・評価）</td></tr>
+    <tr><td><strong>権限</strong></td><td><code>staff</code></td><td>スタッフ（3職種別評価1-5・実績自動集計）</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2>5. 外部連携</h2>
+<!-- ============================================================ -->
+
+<table>
+  <thead><tr><th>連携先</th><th>用途</th><th>優先度</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Stripe</strong></td><td>クレジットカード決済（URL A）。Payment Intents API、Webhook、海外カード対応、3Dセキュア、PCI DSS準拠</td><td><span class="badge badge-must">必須</span></td></tr>
+    <tr><td><strong>mPOS</strong></td><td>対面決済（URL B）。mPOS / 全旅 / 現金 / Web の4種決済方法に対応</td><td><span class="badge badge-must">必須</span></td></tr>
+    <tr><td><strong>PDF生成エンジン</strong></td><td>運行指示書PDF（A4縦・日英バイリンガル・車両ごと個別生成・特記事項2段構成）</td><td><span class="badge badge-must">必須</span></td></tr>
+    <tr><td><strong>メール（SMTP）</strong></td><td>予約確認メール、運行指示書送信、乗務員報告リンク送信。多言語テンプレート、PDF添付</td><td><span class="badge badge-must">必須</span></td></tr>
+    <tr><td><strong>LINE Messaging API</strong></td><td>乗務員グループへの配車通知（テキスト + PDF URL）</td><td><span class="badge badge-imp">重要</span></td></tr>
+    <tr><td><strong>WhatsApp Business API</strong></td><td>外国人顧客への配車完了通知。テンプレートメッセージ事前承認要</td><td><span class="badge badge-imp">重要</span></td></tr>
+    <tr><td><strong>プリンター</strong></td><td>現地での運行指示書印刷（モバイル/A4対応）</td><td><span class="badge badge-imp">重要</span></td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2>6. 法令対応・コンプライアンス</h2>
+<!-- ============================================================ -->
+
+<div class="card danger">
+  <h3>旅行業法対応（募集型企画旅行）</h3>
+  <ul>
+    <li><strong>旅行条件書の事前交付</strong>: 予約前に提示し、明示的同意を取得（電磁的方法）</li>
+    <li><strong>取消料規定の明示</strong>: 7日前/3-6日前/1-2日前/当日の段階的取消料</li>
+    <li><strong>旅行業務取扱管理者の明示</strong>: サイト上に記載</li>
+    <li><strong>運行指示書の保管</strong>: 帳票として5年間保管義務</li>
+    <li><strong>行政報告</strong>: 国土交通省への定期報告（CSV/PDF出力で対応）</li>
+  </ul>
+</div>
+
+<div class="card danger">
+  <h3>個人情報保護・セキュリティ</h3>
+  <ul>
+    <li>個人情報保護法（日本）+ GDPR配慮（外国人個人情報）</li>
+    <li>HTTPS全ページ、SSL/TLS必須</li>
+    <li>カード情報サーバー非保持（Stripeトークン化）、PCI DSS SAQ A-EP準拠</li>
+    <li>ロールベースアクセス制御（RBAC）</li>
+    <li>SQL Injection / XSS / CSRF 対策</li>
+    <li>ワンタイムURL（乗務員報告、署名付きトークン、当日有効期限）</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<h2>7. 開発フェーズ</h2>
+<!-- ============================================================ -->
+
+<div class="phase">
+  <h4>Phase 1: 基盤構築 <span style="font-size:11px; color:#bdc3c7;">(最優先)</span></h4>
+  <ul>
+    <li>DB設計・マスタデータ投入（13テーブル）</li>
+    <li>認証基盤（スタッフログイン、JWT）</li>
+    <li>寄港情報登録（Admin、5セクション）</li>
+    <li>マスタ管理（コース・タクシー会社・車両・乗務員・スタッフ・公式ツアー）</li>
+  </ul>
+</div>
+
+<div class="phase">
+  <h4>Phase 2: 当日業務 <span style="font-size:11px; color:#bdc3c7;">(最優先)</span></h4>
+  <ul>
+    <li>URL B 受注入力（特記事項・オプション・ドロップオフ）</li>
+    <li>URL B 決済処理（4種決済、W番号車両単位）</li>
+    <li>URL B 配車入力（車両ごと）・受注修正</li>
+    <li>Admin ダッシュボード（粗利率含む5カード）・受注一覧</li>
+    <li>Admin ワンウェイ記録・売上集計</li>
+    <li>運行指示書PDF生成（車両ごと、特記事項2種類）</li>
+  </ul>
+</div>
+
+<div class="phase">
+  <h4>Phase 3: 顧客予約 <span style="font-size:11px; color:#bdc3c7;">(重要)</span></h4>
+  <ul>
+    <li>URL A 全7画面（予約フロー）</li>
+    <li>Stripe決済連携（海外カード・3Dセキュア）</li>
+    <li>予約確認メール + PDF添付</li>
+    <li>多言語対応（5言語）</li>
+  </ul>
+</div>
+
+<div class="phase">
+  <h4>Phase 4: 通知・連携 <span style="font-size:11px; color:#bdc3c7;">(重要)</span></h4>
+  <ul>
+    <li>乗務員 運行完了報告（ワンタイムURL、延長/返金、原価、顧客満足度）</li>
+    <li>LINE送信（乗務員グループ）</li>
+    <li>WhatsApp送信（顧客通知）</li>
+    <li>メール送信（運行指示書）</li>
+  </ul>
+</div>
+
+<div class="phase">
+  <h4>Phase 5: 分析・レポート <span style="font-size:11px; color:#bdc3c7;">(後続)</span></h4>
+  <ul>
+    <li>業務分析ダッシュボード</li>
+    <li>クルーズ船ランキング・人気ツアー分析・タクシー会社分析</li>
+    <li>天気×売上分析</li>
+    <li>CSV出力 / 行政レポート</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<h2>8. 業務フロー（一気通貫）</h2>
+<!-- ============================================================ -->
+
+<div class="card highlight">
+  <h3>① 事前準備（前日〜数日前）</h3>
+  <p>寄港情報登録 → 船名・入出港時刻・W番号枠を設定 → 公式ツアー紐付け → 事前予約受付（URL A）</p>
+</div>
+
+<div class="card highlight">
+  <h3>② 当日（受注〜決済）</h3>
+  <p>営業がURL Bで受注入力 → 受付番号 自動発行 → 決済デスクで受付番号確認 → 内容確認（修正可） → mPOS/全旅/現金/Web決済 → W番号入力（車両ごと）</p>
+</div>
+
+<div class="card highlight">
+  <h3>③ 当日（配車〜出発）</h3>
+  <p>配車担当が車両・乗務員引当 → 運行指示書PDF生成（車両ごと） → 乗務員にLINE/メール送信</p>
+</div>
+
+<div class="card highlight">
+  <h3>④ 運行中〜完了</h3>
+  <p>乗務員がツアー実施 → 乗務員がスマホで運行完了報告（行き先・帰着時刻・延長/返金・原価・顧客満足度） → 管理画面で実績確認・集計 → 行政レポート出力</p>
+</div>
+
+<!-- ============================================================ -->
+<h2>9. 4/1・4/9 打合せでの主要決定事項（v2.0反映済み）</h2>
+<!-- ============================================================ -->
+
+<table>
+  <thead><tr><th>カテゴリ</th><th>決定事項</th><th>反映状況</th></tr></thead>
+  <tbody>
+    <tr><td>受注フロー</td><td>営業と決済を別ボタン・別ロールに分離</td><td><span class="badge badge-now">反映済</span></td></tr>
+    <tr><td>W番号</td><td>車両単位で発行（3台口=W-005,006,007）</td><td><span class="badge badge-now">反映済</span></td></tr>
+    <tr><td>ステータス</td><td>「帰着待ち」「運行完了」の2値表示に統一</td><td><span class="badge badge-now">反映済</span></td></tr>
+    <tr><td>決済方法</td><td>mPOS / 全旅 / 現金 / Web の4種対応、決済番号入力不要</td><td><span class="badge badge-now">反映済</span></td></tr>
+    <tr><td>車両マスタ</td><td>ナンバープレート・タブレット番号追加、英語対応列削除</td><td><span class="badge badge-now">反映済</span></td></tr>
+    <tr><td>乗務員マスタ</td><td>資格(英語/アプリ/一般)・顔写真JPEG・LINE登録・評価1-5・特記事項</td><td><span class="badge badge-now">反映済</span></td></tr>
+    <tr><td>スタッフマスタ</td><td>営業/決済/配車の3職種別評価、実績件数自動集計</td><td><span class="badge badge-now">反映済</span></td></tr>
+    <tr><td>管理画面</td><td>受注一覧クリック→運行指示書PDFを直接表示</td><td><span class="badge badge-now">反映済</span></td></tr>
+    <tr><td>運行完了報告</td><td>「決済料金」→「延長・返金」、「備考」→「顧客満足度・メモ」</td><td><span class="badge badge-now">反映済</span></td></tr>
+    <tr><td>運行指示書</td><td>受注入力時の特記事項を上段に追加表示（固定+受注の2種）</td><td><span class="badge badge-now">反映済</span></td></tr>
+    <tr><td>言語アンケート</td><td>「言語についてアンケート」タイトル変更、英語ドライバー注釈追加</td><td><span class="badge badge-now">反映済</span></td></tr>
+    <tr><td>公式ツアーマスタ</td><td>新規マスタ作成（行き先・台数）、寄港情報登録から参照</td><td><span class="badge badge-now">反映済</span></td></tr>
+    <tr><td>ワンウェイ管理</td><td>Admin側で管理（URL Bではない）、W番号はチャーターと共通連番</td><td><span class="badge badge-now">反映済</span></td></tr>
+    <tr><td>受注修正ロール</td><td>5つ目のロールとして追加</td><td><span class="badge badge-now">反映済</span></td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2>10. 非機能要件</h2>
+<!-- ============================================================ -->
+
+<table>
+  <thead><tr><th>項目</th><th>要件</th></tr></thead>
+  <tbody>
+    <tr><td>可用性</td><td>寄港日 朝6時〜夜8時の安定稼働。ダウンは業務に致命的</td></tr>
+    <tr><td>応答速度</td><td>受注入力 1秒以内、決済 3秒以内、分析画面 5秒以内</td></tr>
+    <tr><td>同時接続</td><td>当日業務 最大15名（営業5+決済2+配車2+管理2+予備）。URL A 同時50セッション</td></tr>
+    <tr><td>データ保持</td><td>受注データ5年間（旅行業法）、分析データ過去3年分</td></tr>
+    <tr><td>バックアップ</td><td>日次自動バックアップ、30日間保持</td></tr>
+    <tr><td>ブラウザ対応</td><td>Chrome/Safari/Edge最新版（IE非対応）</td></tr>
+    <tr><td>通信環境</td><td>清水港の通信不安定環境への配慮（PWA・オフライン入力検討）</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2>11. 成果物（納品物）一覧</h2>
+<!-- ============================================================ -->
+
+<table>
+  <thead><tr><th>カテゴリ</th><th>成果物</th><th>備考</th></tr></thead>
+  <tbody>
+    <tr><td rowspan="4"><strong>ドキュメント</strong></td><td>エンジニア向け要件伝達書 v2.0（14章）</td><td>完成済み</td></tr>
+    <tr><td>技術設計書 v1.0（9章）</td><td>完成済み</td></tr>
+    <tr><td>画面モックアップ全39画面（HTML）</td><td>完成済み・動作確認可</td></tr>
+    <tr><td>業務フロー・ER図・画面遷移図</td><td>完成済み</td></tr>
+    <tr><td rowspan="4"><strong>システム</strong></td><td>URL A: 顧客向け予約サイト（7画面・5言語）</td><td>Phase 3</td></tr>
+    <tr><td>URL B: スタッフ対面販売端末（14画面・5ロール）</td><td>Phase 2</td></tr>
+    <tr><td>Admin: 管理画面（11画面・マスタ4種・粗利率KPI）</td><td>Phase 2</td></tr>
+    <tr><td>分析: 寄港管理・業務分析（7画面）</td><td>Phase 5</td></tr>
+    <tr><td rowspan="3"><strong>連携・帳票</strong></td><td>運行指示書PDF（車両ごと、日英バイリンガル）</td><td>Phase 2</td></tr>
+    <tr><td>外部連携7種（Stripe / mPOS / Email / PDF / LINE / WhatsApp / Printer）</td><td>Phase 2-4</td></tr>
+    <tr><td>CSV出力（受注一覧・運行実績・行政レポート）</td><td>Phase 5</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2>12. 関連リンク</h2>
+<!-- ============================================================ -->
+
+<div class="card success">
+  <h3>公開URL（オンライン確認可）</h3>
+  <ul>
+    <li><strong>トップページ:</strong> <a href="https://shimizu-port-smart-transfer.vercel.app/" target="_blank">https://shimizu-port-smart-transfer.vercel.app/</a></li>
+    <li><strong>エンジニア向け要件伝達書 v2.0:</strong> <a href="https://shimizu-port-smart-transfer.vercel.app/engineering-requirements.html" target="_blank">/engineering-requirements.html</a></li>
+    <li><strong>技術設計書 v1.0:</strong> <a href="https://shimizu-port-smart-transfer.vercel.app/technical-design.html" target="_blank">/technical-design.html</a></li>
+    <li><strong>本資料:</strong> <a href="https://shimizu-port-smart-transfer.vercel.app/project-scope-summary.html" target="_blank">/project-scope-summary.html</a></li>
+  </ul>
+</div>
+
+<div class="footer">
+  &copy; 2026 株式会社静岡TaaSトラベル様 / 株式会社アイドマ・ホールディングス — プロジェクトスコープサマリー
+</div>
+
+</div>
+</body>
+</html>
